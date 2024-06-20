@@ -1,8 +1,12 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Noto Sans KR", sans-serif;
-  background-color: #ffffff;
+/* Add your styles for the form here */
+
+.container {
+  max-width: 500px;
+  margin: 100px auto 0;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .topbar {
@@ -19,20 +23,61 @@ body {
   z-index: 1000;
 }
 
+.nav-links {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #007bff;
+  transition: width 0.3s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.profile-icon {
+  font-size: 24px;
+  color: #333;
+}
+
 .topbar img {
   height: 40px;
 }
 
-.container {
-  max-width: 500px;
-  margin: 100px auto 0;
-  padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.form-container {
+  margin-top: 60px;
 }
 
-form h1 {
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form h1 {
   margin-bottom: 20px;
   text-align: center;
 }
@@ -97,38 +142,45 @@ form h1 {
   color: #999;
 }
 
-.file-upload {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
 .file-upload-label {
   border: 1px solid #ccc;
+  display: inline-block;
   padding: 10px;
   cursor: pointer;
   border-radius: 5px;
   background-color: #007bff;
   color: white;
-  display: inline-block;
+  margin-right: 10px;
 }
 
 .file-upload-input {
   display: none;
 }
 
-.file-preview-button {
-  border: 1px solid #ccc;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  margin-left: 10px;
+.button-group {
+  display: flex;
+  gap: 10px;
 }
 
-.button,
-.modal-button {
+.preview-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button {
   background-color: #007bff;
   color: white;
   border: none;
@@ -140,8 +192,7 @@ form h1 {
   text-align: center;
 }
 
-.button:hover,
-.modal-button:hover {
+.button:hover {
   background-color: #0056b3;
 }
 
@@ -188,6 +239,25 @@ form h1 {
 
 .register a:hover {
   text-decoration: underline;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-button:hover {
+  background-color: #0056b3;
 }
 
 /* 모달 내부 스타일 */
@@ -259,32 +329,4 @@ form h1 {
     font-size: 12px;
     line-height: 1.4;
   }
-}
-
-/* New CSS for Image Preview and Buttons */
-.image-preview {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.image-preview img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.remove-image-button {
-  border: 1px solid #ccc;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  background-color: #dc3545;
-  color: white;
-}
-
-.remove-image-button:hover {
-  background-color: #c82333;
 }

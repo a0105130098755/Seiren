@@ -54,29 +54,15 @@ export const signUp = async (userData: {
 
 export const sendEmailCode = async (email: string) => {
   try {
-    const response = await api.post("/send-email-code", { email });
+    const response = await api.get("/send-email-code", {
+      params: { email },
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(
         error.response?.data?.message ||
           "인증번호 발송에 실패했습니다. 다시 시도해주세요."
-      );
-    } else {
-      throw new Error("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-    }
-  }
-};
-
-export const verifyEmailCode = async (email: string, emailCode: string) => {
-  try {
-    const response = await api.post("/verify-email-code", { email, emailCode });
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message ||
-          "인증번호 확인에 실패했습니다. 다시 시도해주세요."
       );
     } else {
       throw new Error("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");

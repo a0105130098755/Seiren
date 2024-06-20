@@ -6,11 +6,12 @@ import {
   FaEyeSlash,
   FaAddressCard,
   FaPhone,
-  FaImage,
 } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 import Modal from "react-modal";
-import { signUp, sendEmailCode, verifyEmailCode } from "../api/Api";
+import { signUp, sendEmailCode } from "../api/Api";
+import useTimer from "../hooks/useTimer";
+import NavBar from "./NavBar";
 import "./SignUpForm.css";
 import { Link } from "react-router-dom";
 
@@ -28,13 +29,16 @@ const SignUpForm: React.FC = () => {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [emailCode, setEmailCode] = useState<string>("");
-  const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false);
+  const [generatedCode, setGeneratedCode] = useState<string>(""); // 이메일 인증 코드
+  const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false); // 상태 추가
   const [termsAgreed, setTermsAgreed] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [privacyModalIsOpen, setPrivacyModalIsOpen] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const { timeLeft, isActive, start, stop } = useTimer(180);
 
   const handleChange =
     (setter: React.Dispatch<React.SetStateAction<string>>) =>
@@ -43,32 +47,49 @@ const SignUpForm: React.FC = () => {
     };
 
   const handleProfileImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setProfileImage(e.target.files[0]);
+    if (e.target.files && e.target.files[0]) {
+      const selectedFile = e.target.files[0];
+      const img = new Image();
+      img.src = URL.createObjectURL(selectedFile);
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = 100;
+        canvas.height = 100;
+        ctx?.drawImage(img, 0, 0, 100, 100);
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const resizedFile = new File([blob], selectedFile.name, {
+                type: "image/jpeg",
+              });
+              setProfileImage(resizedFile);
+              setProfileImageUrl(URL.createObjectURL(resizedFile));
+            }
+          },
+          "image/jpeg",
+          0.95
+        );
+        URL.revokeObjectURL(img.src);
+      };
+      img.onerror = () => {
+        console.log("이미지 로드 중 오류 발생");
+      };
     }
+  };
+
+  const handleProfileImageClear = () => {
+    setProfileImage(null);
+    setProfileImageUrl(null);
   };
 
   const handleSendEmailCode = async () => {
     try {
-      await sendEmailCode(email);
-      alert("인증번호가 발송되었습니다.");
-      localStorage.setItem("sentEmail", email);
+      const response = await sendEmailCode(email);
+      setGeneratedCode(response.code);
+      start();
     } catch (error) {
-      alert("인증번호 발송에 실패했습니다.");
-    }
-  };
-
-  const handleVerifyEmailCode = async () => {
-    try {
-      const verified = await verifyEmailCode(email, emailCode);
-      if (verified) {
-        setIsEmailVerified(true);
-        alert("이메일 인증이 완료되었습니다.");
-      } else {
-        alert("인증번호가 일치하지 않습니다.");
-      }
-    } catch (error) {
-      alert("인증번호 확인에 실패했습니다.");
+      setError("인증번호 발송에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -99,8 +120,8 @@ const SignUpForm: React.FC = () => {
       setError("비밀번호와 비밀번호 확인이 일치해야 합니다.");
       return false;
     }
-    if (!isEmailVerified) {
-      setError("이메일 인증을 완료해주세요.");
+    if (emailCode !== generatedCode) {
+      setError("인증번호가 일치하지 않습니다.");
       return false;
     }
     setError("");
@@ -122,7 +143,6 @@ const SignUpForm: React.FC = () => {
           profileImage: profileImageUrl,
         });
         console.log("회원 가입 성공:", response);
-        // Navigate to login page or other action
       } catch (error: unknown) {
         if (error instanceof Error) {
           setError(error.message);
@@ -141,11 +161,17 @@ const SignUpForm: React.FC = () => {
     setModalIsOpen(false);
   };
 
+  const openPrivacyModal = () => {
+    setPrivacyModalIsOpen(true);
+  };
+
+  const closePrivacyModal = () => {
+    setPrivacyModalIsOpen(false);
+  };
+
   return (
     <div className="container">
-      <div className="topbar">
-        <img src="\Logo.png" alt="Logo" className="logo" />
-      </div>
+      <NavBar />
       <div className="form-container">
         <form className="form" onSubmit={handleSubmit}>
           <h1>Create Account</h1>
@@ -172,6 +198,7 @@ const SignUpForm: React.FC = () => {
                 type="button"
                 className="email-button"
                 onClick={handleSendEmailCode}
+                disabled={isActive}
               >
                 인증번호 발송
               </button>
@@ -186,12 +213,20 @@ const SignUpForm: React.FC = () => {
               <button
                 type="button"
                 className="email-confirm-button"
-                onClick={handleVerifyEmailCode}
+                onClick={() => {
+                  if (emailCode === generatedCode) {
+                    setIsEmailVerified(true);
+                    stop();
+                    alert("이메일 인증이 완료되었습니다.");
+                  } else {
+                    alert("인증번호가 일치하지 않습니다.");
+                  }
+                }}
               >
                 인증번호 확인
               </button>
             </div>
-            <div className="input box">
+            <div className="input box full-width">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -199,14 +234,14 @@ const SignUpForm: React.FC = () => {
                 onChange={handleChange(setPassword)}
               />
               <FaLock className="icon" />
-              <div
+              <span
                 className="eye-icon"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </div>
+              </span>
             </div>
-            <div className="input box">
+            <div className="input box full-width">
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
@@ -214,12 +249,12 @@ const SignUpForm: React.FC = () => {
                 onChange={handleChange(setConfirmPassword)}
               />
               <FaLock className="icon" />
-              <div
+              <span
                 className="eye-icon"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-              </div>
+              </span>
             </div>
             <div className="input box full-width">
               <input
@@ -257,53 +292,93 @@ const SignUpForm: React.FC = () => {
               />
               <FaPhone className="icon" />
             </div>
-            <div className="file-input">
-              <label className="custom-file-upload">
-                <input
-                  type="file"
-                  onChange={handleProfileImageChange}
-                  className="file-upload-input"
-                />
-                파일 선택
-              </label>
-              {profileImage && (
-                <div>
-                  <button type="button" onClick={openModal}>
-                    미리보기
-                  </button>
-                  <button type="button" onClick={() => setProfileImage(null)}>
-                    취소
-                  </button>
-                </div>
-              )}
-            </div>
-            <label className="terms-label">
+            <label className="file-upload-label">
               <input
-                type="checkbox"
-                checked={termsAgreed}
-                onChange={(e) => setTermsAgreed(e.target.checked)}
+                type="file"
+                onChange={handleProfileImageChange}
+                className="file-upload-input"
               />
-              개인정보 처리방침 동의
+              파일 선택
             </label>
-            {error && <div className="error">{error}</div>}
+            {profileImage && (
+              <div className="button-group">
+                <button
+                  type="button"
+                  className="preview-button"
+                  onClick={openModal}
+                >
+                  미리보기
+                </button>
+                <button
+                  type="button"
+                  className="cancel-button"
+                  onClick={handleProfileImageClear}
+                >
+                  취소
+                </button>
+              </div>
+            )}
+            <div className="checkbox-container">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={termsAgreed}
+                  onChange={(e) => setTermsAgreed(e.target.checked)}
+                />
+                개인정보 처리방침 동의
+              </label>
+              <button
+                type="button"
+                onClick={openPrivacyModal}
+                className="modal-button"
+              >
+                개인정보 처리방침 보기
+              </button>
+            </div>
+            {error && <p className="error">{error}</p>}
             <button type="submit" className="button">
               Create Account
             </button>
-          </div>
-          <div className="register">
-            <Link to="/login">Already have an account? Log in</Link>
+            <p className="register">
+              Already have an account? <Link to="/login">Log in</Link>
+            </p>
           </div>
         </form>
       </div>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
+        contentLabel="Image Preview"
         className="modal"
         overlayClassName="overlay"
       >
-        <h2>Profile Image Preview</h2>
-        {profileImageUrl && <img src={profileImageUrl} alt="Profile Preview" />}
-        <button onClick={closeModal}>Close</button>
+        <h2>Image Preview</h2>
+        {profileImage && (
+          <img
+            src={URL.createObjectURL(profileImage)}
+            alt="Profile Preview"
+            className="image-preview"
+          />
+        )}
+        <button onClick={closeModal} className="modal-button">
+          Close
+        </button>
+      </Modal>
+      <Modal
+        isOpen={privacyModalIsOpen}
+        onRequestClose={closePrivacyModal}
+        contentLabel="Terms and Conditions"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <h2>Terms and Conditions</h2>
+        <div className="modal-content">
+          {/* 개인정보 처리방침 내용 */}
+          <p>{/* 주석 처리된 개인정보 처리방침 내용 */}</p>
+        </div>
+        <button onClick={closePrivacyModal} className="modal-button">
+          Close
+        </button>
       </Modal>
     </div>
   );
