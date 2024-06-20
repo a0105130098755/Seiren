@@ -1,0 +1,290 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Noto Sans KR", sans-serif;
+  background-color: #ffffff;
+}
+
+.topbar {
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.topbar img {
+  height: 40px;
+}
+
+.container {
+  max-width: 500px;
+  margin: 100px auto 0;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form h1 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.input.box {
+  position: relative;
+  flex: 1 1 calc(50% - 10px);
+  display: flex;
+  align-items: center;
+}
+
+.input.box.full-width {
+  flex: 1 1 100%;
+}
+
+.input.box input {
+  width: 100%;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  flex: 1;
+}
+
+.icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.email-input {
+  padding-right: 110px;
+}
+
+.email-button,
+.email-confirm-button {
+  position: absolute;
+  right: 0;
+  padding: 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.file-upload-label {
+  border: 1px solid #ccc;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  display: inline-block;
+}
+
+.file-upload-input {
+  display: none;
+}
+
+.file-preview-button {
+  border: 1px solid #ccc;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  margin-left: 10px;
+}
+
+.button,
+.modal-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.button:hover,
+.modal-button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  outline: none;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.register {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.register a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.register a:hover {
+  text-decoration: underline;
+}
+
+/* 모달 내부 스타일 */
+.modal-content {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.modal-content h3 {
+  font-size: 18px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  margin-bottom: 10px;
+}
+
+.modal-content ul {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.modal-content ul li {
+  list-style-type: disc;
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 100px 20px 0;
+    padding: 10px;
+  }
+
+  .form-group {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .input.box {
+    flex: 1 1 100%;
+  }
+
+  .input.box.full-width input {
+    padding-right: 40px;
+  }
+
+  .email-button,
+  .email-confirm-button {
+    position: static;
+    width: auto;
+    margin-top: 5px;
+    border-radius: 5px;
+  }
+
+  .modal {
+    max-width: 90%;
+  }
+
+  .topbar {
+    padding: 10px;
+    flex-direction: column;
+  }
+
+  .form-container {
+    margin-top: 60px;
+  }
+
+  .modal-content {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}
+
+/* New CSS for Image Preview and Buttons */
+.image-preview {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.image-preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.remove-image-button {
+  border: 1px solid #ccc;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #dc3545;
+  color: white;
+}
+
+.remove-image-button:hover {
+  background-color: #c82333;
+}
