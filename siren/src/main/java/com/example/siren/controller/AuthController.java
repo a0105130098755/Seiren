@@ -1,4 +1,30 @@
 package com.example.siren.controller;
 
+import com.example.siren.service.AuthService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/auth")
+@RequiredArgsConstructor
+@Slf4j
 public class AuthController {
+    private final AuthService authService;
+
+    @GetMapping("/sendmail")
+    public ResponseEntity<String> mailCode(@RequestParam String email){
+        String code = authService.sendMail(email);
+        log.info("메일 : " + email + " / 코드 : " + code);
+        return ResponseEntity.ok(code);
+    }
+    @GetMapping("/test")
+    public ResponseEntity<String> test(){
+        return ResponseEntity.ok("테스트");
+    }
+
 }

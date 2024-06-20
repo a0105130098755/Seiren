@@ -3,8 +3,6 @@ package com.example.siren.service;
 import com.example.siren.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,6 @@ import java.util.Random;
 public class AuthService {
     private final MemberRepository memberRepository;
     private final JavaMailSender mailSender;
-    private final MimeMessage mimeMessage = mailSender.createMimeMessage();
 
     public boolean existsEmail(String email){
         try{
@@ -59,14 +56,15 @@ public class AuthService {
                 + "<div style=\"font-size:20px; font-style:bold; width: 100%; height:50px; border: 1px solid #c6c6c6; display: block;\">" + code + "</div>"
                 + "</div>";
 
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
         try {
-            helper.setFrom("1103bsj@naver.com");
+            helper.setFrom("siren-_-@naver.com");
             helper.setTo(email);
-            helper.setSubject("AskMe 이메일 인증 번호");
+            helper.setSubject("이메일 인증 번호");
             helper.setText(htmlContent, true);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            log.error("메일 전송 중 에러 발생 : " + e);
         }
         mailSender.send(mimeMessage);
         return code;
