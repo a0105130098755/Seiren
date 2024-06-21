@@ -23,6 +23,22 @@ export const login = async (email: string, password: string) => {
   }
 };
 
+export const requestRefreshToken = async (refreshToken: string) => {
+  try {
+    const response = await api.post("/refresh-token", { refreshToken });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message ||
+          "토큰 재발행에 실패했습니다. 다시 시도해주세요."
+      );
+    } else {
+      throw new Error("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  }
+};
+
 export const signUp = async (userData: {
   username: string;
   email: string;

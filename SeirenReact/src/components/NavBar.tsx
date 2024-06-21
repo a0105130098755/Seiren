@@ -1,14 +1,27 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 import "./NavBar.css";
 
 const NavBar: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const isProfileSet = false; // 예시: 실제로는 프로필이 설정되었는지 확인하는 로직을 넣어야 합니다.
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    setIsLoggedIn(!!accessToken);
+  }, [location]);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setIsLoggedIn(false);
+    toggleSidebar(); // 사이드바 닫기
   };
 
   return (
@@ -26,7 +39,7 @@ const NavBar: React.FC = () => {
           <Link to="/charge">충전</Link>
         </nav>
         <div className="profile">
-          {isProfileSet ? (
+          {isLoggedIn ? (
             <img
               src="/default-profile.png"
               alt="Profile"
@@ -42,7 +55,7 @@ const NavBar: React.FC = () => {
       <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
         <FaTimes className="close-icon" onClick={toggleSidebar} />
         <div className="profile">
-          {isProfileSet ? (
+          {isLoggedIn ? (
             <img
               src="/default-profile.png"
               alt="Profile"
@@ -62,6 +75,11 @@ const NavBar: React.FC = () => {
           <Link to="/charge" onClick={toggleSidebar}>
             충전
           </Link>
+          {isLoggedIn && (
+            <button className="logout-button" onClick={handleLogout}>
+              로그아웃
+            </button>
+          )}
         </nav>
       </div>
     </>
