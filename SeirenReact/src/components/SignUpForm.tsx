@@ -332,7 +332,7 @@ const SignUpForm: React.FC = () => {
                 onClick={openPrivacyModal}
                 className="modal-button"
               >
-                개인정보 처리방침 보기
+                개인정보 처리방침
               </button>
             </div>
             {error && <p className="error">{error}</p>}

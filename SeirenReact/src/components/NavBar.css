@@ -26,7 +26,7 @@
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  gap: 60px; /* 항목 사이의 공백을 넓게 조정 */
+  gap: 200px; /* 항목 사이의 공백을 더 넓게 조정 */
 }
 
 .nav-links a {
@@ -96,7 +96,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  transition: right 0.8s ease; /* 슬라이드 애니메이션 */
+  transition: right 0.3s ease; /* 슬라이드 애니메이션 */
 }
 
 .sidebar.open {
@@ -119,8 +119,28 @@
 .sidebar-links a {
   text-decoration: none;
   color: #333;
-  font-size: 16px;
+  font-size: 18px; /* 가독성을 위해 글꼴 크기 증가 */
+  padding: 10px 0; /* 여백 추가 */
   transition: color 0.3s ease-in-out;
+  position: relative;
+}
+
+.sidebar-links a::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px; /* 밑줄의 높이 */
+  background-color: #333; /* 밑줄 색상 */
+  left: 0;
+  bottom: 0;
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .sidebar-links a:hover {
@@ -128,12 +148,9 @@
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    justify-content: space-between;
-  }
-
-  .nav-links {
-    display: none;
+  .nav-links,
+  .profile {
+    display: none !important; /* 모바일일 때 네비게이션 바에서 숨기기 */
   }
 
   .hamburger-icon {
@@ -144,7 +161,19 @@
     width: 200px;
   }
 
-  .sidebar-links a {
-    font-size: 14px;
+  .sidebar-links {
+    display: flex; /* 모바일일 때 사이드바에서 링크 보이기 */
+  }
+
+  .sidebar .profile {
+    display: flex; /* 모바일일 때 사이드바에서 프로필 보이기 */
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .sidebar .profile-pic,
+  .sidebar .profile-icon {
+    height: 40px;
+    width: 40px;
   }
 }

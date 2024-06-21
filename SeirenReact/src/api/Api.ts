@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "http://localhost:8111/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -54,7 +54,7 @@ export const signUp = async (userData: {
 
 export const sendEmailCode = async (email: string) => {
   try {
-    const response = await api.get("/send-email-code", {
+    const response = await api.get("/auth/sendmail", {
       params: { email },
     });
     return response.data;

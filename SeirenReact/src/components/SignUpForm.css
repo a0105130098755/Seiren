@@ -131,6 +131,8 @@
   color: white;
   border-radius: 0 5px 5px 0;
   cursor: pointer;
+  width: auto; /* 너비를 자동으로 설정 */
+  white-space: nowrap; /* 버튼 내부 텍스트 줄바꿈 방지 */
 }
 
 .eye-icon {
@@ -293,7 +295,7 @@
 
   .form-group {
     flex-direction: column;
-    gap: 0;
+    gap: 10px;
   }
 
   .input.box {
@@ -306,10 +308,17 @@
 
   .email-button,
   .email-confirm-button {
-    position: static;
-    width: auto;
-    margin-top: 5px;
-    border-radius: 5px;
+    position: absolute;
+    right: 0;
+    top: 0; /* 버튼을 인풋과 동일한 높이에 배치 */
+    height: 100%; /* 버튼 높이를 인풋 높이와 동일하게 설정 */
+    width: auto; /* 너비를 자동으로 설정 */
+    border-radius: 0 5px 5px 0;
+    white-space: nowrap;
+  }
+
+  .button-group {
+    flex-direction: column;
   }
 
   .modal {
