@@ -4,7 +4,7 @@
   max-width: 500px;
   margin: 100px auto 0;
   padding: 20px;
-  background: white;
+  background: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -80,6 +80,7 @@
 .form h1 {
   margin-bottom: 20px;
   text-align: center;
+  color: #333;
 }
 
 .form-group {
@@ -107,6 +108,8 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   height: 40px; /* 입력 필드 높이 */
+  background: #fff;
+  color: #333;
 }
 
 .icon {
@@ -127,7 +130,7 @@
   right: 0;
   padding: 0 15px; /* 버튼 내부 여백 */
   border: none;
-  background-color: #007bff;
+  background-color: #444; /* 고급스러운 색상으로 변경 */
   color: white;
   border-radius: 0 5px 5px 0;
   cursor: pointer;
@@ -138,8 +141,13 @@
   justify-content: center;
 }
 
+.email-button:hover,
+.email-confirm-button:hover {
+  background-color: #555; /* 호버 시 색상 변경 */
+}
+
 .check-button {
-  background-color: #28a745;
+  background-color: #444; /* 고급스러운 색상으로 변경 */
   color: white;
   border: none;
   padding: 10px 15px;
@@ -153,7 +161,7 @@
 }
 
 .check-button:hover {
-  background-color: #218838;
+  background-color: #555; /* 호버 시 색상 변경 */
 }
 
 .eye-icon {
@@ -171,9 +179,13 @@
   padding: 10px;
   cursor: pointer;
   border-radius: 5px;
-  background-color: #007bff;
+  background-color: #444; /* 고급스러운 색상으로 변경 */
   color: white;
   margin-right: 10px;
+}
+
+.file-upload-label:hover {
+  background-color: #555; /* 호버 시 색상 변경 */
 }
 
 .file-upload-input {
@@ -186,12 +198,16 @@
 }
 
 .preview-button {
-  background-color: #28a745;
+  background-color: #444; /* 고급스러운 색상으로 변경 */
   color: white;
   border: none;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.preview-button:hover {
+  background-color: #555; /* 호버 시 색상 변경 */
 }
 
 .cancel-button {
@@ -203,8 +219,12 @@
   cursor: pointer;
 }
 
+.cancel-button:hover {
+  background-color: #c82333; /* 호버 시 색상 변경 */
+}
+
 .button {
-  background-color: #007bff;
+  background-color: #444; /* 고급스러운 색상으로 변경 */
   color: white;
   border: none;
   padding: 10px;
@@ -216,7 +236,7 @@
 }
 
 .button:hover {
-  background-color: #0056b3;
+  background-color: #555; /* 호버 시 색상 변경 */
 }
 
 .error {
@@ -256,7 +276,7 @@
 }
 
 .register a {
-  color: #007bff;
+  color: #444; /* 고급스러운 색상으로 변경 */
   text-decoration: none;
 }
 
@@ -271,7 +291,7 @@
 }
 
 .modal-button {
-  background-color: #007bff;
+  background-color: #444; /* 고급스러운 색상으로 변경 */
   color: white;
   border: none;
   padding: 10px;
@@ -280,7 +300,7 @@
 }
 
 .modal-button:hover {
-  background-color: #0056b3;
+  background-color: #555; /* 호버 시 색상 변경 */
 }
 
 /* 모달 내부 스타일 */
