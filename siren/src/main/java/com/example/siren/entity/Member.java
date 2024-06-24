@@ -1,5 +1,6 @@
 package com.example.siren.entity;
 
+import com.example.siren.constant.Authority;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

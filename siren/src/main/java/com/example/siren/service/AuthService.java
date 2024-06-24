@@ -1,10 +1,19 @@
 package com.example.siren.service;
 
+import com.example.siren.dto.MemberRequestDTO;
+import com.example.siren.dto.MemberResponseDTO;
+import com.example.siren.dto.TokenDTO;
+import com.example.siren.entity.Member;
+import com.example.siren.jwt.TokenProvider;
 import com.example.siren.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -19,6 +28,30 @@ import java.util.Random;
 public class AuthService {
     private final MemberRepository memberRepository;
     private final JavaMailSender mailSender;
+    private final AuthenticationManagerBuilder managerBuilder;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
+
+    public MemberResponseDTO signup(MemberRequestDTO requestDTO){
+        if(memberRepository.existsByEmail(requestDTO.getEmail())){
+            throw new RuntimeException("이미 가입된 유저");
+        }
+        Member member = requestDTO.toEntity(passwordEncoder);
+        return MemberResponseDTO.of(memberRepository.save(member));
+        // save 는 저장 뒤 해당 저장된 객체를 반환한다.
+    }
+
+    public TokenDTO login(MemberRequestDTO requestDTO){
+        // toAuthentication() 은 객체 변환, 이메일과 패스워드가 일치하는지 검증하는 메소드.
+        UsernamePasswordAuthenticationToken authenticationToken = requestDTO.toAuthentication();
+        // 검증을 거친 뒤 해당 변환된 객체 UsernamePasswordAuthenticationToken 을
+        // managerBuilder.getObject().authenticate() 로 인증을 수행.
+        // 인증이 성공할 때 Authentication 객체 반환
+        Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+
+        // 인증된 사용자 정보를 사용해 Token 생성 뒤 해당 객체를 반환해준다.
+        return tokenProvider.generateTokenDto(authentication);
+    }
 
     public boolean existsEmail(String email){
         try{

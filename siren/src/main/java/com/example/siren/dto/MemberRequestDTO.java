@@ -1,5 +1,6 @@
 package com.example.siren.dto;
 
+import com.example.siren.constant.Authority;
 import com.example.siren.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +16,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class MemberRequestDTO {
     private String email;
     private String password;
+    private String name;
+    private String profile;
+    private String phone;
 
     public Member toEntity(PasswordEncoder passwordEncoder){
         return Member.builder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
+                .name(name)
+                .profile(profile)
+                .phone(phone)
+                .authority(Authority.ROLE_USER)
                 .build();
     }
 
