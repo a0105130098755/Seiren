@@ -17,7 +17,6 @@ import { Link } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
-// 초기 상태 정의
 const initialState: State = {
   email: "",
   password: "",
@@ -33,6 +32,7 @@ const initialState: State = {
   isEmailVerified: false,
   termsAgreed: false,
   error: "",
+  emailError: "",
   modalIsOpen: false,
   privacyModalIsOpen: false,
   showPassword: false,
@@ -41,7 +41,6 @@ const initialState: State = {
   isPhoneUnique: null,
 };
 
-// 상태와 액션 타입 정의
 type State = {
   email: string;
   password: string;
@@ -57,6 +56,7 @@ type State = {
   isEmailVerified: boolean;
   termsAgreed: boolean;
   error: string;
+  emailError: string;
   modalIsOpen: boolean;
   privacyModalIsOpen: boolean;
   showPassword: boolean;
@@ -67,7 +67,8 @@ type State = {
 
 type Action =
   | { type: "SET_FIELD"; field: string; value: any }
-  | { type: "SET_ERROR"; value: string }
+  | { type: "SET_GENERAL_ERROR"; value: string }
+  | { type: "SET_EMAIL_ERROR"; value: string }
   | { type: "SET_PROFILE_IMAGE"; file: File | null; url: string | null }
   | { type: "TOGGLE_MODAL"; modal: string }
   | { type: "TOGGLE_PASSWORD"; field: string }
@@ -75,13 +76,14 @@ type Action =
   | { type: "SET_GENERATED_CODE"; value: string }
   | { type: "SET_UNIQUE_STATUS"; field: string; value: boolean | null };
 
-// 리듀서 함수 정의
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "SET_FIELD":
       return { ...state, [action.field]: action.value };
-    case "SET_ERROR":
+    case "SET_GENERAL_ERROR":
       return { ...state, error: action.value };
+    case "SET_EMAIL_ERROR":
+      return { ...state, emailError: action.value };
     case "SET_PROFILE_IMAGE":
       return {
         ...state,
@@ -113,7 +115,6 @@ const SignUpForm: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { timeLeft, isActive, start, stop } = useTimer(180);
 
-  // 입력 값 변경 핸들러
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: "SET_FIELD",
@@ -122,7 +123,6 @@ const SignUpForm: React.FC = () => {
     });
   };
 
-  // 프로필 이미지 변경 핸들러
   const handleProfileImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
@@ -153,22 +153,31 @@ const SignUpForm: React.FC = () => {
         URL.revokeObjectURL(img.src);
       };
       img.onerror = () => {
-        dispatch({ type: "SET_ERROR", value: "이미지 로드 중 오류 발생" });
+        dispatch({
+          type: "SET_GENERAL_ERROR",
+          value: "이미지 로드 중 오류 발생",
+        });
       };
     }
   };
 
-  // 프로필 이미지 초기화 핸들러
   const handleProfileImageClear = () => {
     dispatch({ type: "SET_PROFILE_IMAGE", file: null, url: null });
   };
 
-  // 이메일 인증 코드 발송 핸들러
   const handleSendEmailCode = async () => {
     if (state.isEmailVerified) {
       dispatch({
-        type: "SET_ERROR",
+        type: "SET_GENERAL_ERROR",
         value: "이미 이메일 인증이 완료되었습니다.",
+      });
+      return;
+    }
+
+    if (!state.email) {
+      dispatch({
+        type: "SET_EMAIL_ERROR",
+        value: "이메일을 입력해 주세요.",
       });
       return;
     }
@@ -177,12 +186,22 @@ const SignUpForm: React.FC = () => {
       const response = await sendEmailCode(state.email);
       dispatch({ type: "SET_GENERATED_CODE", value: response.code });
       start();
-    } catch (error) {
-      dispatch({ type: "SET_ERROR", value: (error as Error).message });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch({
+          type: "SET_GENERAL_ERROR",
+          value:
+            error.message || "인증번호 발송에 실패했습니다. 다시 시도해주세요.",
+        });
+      } else {
+        dispatch({
+          type: "SET_GENERAL_ERROR",
+          value: "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.",
+        });
+      }
     }
   };
 
-  // 닉네임 중복 확인 핸들러
   const checkNicknameUnique = async () => {
     try {
       const isUnique = await checkNickname(state.nickname);
@@ -191,12 +210,18 @@ const SignUpForm: React.FC = () => {
         field: "isNicknameUnique",
         value: isUnique,
       });
-    } catch (error) {
-      dispatch({ type: "SET_ERROR", value: (error as Error).message });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch({ type: "SET_GENERAL_ERROR", value: error.message });
+      } else {
+        dispatch({
+          type: "SET_GENERAL_ERROR",
+          value: "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.",
+        });
+      }
     }
   };
 
-  // 전화번호 중복 확인 핸들러
   const checkPhoneUnique = async () => {
     try {
       const isUnique = await checkPhone(state.phone);
@@ -205,19 +230,27 @@ const SignUpForm: React.FC = () => {
         field: "isPhoneUnique",
         value: isUnique,
       });
-    } catch (error) {
-      dispatch({ type: "SET_ERROR", value: (error as Error).message });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch({ type: "SET_GENERAL_ERROR", value: error.message });
+      } else {
+        dispatch({
+          type: "SET_GENERAL_ERROR",
+          value: "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.",
+        });
+      }
     }
   };
 
-  // 비밀번호 유효성 검사
   const validatePassword = (password: string): boolean => {
     const regex = /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
   };
 
-  // 폼 유효성 검사
   const validateForm = (): boolean => {
+    dispatch({ type: "SET_GENERAL_ERROR", value: "" });
+    dispatch({ type: "SET_EMAIL_ERROR", value: "" });
+
     if (
       !state.name ||
       !state.email ||
@@ -229,21 +262,21 @@ const SignUpForm: React.FC = () => {
       !state.termsAgreed
     ) {
       dispatch({
-        type: "SET_ERROR",
+        type: "SET_GENERAL_ERROR",
         value: "모든 필드를 입력하고 약관에 동의해야 합니다.",
       });
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(state.email)) {
       dispatch({
-        type: "SET_ERROR",
+        type: "SET_EMAIL_ERROR",
         value: "유효한 이메일 주소를 입력해주세요.",
       });
       return false;
     }
     if (!validatePassword(state.password)) {
       dispatch({
-        type: "SET_ERROR",
+        type: "SET_GENERAL_ERROR",
         value:
           "비밀번호는 최소 8자 이상, 하나의 숫자 및 하나의 특수 문자를 포함해야 합니다.",
       });
@@ -251,35 +284,43 @@ const SignUpForm: React.FC = () => {
     }
     if (state.password !== state.confirmPassword) {
       dispatch({
-        type: "SET_ERROR",
+        type: "SET_GENERAL_ERROR",
         value: "비밀번호와 비밀번호 확인이 일치해야 합니다.",
       });
       return false;
     }
     if (state.emailCode !== state.generatedCode) {
-      dispatch({ type: "SET_ERROR", value: "인증번호가 일치하지 않습니다." });
+      dispatch({
+        type: "SET_GENERAL_ERROR",
+        value: "인증번호가 일치하지 않습니다.",
+      });
       return false;
     }
     if (!state.isEmailVerified) {
       dispatch({
-        type: "SET_ERROR",
+        type: "SET_GENERAL_ERROR",
         value: "이메일 인증이 완료되지 않았습니다.",
       });
       return false;
     }
     if (state.isNicknameUnique === false) {
-      dispatch({ type: "SET_ERROR", value: "이미 사용 중인 닉네임입니다." });
+      dispatch({
+        type: "SET_GENERAL_ERROR",
+        value: "이미 사용 중인 닉네임입니다.",
+      });
       return false;
     }
     if (state.isPhoneUnique === false) {
-      dispatch({ type: "SET_ERROR", value: "이미 사용 중인 전화번호입니다." });
+      dispatch({
+        type: "SET_GENERAL_ERROR",
+        value: "이미 사용 중인 전화번호입니다.",
+      });
       return false;
     }
-    dispatch({ type: "SET_ERROR", value: "" });
+    dispatch({ type: "SET_GENERAL_ERROR", value: "" });
     return true;
   };
 
-  // 회원가입 폼 제출 핸들러
   const handleSignUpSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
@@ -294,29 +335,31 @@ const SignUpForm: React.FC = () => {
           profileImage: state.profileImageUrl,
         });
         console.log("회원 가입 성공:", response);
-        // 회원 가입 성공 시 추가 작업
       } catch (error: unknown) {
-        dispatch({ type: "SET_ERROR", value: (error as Error).message });
+        if (error instanceof Error) {
+          dispatch({ type: "SET_GENERAL_ERROR", value: error.message });
+        } else {
+          dispatch({
+            type: "SET_GENERAL_ERROR",
+            value: "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.",
+          });
+        }
       }
     }
   };
 
-  // 모달 열기 핸들러
   const openModal = () => {
     dispatch({ type: "TOGGLE_MODAL", modal: "modalIsOpen" });
   };
 
-  // 모달 닫기 핸들러
   const closeModal = () => {
     dispatch({ type: "TOGGLE_MODAL", modal: "modalIsOpen" });
   };
 
-  // 개인정보 처리방침 모달 열기 핸들러
   const openPrivacyModal = () => {
     dispatch({ type: "TOGGLE_MODAL", modal: "privacyModalIsOpen" });
   };
 
-  // 개인정보 처리방침 모달 닫기 핸들러
   const closePrivacyModal = () => {
     dispatch({ type: "TOGGLE_MODAL", modal: "privacyModalIsOpen" });
   };
@@ -359,6 +402,7 @@ const SignUpForm: React.FC = () => {
                 인증번호 발송
               </button>
             </div>
+            {state.emailError && <p className="error">{state.emailError}</p>}
             <div className="input box full-width">
               <input
                 type="text"
