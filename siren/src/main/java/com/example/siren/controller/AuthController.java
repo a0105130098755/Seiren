@@ -1,5 +1,6 @@
 package com.example.siren.controller;
 
+import com.example.siren.dto.AccessTokenDTO;
 import com.example.siren.dto.MemberRequestDTO;
 import com.example.siren.dto.MemberResponseDTO;
 import com.example.siren.dto.TokenDTO;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Access;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/reissued")
-    public ResponseEntity<TokenDTO> newToken(@RequestBody String refreshToken){
+    public ResponseEntity<AccessTokenDTO> newToken(@RequestBody String refreshToken){
         log.info("refreshToken 값 : {}", refreshToken);
         return ResponseEntity.ok(authService.reissuedToken(refreshToken));
     }

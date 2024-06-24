@@ -1,6 +1,7 @@
 package com.example.siren.jwt;
 
 
+import com.example.siren.dto.AccessTokenDTO;
 import com.example.siren.dto.TokenDTO;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -75,6 +76,32 @@ public class TokenProvider {
                 .tokenExpiresIn(tokenExpiresIn.getTime())
                 .refreshToken(refreshToken)
                 .refreshTokenExpiresIn(refreshTokenExpiresIn.getTime())
+                .build();
+    }
+    // refreshToken 을 이용해 새 AccessToken 발행
+    public AccessTokenDTO generateAccessTokenDto(Authentication authentication) {
+        // 권한 정보 문자열 생성
+        // 권한 정보 문자열 생성
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        long now = (new java.util.Date()).getTime(); // 현재 시간
+        // 토큰 만료 시간 설정
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME); // 엑세스 토큰 만료 시간
+
+        // 토큰 생성
+        String accessToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
+        return AccessTokenDTO.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .build();
     }
 

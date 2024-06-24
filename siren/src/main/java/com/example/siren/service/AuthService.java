@@ -1,5 +1,6 @@
 package com.example.siren.service;
 
+import com.example.siren.dto.AccessTokenDTO;
 import com.example.siren.dto.MemberRequestDTO;
 import com.example.siren.dto.MemberResponseDTO;
 import com.example.siren.dto.TokenDTO;
@@ -131,10 +132,12 @@ public class AuthService {
     }
 
     // RefreshToken 이용하여 AccessToken 재발급
-    public TokenDTO reissuedToken(String refreshToken){
+    public AccessTokenDTO reissuedToken(String refreshToken){
         Optional<Token> optionalToken = tokenRepository.findByRefreshToken(refreshToken);
         if(optionalToken.isPresent()){
-            return tokenProvider.generateTokenDto(tokenProvider.getAuthentication(refreshToken));
+            AccessTokenDTO reissuedAccessToken = tokenProvider.generateAccessTokenDto(tokenProvider.getAuthentication(refreshToken));
+            log.info("재발행 accessToken 값 {}", reissuedAccessToken);
+            return reissuedAccessToken;
         }
         return null;
     }
