@@ -132,7 +132,7 @@ public class AuthService {
 
     // RefreshToken 이용하여 AccessToken 재발급
     public TokenDTO reissuedToken(String refreshToken){
-        Optional<Token> optionalToken = tokenRepository.findByToken(refreshToken);
+        Optional<Token> optionalToken = tokenRepository.findByRefreshToken(refreshToken);
         if(optionalToken.isPresent()){
             return tokenProvider.generateTokenDto(tokenProvider.getAuthentication(refreshToken));
         }
