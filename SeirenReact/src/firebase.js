@@ -17,7 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Firebase 서비스 초기화
-const auth = getAuth(app); // app을 인자로 전달
+const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 

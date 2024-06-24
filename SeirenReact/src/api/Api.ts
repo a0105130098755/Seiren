@@ -40,7 +40,6 @@ export const requestRefreshToken = async (refreshToken: string) => {
 };
 
 export const signUp = async (userData: {
-  username: string;
   email: string;
   password: string;
   name: string;

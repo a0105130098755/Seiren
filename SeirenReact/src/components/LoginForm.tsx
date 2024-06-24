@@ -7,23 +7,20 @@ import "./LoginForm.css";
 import NavBar from "./NavBar";
 
 const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const interval = setInterval(checkTokenExpiration, 60 * 1000); // 1분마다 확인
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(checkTokenExpiration, 60 * 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value);
-  };
 
   const validateForm = (): boolean => {
     if (!email || !password) {
@@ -50,7 +47,7 @@ const LoginForm: React.FC = () => {
         console.log("Tokens saved to localStorage");
         navigate("/dashboard");
       } catch (error) {
-        const errorMessage = (error as any).message;
+        const errorMessage = (error as Error).message;
         setError(errorMessage || "로그인에 실패했습니다. 다시 시도해주세요.");
         console.error("Login Error:", errorMessage);
       }
@@ -73,6 +70,7 @@ const LoginForm: React.FC = () => {
             console.log("Token refreshed:", data);
           } else {
             console.log("No refresh token available");
+            handleLogout();
           }
         } catch (error) {
           console.error("Token refresh failed:", error);

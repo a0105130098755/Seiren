@@ -106,7 +106,7 @@
   padding: 10px 10px 10px 40px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  flex: 1;
+  height: 40px; /* 입력 필드 높이 */
 }
 
 .icon {
@@ -125,14 +125,17 @@
 .email-confirm-button {
   position: absolute;
   right: 0;
-  padding: 10px;
+  padding: 0 15px; /* 버튼 내부 여백 */
   border: none;
   background-color: #007bff;
   color: white;
   border-radius: 0 5px 5px 0;
   cursor: pointer;
-  width: auto; /* 너비를 자동으로 설정 */
+  height: 40px; /* 버튼 높이를 입력 필드와 동일하게 설정 */
   white-space: nowrap; /* 버튼 내부 텍스트 줄바꿈 방지 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .eye-icon {
