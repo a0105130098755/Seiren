@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class MemberRequestDTO {
     private String email;
     private String password;
+    private String nickname;
     private String name;
     private String profile;
     private String phone;
@@ -25,6 +26,7 @@ public class MemberRequestDTO {
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .name(name)
+                .nickname(nickname)
                 .profile(profile)
                 .phone(phone)
                 .authority(Authority.ROLE_USER)
