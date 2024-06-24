@@ -100,6 +100,8 @@ export const checkPhone = async (phone: string) => {
 const handleAxiosError = (error: unknown, defaultMessage: string) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);
+  } else if (error instanceof Error) {
+    throw new Error(error.message);
   } else {
     throw new Error(defaultMessage);
   }
