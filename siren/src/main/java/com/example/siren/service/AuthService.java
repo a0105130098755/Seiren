@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -45,7 +46,21 @@ public class AuthService {
     }
 
     public TokenDTO login(MemberRequestDTO requestDTO){
-        // toAuthentication() 은 객체 변환, 이메일과 패스워드가 일치하는지 검증하는 메소드.
+        Optional<Member> optionalMember
+                = memberRepository.findByEmail(requestDTO.getEmail());
+        if(optionalMember.isPresent()){
+            Member member = optionalMember.get();
+            // 탈퇴한 회원이라면
+            if(!member.isStatus()) {
+                log.info("탈퇴한 회원 입니다. 이메일 : " + member.getEmail());
+                return null;
+            }
+        }else{
+            log.info("없는 회원");
+            return null;
+        }
+
+        // toAuthentication() 은 객체 변환 메소드
         UsernamePasswordAuthenticationToken authenticationToken = requestDTO.toAuthentication();
         
         // 검증을 거친 뒤 해당 변환된 객체 UsernamePasswordAuthenticationToken 을

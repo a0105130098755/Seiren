@@ -28,7 +28,7 @@ public class Member {
     private String phone;
     private int point;
     private LocalDateTime regDate;
-    boolean status;
+    private boolean status;
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
