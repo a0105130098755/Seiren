@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:8111/api",
@@ -7,7 +7,7 @@ const api = axios.create({
   },
 });
 
-export const login = async (email: string, password: string) => {
+export const login = async (email, password) => {
   try {
     const response = await api.post("/login", { email, password });
     return response.data;
@@ -19,7 +19,7 @@ export const login = async (email: string, password: string) => {
   }
 };
 
-export const requestRefreshToken = async (refreshToken: string) => {
+export const requestRefreshToken = async (refreshToken) => {
   try {
     const response = await api.post("/refresh-token", { refreshToken });
     return response.data;
@@ -28,7 +28,7 @@ export const requestRefreshToken = async (refreshToken: string) => {
   }
 };
 
-export const loginWithGoogle = async (tokenId: string) => {
+export const loginWithGoogle = async (tokenId) => {
   try {
     const response = await api.post("/google-login", { tokenId });
     return response.data;
@@ -37,14 +37,7 @@ export const loginWithGoogle = async (tokenId: string) => {
   }
 };
 
-export const signUp = async (userData: {
-  email: string;
-  password: string;
-  name: string;
-  nickname: string;
-  phone: string;
-  profileImage: string | null;
-}) => {
+export const signUp = async (userData) => {
   try {
     const response = await api.post("/signup", userData, {
       headers: {
@@ -57,7 +50,7 @@ export const signUp = async (userData: {
   }
 };
 
-export const sendEmailCode = async (email: string) => {
+export const sendEmailCode = async (email) => {
   try {
     const response = await api.get("/auth/sendmail", {
       params: { email },
@@ -68,7 +61,7 @@ export const sendEmailCode = async (email: string) => {
   }
 };
 
-export const checkNickname = async (nickname: string) => {
+export const checkNickname = async (nickname) => {
   try {
     const response = await api.get("/check-nickname", {
       params: { nickname },
@@ -82,7 +75,7 @@ export const checkNickname = async (nickname: string) => {
   }
 };
 
-export const checkPhone = async (phone: string) => {
+export const checkPhone = async (phone) => {
   try {
     const response = await api.get("/check-phone", {
       params: { phone },
@@ -96,7 +89,7 @@ export const checkPhone = async (phone: string) => {
   }
 };
 
-const handleAxiosError = (error: unknown, defaultMessage: string) => {
+const handleAxiosError = (error, defaultMessage) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);
   } else if (error instanceof Error) {

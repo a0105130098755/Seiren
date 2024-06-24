@@ -138,6 +138,24 @@
   justify-content: center;
 }
 
+.check-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px; /* 버튼과 입력 필드 사이 간격 */
+}
+
+.check-button:hover {
+  background-color: #218838;
+}
+
 .eye-icon {
   position: absolute;
   right: 10px;
