@@ -90,6 +90,11 @@ public class TokenProvider {
         // 토큰 만료 시간 설정
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME); // 엑세스 토큰 만료 시간
 
+        log.info("TokenProvider getName {}",authentication.getName());
+        log.info("TokenProvider getPrincipal {}",authentication.getDetails());
+        log.info("TokenProvider getAuthorities {}",authentication.getAuthorities());
+
+
         // 토큰 생성
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())

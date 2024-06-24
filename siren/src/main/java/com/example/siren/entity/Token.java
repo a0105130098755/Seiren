@@ -3,9 +3,7 @@ package com.example.siren.entity;
 import com.example.siren.constant.Authority;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,6 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Token {
     @Id
+    @Column(name="token_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String email;
     private String refreshToken;
 
