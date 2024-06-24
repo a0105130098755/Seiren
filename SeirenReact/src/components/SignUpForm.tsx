@@ -1,4 +1,4 @@
-import React, { useState, useReducer, ChangeEvent, FormEvent } from "react";
+import React, { useReducer, ChangeEvent, FormEvent } from "react";
 import {
   FaLock,
   FaUser,
