@@ -5,6 +5,7 @@ import SignUpForm from "./components/SignUpForm";
 import "./App.css";
 
 function App() {
+  console.log("Google Client ID:", process.env.REACT_APP_GOOGLE_CLIENT_ID); // 환경 변수 확인
   return (
     <Router>
       <div className="App">

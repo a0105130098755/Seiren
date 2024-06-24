@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, useReducer, ChangeEvent, FormEvent } from "react";
 import {
   FaLock,
   FaUser,
@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 import Modal from "react-modal";
-import { signUp, sendEmailCode } from "../api/Api";
+import { signUp, sendEmailCode, checkNickname, checkPhone } from "../api/Api";
 import useTimer from "../hooks/useTimer";
 import NavBar from "./NavBar";
 import "./SignUpForm.css";
@@ -17,34 +17,112 @@ import { Link } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
+// 초기 상태 정의
+const initialState: State = {
+  email: "",
+  password: "",
+  confirmPassword: "",
+  name: "",
+  nickname: "",
+  address: "",
+  phone: "",
+  profileImage: null,
+  profileImageUrl: null,
+  emailCode: "",
+  generatedCode: "",
+  isEmailVerified: false,
+  termsAgreed: false,
+  error: "",
+  modalIsOpen: false,
+  privacyModalIsOpen: false,
+  showPassword: false,
+  showConfirmPassword: false,
+  isNicknameUnique: null,
+  isPhoneUnique: null,
+};
+
+// 상태와 액션 타입 정의
+type State = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  name: string;
+  nickname: string;
+  address: string;
+  phone: string;
+  profileImage: File | null;
+  profileImageUrl: string | null;
+  emailCode: string;
+  generatedCode: string;
+  isEmailVerified: boolean;
+  termsAgreed: boolean;
+  error: string;
+  modalIsOpen: boolean;
+  privacyModalIsOpen: boolean;
+  showPassword: boolean;
+  showConfirmPassword: boolean;
+  isNicknameUnique: boolean | null;
+  isPhoneUnique: boolean | null;
+};
+
+type Action =
+  | { type: "SET_FIELD"; field: string; value: any }
+  | { type: "SET_ERROR"; value: string }
+  | { type: "SET_PROFILE_IMAGE"; file: File | null; url: string | null }
+  | { type: "TOGGLE_MODAL"; modal: string }
+  | { type: "TOGGLE_PASSWORD"; field: string }
+  | { type: "SET_EMAIL_VERIFIED"; value: boolean }
+  | { type: "SET_GENERATED_CODE"; value: string }
+  | { type: "SET_UNIQUE_STATUS"; field: string; value: boolean | null };
+
+// 리듀서 함수 정의
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case "SET_FIELD":
+      return { ...state, [action.field]: action.value };
+    case "SET_ERROR":
+      return { ...state, error: action.value };
+    case "SET_PROFILE_IMAGE":
+      return {
+        ...state,
+        profileImage: action.file,
+        profileImageUrl: action.url,
+      };
+    case "TOGGLE_MODAL":
+      return {
+        ...state,
+        [action.modal]: !state[action.modal as keyof State],
+      };
+    case "TOGGLE_PASSWORD":
+      return {
+        ...state,
+        [action.field]: !state[action.field as keyof State],
+      };
+    case "SET_EMAIL_VERIFIED":
+      return { ...state, isEmailVerified: action.value };
+    case "SET_GENERATED_CODE":
+      return { ...state, generatedCode: action.value };
+    case "SET_UNIQUE_STATUS":
+      return { ...state, [action.field]: action.value };
+    default:
+      return state;
+  }
+};
+
 const SignUpForm: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [nickname, setNickname] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const [emailCode, setEmailCode] = useState<string>("");
-  const [generatedCode, setGeneratedCode] = useState<string>(""); // 이메일 인증 코드
-  const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false); // 상태 추가
-  const [termsAgreed, setTermsAgreed] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-  const [privacyModalIsOpen, setPrivacyModalIsOpen] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const { timeLeft, isActive, start, stop } = useTimer(180);
 
-  const handleChange =
-    (setter: React.Dispatch<React.SetStateAction<string>>) =>
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setter(e.target.value);
-    };
+  // 입력 값 변경 핸들러
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: "SET_FIELD",
+      field: e.target.name,
+      value: e.target.value,
+    });
+  };
 
+  // 프로필 이미지 변경 핸들러
   const handleProfileImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
@@ -62,8 +140,11 @@ const SignUpForm: React.FC = () => {
               const resizedFile = new File([blob], selectedFile.name, {
                 type: "image/jpeg",
               });
-              setProfileImage(resizedFile);
-              setProfileImageUrl(URL.createObjectURL(resizedFile));
+              dispatch({
+                type: "SET_PROFILE_IMAGE",
+                file: resizedFile,
+                url: URL.createObjectURL(resizedFile),
+              });
             }
           },
           "image/jpeg",
@@ -72,120 +153,189 @@ const SignUpForm: React.FC = () => {
         URL.revokeObjectURL(img.src);
       };
       img.onerror = () => {
-        console.log("이미지 로드 중 오류 발생");
+        dispatch({ type: "SET_ERROR", value: "이미지 로드 중 오류 발생" });
       };
     }
   };
 
+  // 프로필 이미지 초기화 핸들러
   const handleProfileImageClear = () => {
-    setProfileImage(null);
-    setProfileImageUrl(null);
+    dispatch({ type: "SET_PROFILE_IMAGE", file: null, url: null });
   };
 
+  // 이메일 인증 코드 발송 핸들러
   const handleSendEmailCode = async () => {
+    if (state.isEmailVerified) {
+      dispatch({
+        type: "SET_ERROR",
+        value: "이미 이메일 인증이 완료되었습니다.",
+      });
+      return;
+    }
+
     try {
-      const response = await sendEmailCode(email);
-      setGeneratedCode(response.code);
+      const response = await sendEmailCode(state.email);
+      dispatch({ type: "SET_GENERATED_CODE", value: response.code });
       start();
     } catch (error) {
-      setError("인증번호 발송에 실패했습니다. 다시 시도해주세요.");
+      dispatch({ type: "SET_ERROR", value: (error as Error).message });
     }
   };
 
+  // 닉네임 중복 확인 핸들러
+  const checkNicknameUnique = async () => {
+    try {
+      const isUnique = await checkNickname(state.nickname);
+      dispatch({
+        type: "SET_UNIQUE_STATUS",
+        field: "isNicknameUnique",
+        value: isUnique,
+      });
+    } catch (error) {
+      dispatch({ type: "SET_ERROR", value: (error as Error).message });
+    }
+  };
+
+  // 전화번호 중복 확인 핸들러
+  const checkPhoneUnique = async () => {
+    try {
+      const isUnique = await checkPhone(state.phone);
+      dispatch({
+        type: "SET_UNIQUE_STATUS",
+        field: "isPhoneUnique",
+        value: isUnique,
+      });
+    } catch (error) {
+      dispatch({ type: "SET_ERROR", value: (error as Error).message });
+    }
+  };
+
+  // 비밀번호 유효성 검사
   const validatePassword = (password: string): boolean => {
     const regex = /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
   };
 
+  // 폼 유효성 검사
   const validateForm = (): boolean => {
     if (
-      !name ||
-      !email ||
-      !password ||
-      !confirmPassword ||
-      !nickname ||
-      !address ||
-      !phone ||
-      !termsAgreed
+      !state.name ||
+      !state.email ||
+      !state.password ||
+      !state.confirmPassword ||
+      !state.nickname ||
+      !state.address ||
+      !state.phone ||
+      !state.termsAgreed
     ) {
-      setError("모든 필드를 입력하고 약관에 동의해야 합니다.");
+      dispatch({
+        type: "SET_ERROR",
+        value: "모든 필드를 입력하고 약관에 동의해야 합니다.",
+      });
       return false;
     }
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      setError("유효한 이메일 주소를 입력해주세요.");
+    if (!/\S+@\S+\.\S+/.test(state.email)) {
+      dispatch({
+        type: "SET_ERROR",
+        value: "유효한 이메일 주소를 입력해주세요.",
+      });
       return false;
     }
-    if (!validatePassword(password)) {
-      setError(
-        "비밀번호는 최소 8자 이상, 하나의 숫자 및 하나의 특수 문자를 포함해야 합니다."
-      );
+    if (!validatePassword(state.password)) {
+      dispatch({
+        type: "SET_ERROR",
+        value:
+          "비밀번호는 최소 8자 이상, 하나의 숫자 및 하나의 특수 문자를 포함해야 합니다.",
+      });
       return false;
     }
-    if (password !== confirmPassword) {
-      setError("비밀번호와 비밀번호 확인이 일치해야 합니다.");
+    if (state.password !== state.confirmPassword) {
+      dispatch({
+        type: "SET_ERROR",
+        value: "비밀번호와 비밀번호 확인이 일치해야 합니다.",
+      });
       return false;
     }
-    if (emailCode !== generatedCode) {
-      setError("인증번호가 일치하지 않습니다.");
+    if (state.emailCode !== state.generatedCode) {
+      dispatch({ type: "SET_ERROR", value: "인증번호가 일치하지 않습니다." });
       return false;
     }
-    setError("");
+    if (!state.isEmailVerified) {
+      dispatch({
+        type: "SET_ERROR",
+        value: "이메일 인증이 완료되지 않았습니다.",
+      });
+      return false;
+    }
+    if (state.isNicknameUnique === false) {
+      dispatch({ type: "SET_ERROR", value: "이미 사용 중인 닉네임입니다." });
+      return false;
+    }
+    if (state.isPhoneUnique === false) {
+      dispatch({ type: "SET_ERROR", value: "이미 사용 중인 전화번호입니다." });
+      return false;
+    }
+    dispatch({ type: "SET_ERROR", value: "" });
     return true;
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  // 회원가입 폼 제출 핸들러
+  const handleSignUpSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
       try {
         const response = await signUp({
-          name,
-          email,
-          password,
-          nickname,
-          address,
-          phone,
-          profileImage: profileImageUrl,
+          name: state.name,
+          email: state.email,
+          password: state.password,
+          nickname: state.nickname,
+          address: state.address,
+          phone: state.phone,
+          profileImage: state.profileImageUrl,
         });
         console.log("회원 가입 성공:", response);
+        // 회원 가입 성공 시 추가 작업
       } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("알 수 없는 오류가 발생했습니다.");
-        }
+        dispatch({ type: "SET_ERROR", value: (error as Error).message });
       }
     }
   };
 
+  // 모달 열기 핸들러
   const openModal = () => {
-    setModalIsOpen(true);
+    dispatch({ type: "TOGGLE_MODAL", modal: "modalIsOpen" });
   };
 
+  // 모달 닫기 핸들러
   const closeModal = () => {
-    setModalIsOpen(false);
+    dispatch({ type: "TOGGLE_MODAL", modal: "modalIsOpen" });
   };
 
+  // 개인정보 처리방침 모달 열기 핸들러
   const openPrivacyModal = () => {
-    setPrivacyModalIsOpen(true);
+    dispatch({ type: "TOGGLE_MODAL", modal: "privacyModalIsOpen" });
   };
 
+  // 개인정보 처리방침 모달 닫기 핸들러
   const closePrivacyModal = () => {
-    setPrivacyModalIsOpen(false);
+    dispatch({ type: "TOGGLE_MODAL", modal: "privacyModalIsOpen" });
   };
 
   return (
     <div className="container">
       <NavBar />
       <div className="form-container">
-        <form className="form" onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSignUpSubmit}>
           <h1>회원 가입</h1>
           <div className="form-group">
             <div className="input box full-width">
               <input
                 type="text"
                 placeholder="이름"
-                value={name}
-                onChange={handleChange(setName)}
+                name="name"
+                value={state.name}
+                onChange={handleChange}
+                id="name"
               />
               <FaUser className="icon" />
             </div>
@@ -193,8 +343,10 @@ const SignUpForm: React.FC = () => {
               <input
                 type="text"
                 placeholder="이메일"
-                value={email}
-                onChange={handleChange(setEmail)}
+                name="email"
+                value={state.email}
+                onChange={handleChange}
+                id="email"
                 className="email-input"
               />
               <MdAlternateEmail className="icon" />
@@ -202,7 +354,7 @@ const SignUpForm: React.FC = () => {
                 type="button"
                 className="email-button"
                 onClick={handleSendEmailCode}
-                disabled={isActive}
+                disabled={isActive || state.isEmailVerified}
               >
                 인증번호 발송
               </button>
@@ -211,15 +363,21 @@ const SignUpForm: React.FC = () => {
               <input
                 type="text"
                 placeholder="인증번호"
-                value={emailCode}
-                onChange={handleChange(setEmailCode)}
+                name="emailCode"
+                value={state.emailCode}
+                onChange={handleChange}
               />
               <button
                 type="button"
                 className="email-confirm-button"
                 onClick={() => {
-                  if (emailCode === generatedCode) {
-                    setIsEmailVerified(true);
+                  if (state.isEmailVerified) {
+                    alert("이미 이메일 인증이 완료되었습니다.");
+                    return;
+                  }
+
+                  if (state.emailCode === state.generatedCode) {
+                    dispatch({ type: "SET_EMAIL_VERIFIED", value: true });
                     stop();
                     alert("이메일 인증이 완료되었습니다.");
                   } else {
@@ -232,49 +390,77 @@ const SignUpForm: React.FC = () => {
             </div>
             <div className="input box full-width">
               <input
-                type={showPassword ? "text" : "password"}
+                type={state.showPassword ? "text" : "password"}
                 placeholder="비밀번호"
-                value={password}
-                onChange={handleChange(setPassword)}
+                name="password"
+                value={state.password}
+                onChange={handleChange}
+                id="password"
               />
               <FaLock className="icon" />
               <span
                 className="eye-icon"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() =>
+                  dispatch({ type: "TOGGLE_PASSWORD", field: "showPassword" })
+                }
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                {state.showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
             <div className="input box full-width">
               <input
-                type={showConfirmPassword ? "text" : "password"}
+                type={state.showConfirmPassword ? "text" : "password"}
                 placeholder="비밀번호 확인"
-                value={confirmPassword}
-                onChange={handleChange(setConfirmPassword)}
+                name="confirmPassword"
+                value={state.confirmPassword}
+                onChange={handleChange}
+                id="confirmPassword"
               />
               <FaLock className="icon" />
               <span
                 className="eye-icon"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                onClick={() =>
+                  dispatch({
+                    type: "TOGGLE_PASSWORD",
+                    field: "showConfirmPassword",
+                  })
+                }
               >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                {state.showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
             <div className="input box full-width">
               <input
                 type="text"
                 placeholder="별명"
-                value={nickname}
-                onChange={handleChange(setNickname)}
+                name="nickname"
+                value={state.nickname}
+                onChange={handleChange}
+                id="nickname"
               />
               <FaUser className="icon" />
+              <button
+                type="button"
+                className="check-button"
+                onClick={checkNicknameUnique}
+              >
+                중복 확인
+              </button>
+              {state.isNicknameUnique === false && (
+                <p className="error">이미 사용 중인 닉네임입니다.</p>
+              )}
+              {state.isNicknameUnique === true && (
+                <p className="success">사용 가능한 닉네임입니다.</p>
+              )}
             </div>
             <div className="input box full-width">
               <input
                 type="text"
                 placeholder="주소"
-                value={address}
-                onChange={handleChange(setAddress)}
+                name="address"
+                value={state.address}
+                onChange={handleChange}
+                id="address"
               />
               <FaAddressCard className="icon" />
             </div>
@@ -282,10 +468,25 @@ const SignUpForm: React.FC = () => {
               <input
                 type="text"
                 placeholder="전화번호 (000-0000-0000)"
-                value={phone}
-                onChange={handleChange(setPhone)}
+                name="phone"
+                value={state.phone}
+                onChange={handleChange}
+                id="phone"
               />
               <FaPhone className="icon" />
+              <button
+                type="button"
+                className="check-button"
+                onClick={checkPhoneUnique}
+              >
+                중복 확인
+              </button>
+              {state.isPhoneUnique === false && (
+                <p className="error">이미 사용 중인 전화번호입니다.</p>
+              )}
+              {state.isPhoneUnique === true && (
+                <p className="success">사용 가능한 전화번호입니다.</p>
+              )}
             </div>
             <label className="file-upload-label">
               <input
@@ -295,7 +496,7 @@ const SignUpForm: React.FC = () => {
               />
               파일 선택
             </label>
-            {profileImage && (
+            {state.profileImage && (
               <div className="button-group">
                 <button
                   type="button"
@@ -317,8 +518,14 @@ const SignUpForm: React.FC = () => {
               <label>
                 <input
                   type="checkbox"
-                  checked={termsAgreed}
-                  onChange={(e) => setTermsAgreed(e.target.checked)}
+                  checked={state.termsAgreed}
+                  onChange={(e) =>
+                    dispatch({
+                      type: "SET_FIELD",
+                      field: "termsAgreed",
+                      value: e.target.checked,
+                    })
+                  }
                 />
                 개인정보 처리방침 동의
               </label>
@@ -330,7 +537,7 @@ const SignUpForm: React.FC = () => {
                 개인정보 처리방침
               </button>
             </div>
-            {error && <p className="error">{error}</p>}
+            {state.error && <p className="error">{state.error}</p>}
             <button type="submit" className="button">
               계정 생성
             </button>
@@ -341,16 +548,16 @@ const SignUpForm: React.FC = () => {
         </form>
       </div>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={state.modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Image Preview"
         className="modal"
         overlayClassName="overlay"
       >
         <h2>이미지 미리보기</h2>
-        {profileImage && (
+        {state.profileImage && (
           <img
-            src={URL.createObjectURL(profileImage)}
+            src={URL.createObjectURL(state.profileImage)}
             alt="프로필 미리보기"
             className="image-preview"
           />
@@ -360,7 +567,7 @@ const SignUpForm: React.FC = () => {
         </button>
       </Modal>
       <Modal
-        isOpen={privacyModalIsOpen}
+        isOpen={state.privacyModalIsOpen}
         onRequestClose={closePrivacyModal}
         contentLabel="Terms and Conditions"
         className="modal"

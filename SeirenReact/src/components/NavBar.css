@@ -58,7 +58,7 @@ html {
   bottom: -5px;
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.8s ease-in-out;
 }
 
 .nav-links a:hover::after {
@@ -148,7 +148,7 @@ html {
   bottom: 0;
   transform: scaleX(1);
   transform-origin: right;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.8s ease-in-out;
 }
 
 .sidebar-links a:hover::after {
