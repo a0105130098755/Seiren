@@ -29,15 +29,19 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(requestDto));
     }
 
+    @PostMapping("/reissued")
+    public ResponseEntity<TokenDTO> newToken(@RequestBody String refreshToken){
+        log.info("refreshToken 값 : {}", refreshToken);
+        return ResponseEntity.ok(authService.reissuedToken(refreshToken));
+    }
+
     @GetMapping("/sendmail")
     public ResponseEntity<String> mailCode(@RequestParam String email){
         String code = authService.sendMail(email);
         log.info("메일 : " + email + " / 코드 : " + code);
         return ResponseEntity.ok(code);
     }
-    @GetMapping("/test")
-    public ResponseEntity<String> test(){
-        return ResponseEntity.ok("테스트");
-    }
+
+
 
 }
