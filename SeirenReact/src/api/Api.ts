@@ -12,14 +12,10 @@ export const login = async (email: string, password: string) => {
     const response = await api.post("/login", { email, password });
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message ||
-          "로그인에 실패했습니다. 다시 시도해주세요."
-      );
-    } else {
-      throw new Error("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-    }
+    handleAxiosError(
+      error,
+      "로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요."
+    );
   }
 };
 
@@ -28,14 +24,16 @@ export const requestRefreshToken = async (refreshToken: string) => {
     const response = await api.post("/refresh-token", { refreshToken });
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message ||
-          "토큰 재발행에 실패했습니다. 다시 시도해주세요."
-      );
-    } else {
-      throw new Error("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-    }
+    handleAxiosError(error, "토큰 재발행에 실패했습니다. 다시 시도해주세요.");
+  }
+};
+
+export const loginWithGoogle = async (tokenId: string) => {
+  try {
+    const response = await api.post("/google-login", { tokenId });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "구글 로그인에 실패했습니다. 다시 시도해주세요.");
   }
 };
 
@@ -56,14 +54,7 @@ export const signUp = async (userData: {
     });
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message ||
-          "회원 가입에 실패했습니다. 다시 시도해주세요."
-      );
-    } else {
-      throw new Error("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-    }
+    handleAxiosError(error, "회원 가입에 실패했습니다. 다시 시도해주세요.");
   }
 };
 
@@ -74,14 +65,43 @@ export const sendEmailCode = async (email: string) => {
     });
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(
-        error.response?.data?.message ||
-          "인증번호 발송에 실패했습니다. 다시 시도해주세요."
-      );
-    } else {
-      throw new Error("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-    }
+    handleAxiosError(error, "인증번호 발송에 실패했습니다. 다시 시도해주세요.");
+  }
+};
+
+export const checkNickname = async (nickname: string) => {
+  try {
+    const response = await api.get("/check-nickname", {
+      params: { nickname },
+    });
+    return response.data.isUnique;
+  } catch (error) {
+    handleAxiosError(
+      error,
+      "닉네임 중복 확인에 실패했습니다. 다시 시도해주세요."
+    );
+  }
+};
+
+export const checkPhone = async (phone: string) => {
+  try {
+    const response = await api.get("/check-phone", {
+      params: { phone },
+    });
+    return response.data.isUnique;
+  } catch (error) {
+    handleAxiosError(
+      error,
+      "전화번호 중복 확인에 실패했습니다. 다시 시도해주세요."
+    );
+  }
+};
+
+const handleAxiosError = (error: unknown, defaultMessage: string) => {
+  if (axios.isAxiosError(error)) {
+    throw new Error(error.response?.data?.message || defaultMessage);
+  } else {
+    throw new Error(defaultMessage);
   }
 };
 

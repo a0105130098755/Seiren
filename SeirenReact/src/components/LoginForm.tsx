@@ -1,8 +1,13 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { MdAlternateEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { login, requestRefreshToken } from "../api/Api";
+import { login, requestRefreshToken, loginWithGoogle } from "../api/Api";
+import {
+  GoogleOAuthProvider,
+  GoogleLogin,
+  CredentialResponse,
+} from "@react-oauth/google";
 import "./LoginForm.css";
 import NavBar from "./NavBar";
 
@@ -12,10 +17,10 @@ const LoginForm: React.FC = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const interval = setInterval(checkTokenExpiration, 60 * 1000);
-  //   return () => clearInterval(interval);
-  // }, []);
+  console.log(
+    "Google Client ID in LoginForm:",
+    process.env.REACT_APP_GOOGLE_CLIENT_ID
+  ); // 환경 변수 확인
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value);
@@ -41,58 +46,41 @@ const LoginForm: React.FC = () => {
     if (validateForm()) {
       try {
         const data = await login(email, password);
-        console.log("Login Response Data:", data);
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
-        console.log("Tokens saved to localStorage");
         navigate("/dashboard");
       } catch (error) {
         const errorMessage = (error as Error).message;
-        setError(errorMessage || "로그인에 실패했습니다. 다시 시도해주세요.");
-        console.error("Login Error:", errorMessage);
+        setError(
+          errorMessage ||
+            "로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요."
+        );
       }
     }
   };
 
-  const checkTokenExpiration = async () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      const tokenExp = JSON.parse(atob(accessToken.split(".")[1])).exp * 1000;
-      const bufferTime = 60 * 1000; // 1분 전
-      console.log("Token expiration time:", new Date(tokenExp));
-      if (Date.now() >= tokenExp - bufferTime) {
-        try {
-          const storedRefreshToken = localStorage.getItem("refreshToken");
-          if (storedRefreshToken) {
-            console.log("Refreshing token...");
-            const data = await requestRefreshToken(storedRefreshToken);
-            localStorage.setItem("accessToken", data.accessToken);
-            console.log("Token refreshed:", data);
-          } else {
-            console.log("No refresh token available");
-            handleLogout();
-          }
-        } catch (error) {
-          console.error("Token refresh failed:", error);
-          handleLogout();
-        }
-      }
+  const onSuccess = async (response: CredentialResponse) => {
+    try {
+      const data = await loginWithGoogle(response.credential as string);
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      navigate("/dashboard");
+    } catch (error) {
+      setError("구글 로그인에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
-  const handleLogout = () => {
-    console.log("Logging out...");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    console.log("Tokens removed from localStorage");
-    navigate("/login");
+  const onFailure = () => {
+    setError("구글 로그인에 실패했습니다. 다시 시도해주세요.");
   };
 
   return (
-    <>
+    <GoogleOAuthProvider
+      clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}
+    >
       <NavBar />
       <div className="form-container">
-        <form onSubmit={handleSubmit} className="form login-form">
+        <form onSubmit={handleSubmit} className="form login-form wrapper">
           <h1>로그인</h1>
           <div className="input box">
             <input
@@ -121,10 +109,21 @@ const LoginForm: React.FC = () => {
           <div className="register">
             <Link to="/signup">회원가입 하시겠어요?</Link>
           </div>
-          <button type="submit">로그인</button>
+          <button type="submit" className="button">
+            로그인
+          </button>
+          <div className="google-login-button">
+            <GoogleLogin
+              onSuccess={onSuccess}
+              onError={onFailure}
+              useOneTap
+              auto_select
+              width="100%"
+            />
+          </div>
         </form>
       </div>
-    </>
+    </GoogleOAuthProvider>
   );
 };
 

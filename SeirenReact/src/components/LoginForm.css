@@ -97,6 +97,24 @@ button[type="submit"]:hover {
   margin-bottom: 15px;
 }
 
+.google-login-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+}
+
+.google-login-button > div {
+  width: 100% !important; /* 구글 로그인 버튼의 너비를 100%로 설정 */
+  display: flex;
+  justify-content: center; /* 텍스트를 가운데 정렬 */
+  height: 40px; /* 버튼 높이 */
+}
+
+.google-login-button > div > div {
+  flex: 1; /* 내부 요소가 전체 너비를 차지하도록 설정 */
+}
+
 @media (max-width: 768px) {
   .wrapper {
     padding: 20px;
