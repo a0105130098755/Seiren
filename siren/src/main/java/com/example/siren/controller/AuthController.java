@@ -1,5 +1,8 @@
 package com.example.siren.controller;
 
+import com.example.siren.dto.MemberRequestDTO;
+import com.example.siren.dto.MemberResponseDTO;
+import com.example.siren.dto.TokenDTO;
 import com.example.siren.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +18,16 @@ import java.util.Map;
 @Slf4j
 public class AuthController {
     private final AuthService authService;
+
+    @PostMapping("/signup")
+    public ResponseEntity<MemberResponseDTO> signup(@RequestBody MemberRequestDTO requestDto) {
+        return ResponseEntity.ok(authService.signup(requestDto));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenDTO> login(@RequestBody MemberRequestDTO requestDto) {
+        return ResponseEntity.ok(authService.login(requestDto));
+    }
 
     @GetMapping("/sendmail")
     public ResponseEntity<String> mailCode(@RequestParam String email){
