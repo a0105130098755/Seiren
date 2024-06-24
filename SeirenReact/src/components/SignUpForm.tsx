@@ -18,7 +18,6 @@ import { Link } from "react-router-dom";
 Modal.setAppElement("#root");
 
 const SignUpForm: React.FC = () => {
-  const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -93,13 +92,17 @@ const SignUpForm: React.FC = () => {
     }
   };
 
+  const validatePassword = (password: string): boolean => {
+    const regex = /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+  };
+
   const validateForm = (): boolean => {
     if (
-      !username ||
+      !name ||
       !email ||
       !password ||
       !confirmPassword ||
-      !name ||
       !nickname ||
       !address ||
       !phone ||
@@ -112,8 +115,10 @@ const SignUpForm: React.FC = () => {
       setError("유효한 이메일 주소를 입력해주세요.");
       return false;
     }
-    if (password.length < 8) {
-      setError("비밀번호는 8자 이상이어야 합니다.");
+    if (!validatePassword(password)) {
+      setError(
+        "비밀번호는 최소 8자 이상, 하나의 숫자 및 하나의 특수 문자를 포함해야 합니다."
+      );
       return false;
     }
     if (password !== confirmPassword) {
@@ -133,10 +138,9 @@ const SignUpForm: React.FC = () => {
     if (validateForm()) {
       try {
         const response = await signUp({
-          username,
+          name,
           email,
           password,
-          name,
           nickname,
           address,
           phone,
@@ -174,21 +178,21 @@ const SignUpForm: React.FC = () => {
       <NavBar />
       <div className="form-container">
         <form className="form" onSubmit={handleSubmit}>
-          <h1>Create Account</h1>
+          <h1>회원 가입</h1>
           <div className="form-group">
             <div className="input box full-width">
               <input
                 type="text"
-                placeholder="Username"
-                value={username}
-                onChange={handleChange(setUsername)}
+                placeholder="이름"
+                value={name}
+                onChange={handleChange(setName)}
               />
               <FaUser className="icon" />
             </div>
             <div className="input box full-width">
               <input
                 type="text"
-                placeholder="Email"
+                placeholder="이메일"
                 value={email}
                 onChange={handleChange(setEmail)}
                 className="email-input"
@@ -206,7 +210,7 @@ const SignUpForm: React.FC = () => {
             <div className="input box full-width">
               <input
                 type="text"
-                placeholder="Email Code"
+                placeholder="인증번호"
                 value={emailCode}
                 onChange={handleChange(setEmailCode)}
               />
@@ -229,7 +233,7 @@ const SignUpForm: React.FC = () => {
             <div className="input box full-width">
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Password"
+                placeholder="비밀번호"
                 value={password}
                 onChange={handleChange(setPassword)}
               />
@@ -244,7 +248,7 @@ const SignUpForm: React.FC = () => {
             <div className="input box full-width">
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm Password"
+                placeholder="비밀번호 확인"
                 value={confirmPassword}
                 onChange={handleChange(setConfirmPassword)}
               />
@@ -259,16 +263,7 @@ const SignUpForm: React.FC = () => {
             <div className="input box full-width">
               <input
                 type="text"
-                placeholder="Name"
-                value={name}
-                onChange={handleChange(setName)}
-              />
-              <FaUser className="icon" />
-            </div>
-            <div className="input box full-width">
-              <input
-                type="text"
-                placeholder="Nickname"
+                placeholder="별명"
                 value={nickname}
                 onChange={handleChange(setNickname)}
               />
@@ -277,7 +272,7 @@ const SignUpForm: React.FC = () => {
             <div className="input box full-width">
               <input
                 type="text"
-                placeholder="Address"
+                placeholder="주소"
                 value={address}
                 onChange={handleChange(setAddress)}
               />
@@ -286,7 +281,7 @@ const SignUpForm: React.FC = () => {
             <div className="input box full-width">
               <input
                 type="text"
-                placeholder="Phone (000-0000-0000)"
+                placeholder="전화번호 (000-0000-0000)"
                 value={phone}
                 onChange={handleChange(setPhone)}
               />
@@ -337,10 +332,10 @@ const SignUpForm: React.FC = () => {
             </div>
             {error && <p className="error">{error}</p>}
             <button type="submit" className="button">
-              Create Account
+              계정 생성
             </button>
             <p className="register">
-              Already have an account? <Link to="/login">Log in</Link>
+              이미 계정이 있으신가요? <Link to="/login">로그인</Link>
             </p>
           </div>
         </form>
@@ -352,16 +347,16 @@ const SignUpForm: React.FC = () => {
         className="modal"
         overlayClassName="overlay"
       >
-        <h2>Image Preview</h2>
+        <h2>이미지 미리보기</h2>
         {profileImage && (
           <img
             src={URL.createObjectURL(profileImage)}
-            alt="Profile Preview"
+            alt="프로필 미리보기"
             className="image-preview"
           />
         )}
         <button onClick={closeModal} className="modal-button">
-          Close
+          닫기
         </button>
       </Modal>
       <Modal
@@ -371,13 +366,13 @@ const SignUpForm: React.FC = () => {
         className="modal"
         overlayClassName="overlay"
       >
-        <h2>Terms and Conditions</h2>
+        <h2>개인정보 처리방침</h2>
         <div className="modal-content">
           {/* 개인정보 처리방침 내용 */}
           <p>{/* 주석 처리된 개인정보 처리방침 내용 */}</p>
         </div>
         <button onClick={closePrivacyModal} className="modal-button">
-          Close
+          닫기
         </button>
       </Modal>
     </div>
