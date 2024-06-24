@@ -4,8 +4,10 @@ import com.example.siren.dto.MemberRequestDTO;
 import com.example.siren.dto.MemberResponseDTO;
 import com.example.siren.dto.TokenDTO;
 import com.example.siren.entity.Member;
+import com.example.siren.entity.Token;
 import com.example.siren.jwt.TokenProvider;
 import com.example.siren.repository.MemberRepository;
+import com.example.siren.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,6 +29,7 @@ import java.util.Random;
 @Slf4j
 public class AuthService {
     private final MemberRepository memberRepository;
+    private final TokenRepository tokenRepository;
     private final JavaMailSender mailSender;
     private final AuthenticationManagerBuilder managerBuilder;
     private final PasswordEncoder passwordEncoder;
@@ -44,13 +47,22 @@ public class AuthService {
     public TokenDTO login(MemberRequestDTO requestDTO){
         // toAuthentication() 은 객체 변환, 이메일과 패스워드가 일치하는지 검증하는 메소드.
         UsernamePasswordAuthenticationToken authenticationToken = requestDTO.toAuthentication();
+        
         // 검증을 거친 뒤 해당 변환된 객체 UsernamePasswordAuthenticationToken 을
         // managerBuilder.getObject().authenticate() 로 인증을 수행.
         // 인증이 성공할 때 Authentication 객체 반환
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+        // 인증된 사용자 정보를 사용해 Token 생성 뒤 해당 객체를 반환해주면 끝
+        TokenDTO token = tokenProvider.generateTokenDto(authentication);
 
-        // 인증된 사용자 정보를 사용해 Token 생성 뒤 해당 객체를 반환해준다.
-        return tokenProvider.generateTokenDto(authentication);
+        // DB에 사용자 email 의 RefreshToken 저장
+        Token tokenEntity = Token.builder()
+                .email(requestDTO.getEmail())
+                .refreshToken(token.getRefreshToken())
+                .build();
+        tokenRepository.save(tokenEntity);
+
+        return token;
     }
 
     public boolean existsEmail(String email){
