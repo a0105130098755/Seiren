@@ -42,7 +42,6 @@ export const signUp = async (userData: {
   password: string;
   name: string;
   nickname: string;
-  address: string;
   phone: string;
   profileImage: string | null;
 }) => {

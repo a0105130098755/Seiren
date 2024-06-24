@@ -17,13 +17,13 @@ import { Link } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
+// 초기 상태 정의
 const initialState: State = {
   email: "",
   password: "",
   confirmPassword: "",
   name: "",
   nickname: "",
-  address: "",
   phone: "",
   profileImage: null,
   profileImageUrl: null,
@@ -41,13 +41,13 @@ const initialState: State = {
   isPhoneUnique: null,
 };
 
+// 상태와 액션 타입 정의
 type State = {
   email: string;
   password: string;
   confirmPassword: string;
   name: string;
   nickname: string;
-  address: string;
   phone: string;
   profileImage: File | null;
   profileImageUrl: string | null;
@@ -76,6 +76,7 @@ type Action =
   | { type: "SET_GENERATED_CODE"; value: string }
   | { type: "SET_UNIQUE_STATUS"; field: string; value: boolean | null };
 
+// 리듀서 함수 정의
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "SET_FIELD":
@@ -257,7 +258,6 @@ const SignUpForm: React.FC = () => {
       !state.password ||
       !state.confirmPassword ||
       !state.nickname ||
-      !state.address ||
       !state.phone ||
       !state.termsAgreed
     ) {
@@ -330,7 +330,6 @@ const SignUpForm: React.FC = () => {
           email: state.email,
           password: state.password,
           nickname: state.nickname,
-          address: state.address,
           phone: state.phone,
           profileImage: state.profileImageUrl,
         });
@@ -496,17 +495,6 @@ const SignUpForm: React.FC = () => {
               {state.isNicknameUnique === true && (
                 <p className="success">사용 가능한 닉네임입니다.</p>
               )}
-            </div>
-            <div className="input box full-width">
-              <input
-                type="text"
-                placeholder="주소"
-                name="address"
-                value={state.address}
-                onChange={handleChange}
-                id="address"
-              />
-              <FaAddressCard className="icon" />
             </div>
             <div className="input box full-width">
               <input
