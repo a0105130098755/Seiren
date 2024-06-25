@@ -21,7 +21,7 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<BoardDTO>> showBoard(@RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "10")int size){
         List<BoardDTO> pageList = boardService.selectPage(page, size);
