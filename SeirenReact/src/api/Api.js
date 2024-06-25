@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8111/api",
+  baseURL: "http://localhost:8111/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -9,7 +9,7 @@ const api = axios.create({
 
 export const login = async (email, password) => {
   try {
-    const response = await api.post("/login", { email, password });
+    const response = await api.post("/auth/login", { email, password });
     return response.data;
   } catch (error) {
     handleAxiosError(
@@ -39,7 +39,7 @@ export const loginWithGoogle = async (tokenId) => {
 
 export const signUp = async (userData) => {
   try {
-    const response = await api.post("/signup", userData, {
+    const response = await api.post("/auth/signup", userData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -63,7 +63,7 @@ export const sendEmailCode = async (email) => {
 
 export const checkNickname = async (nickname) => {
   try {
-    const response = await api.get("/check-nickname", {
+    const response = await api.get("/auth/check-nickname", {
       params: { nickname },
     });
     return response.data.isUnique;
@@ -77,7 +77,7 @@ export const checkNickname = async (nickname) => {
 
 export const checkPhone = async (phone) => {
   try {
-    const response = await api.get("/check-phone", {
+    const response = await api.get("/auth/check-phone", {
       params: { phone },
     });
     return response.data.isUnique;
