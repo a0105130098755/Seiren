@@ -30,7 +30,9 @@ export const requestRefreshToken = async (refreshToken) => {
 
 export const loginWithGoogle = async (tokenId) => {
   try {
-    const response = await api.post("/google-login", { token: tokenId });
+    console.log("Sending token to backend:", tokenId); // 콘솔 로그 추가
+    const response = await api.post("/google/login", { token: tokenId });
+    console.log("Backend response:", response.data); // 콘솔 로그 추가
     return response.data;
   } catch (error) {
     handleAxiosError(error, "구글 로그인에 실패했습니다. 다시 시도해주세요.");
@@ -61,30 +63,14 @@ export const sendEmailCode = async (email) => {
   }
 };
 
-export const checkNickname = async (nickname) => {
+export const checkExist = async ({ type, value }) => {
   try {
-    const response = await api.get("/auth/check-nickname", {
-      params: { nickname },
-    });
+    const response = await api.post("/auth/checkExist", { type, value });
     return response.data.isUnique;
   } catch (error) {
     handleAxiosError(
       error,
-      "닉네임 중복 확인에 실패했습니다. 다시 시도해주세요."
-    );
-  }
-};
-
-export const checkPhone = async (phone) => {
-  try {
-    const response = await api.get("/auth/check-phone", {
-      params: { phone },
-    });
-    return response.data.isUnique;
-  } catch (error) {
-    handleAxiosError(
-      error,
-      "전화번호 중복 확인에 실패했습니다. 다시 시도해주세요."
+      `${type} 중복 확인에 실패했습니다. 다시 시도해주세요.`
     );
   }
 };

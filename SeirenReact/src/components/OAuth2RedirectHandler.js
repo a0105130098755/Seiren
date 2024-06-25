@@ -9,10 +9,13 @@ const OAuth2RedirectHandler = () => {
     const params = new URLSearchParams(window.location.hash.substring(1));
     const token = params.get("access_token");
 
+    console.log("Google access token:", token); // 콘솔 로그 추가
+
     if (token) {
       // 백엔드로 토큰 전송 및 로그인 처리
       loginWithGoogle(token)
         .then((data) => {
+          console.log("Backend response data:", data); // 콘솔 로그 추가
           localStorage.setItem("accessToken", data.accessToken);
           localStorage.setItem("refreshToken", data.refreshToken);
           alert("환영합니다!");
