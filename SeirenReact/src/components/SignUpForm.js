@@ -238,11 +238,15 @@ const SignUpForm = () => {
       return;
     }
 
-    if (emailCode === generatedCode) {
+    if (emailCode == generatedCode) {
       setIsEmailVerified(true);
       stop();
       alert("이메일 인증이 완료되었습니다.");
       console.log("이메일 인증 완료");
+      setErrors((prev) => ({
+        ...prev,
+        emailCode: "",
+      }));
     } else {
       setErrors((prev) => ({
         ...prev,
@@ -477,14 +481,14 @@ const SignUpForm = () => {
               >
                 중복 확인
               </button>
-              {isNicknameUnique === false && (
-                <p className="error">이미 사용 중인 닉네임입니다.</p>
-              )}
-              {isNicknameUnique === true && (
-                <p className="success">사용 가능한 닉네임입니다.</p>
-              )}
             </div>
             {errors.nickname && <p className="error">{errors.nickname}</p>}
+            {isNicknameUnique === false && (
+              <p className="error">이미 사용 중인 닉네임입니다.</p>
+            )}
+            {isNicknameUnique === true && (
+              <p className="success">사용 가능한 닉네임입니다.</p>
+            )}
             <div className="input box full-width">
               <input
                 type="text"
@@ -502,14 +506,14 @@ const SignUpForm = () => {
               >
                 중복 확인
               </button>
-              {isPhoneUnique === false && (
-                <p className="error">이미 사용 중인 전화번호입니다.</p>
-              )}
-              {isPhoneUnique === true && (
-                <p className="success">사용 가능한 전화번호입니다.</p>
-              )}
             </div>
             {errors.phone && <p className="error">{errors.phone}</p>}
+            {isPhoneUnique === false && (
+              <p className="error">이미 사용 중인 전화번호입니다.</p>
+            )}
+            {isPhoneUnique === true && (
+              <p className="success">사용 가능한 전화번호입니다.</p>
+            )}
             <label className="file-upload-label">
               <input
                 type="file"
