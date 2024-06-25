@@ -23,15 +23,17 @@ public class Board {
     private Member member;
 
     private String title;
+    private String location;
     @Lob
     @Column(length = 500)
     private String content;
     private LocalDateTime regDate;
 
     @Builder
-    public Board (Member member, String title, String content){
+    public Board (Member member, String title, String location, String content){
         this.member = member;
         this.title = title;
+        this.location = location;
         this.content = content;
         this.regDate = LocalDateTime.now();
     }

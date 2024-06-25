@@ -14,14 +14,16 @@ public class BoardDTO {
     private Long id;
     private String title;
     private String nickname;
+    private String location;
     private String content;
     private LocalDateTime regDate;
 
     @Builder
-    public BoardDTO (Long id, String title, String nickname, String content, LocalDateTime regDate){
+    public BoardDTO (Long id, String title, String nickname,String location, String content, LocalDateTime regDate){
         this.id = id;
         this.title = title;
         this.nickname = nickname;
+        this.location = location;
         this.content = content;
         this.regDate = regDate;
     }
@@ -31,6 +33,7 @@ public class BoardDTO {
                 .id(board.getId())
                 .title(board.getTitle())
                 .nickname(board.getMember().getNickname())
+                .location(board.getLocation())
                 .content(board.getContent())
                 .regDate(board.getRegDate())
                 .build();
