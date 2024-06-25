@@ -49,6 +49,9 @@ const SignUpForm = () => {
   // 이메일 유효성 검사 함수
   const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
+  // 전화번호 유효성 검사 함수
+  const isValidPhone = (phone) => /^[0-9-]+$/.test(phone);
+
   // 입력 필드 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -99,8 +102,8 @@ const SignUpForm = () => {
         break;
       case "phone":
         setPhone(value);
-        if (!value) {
-          newErrors.phone = "전화번호를 입력해 주세요.";
+        if (!isValidPhone(value)) {
+          newErrors.phone = "전화번호는 숫자와 하이픈만 입력 가능합니다.";
         } else {
           delete newErrors.phone;
         }
@@ -187,7 +190,7 @@ const SignUpForm = () => {
     }
 
     try {
-      const emailExists = checkExistence("email", email);
+      const emailExists = await checkExist({ type: "email", value: email });
       if (!emailExists) {
         setErrors((prev) => ({
           ...prev,
@@ -235,7 +238,7 @@ const SignUpForm = () => {
       return;
     }
 
-    if (emailCode == generatedCode) {
+    if (emailCode === generatedCode) {
       setIsEmailVerified(true);
       stop();
       alert("이메일 인증이 완료되었습니다.");
@@ -305,6 +308,8 @@ const SignUpForm = () => {
     }
     if (!phone) {
       newErrors.phone = "전화번호를 입력해 주세요.";
+    } else if (!isValidPhone(phone)) {
+      newErrors.phone = "전화번호는 숫자와 하이픈만 입력 가능합니다.";
     }
     if (!termsAgreed) {
       newErrors.termsAgreed = "약관에 동의해야 합니다.";
