@@ -1,9 +1,6 @@
 package com.example.siren.controller;
 
-import com.example.siren.dto.AccessTokenDTO;
-import com.example.siren.dto.MemberRequestDTO;
-import com.example.siren.dto.MemberResponseDTO;
-import com.example.siren.dto.TokenDTO;
+import com.example.siren.dto.*;
 import com.example.siren.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,9 +41,23 @@ public class AuthController {
         return ResponseEntity.ok(code);
     }
 
-    @GetMapping("/checkExist")
-    public ResponseEntity<Boolean> nicknameCheck(@RequestParam Map<String, String> value){
-        boolean isExist;
+    @PostMapping("/checkExist")
+    public ResponseEntity<Boolean> nicknameCheck(@RequestBody CheckExistDTO existDTO){
+        boolean isExist = true;
+        String type = existDTO.getType();
+        String value = existDTO.getValue();
+        if(type.equals("email")){
+            log.info("이메일 중복 체크 : " + value);
+            isExist = authService.existsEmail(value);
+        }
+        if(type.equals("phone")){
+            log.info("전화번호 중복 체크 : " + value);
+            isExist = authService.existsPhone(value);
+        }
+        if(type.equals("nickname")){
+            log.info("닉네임 중복 체크 : " + value);
+            isExist = authService.existsPhone(value);
+        }
         return ResponseEntity.ok(isExist);
     }
 
