@@ -75,6 +75,32 @@ export const checkExist = async ({ type, value }) => {
   }
 };
 
+// 비밀번호 찾기 함수 추가
+export const forgotPassword = async (email) => {
+  try {
+    const response = await api.post("/auth/forgot-password", { email });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(
+      error,
+      "비밀번호를 찾는 데 문제가 발생했습니다. 다시 시도해주세요."
+    );
+  }
+};
+
+// 이메일 찾기 함수
+export const findEmail = async (nickname) => {
+  try {
+    const response = await api.post("/auth/find-email", { nickname });
+    return response.data.email;
+  } catch (error) {
+    handleAxiosError(
+      error,
+      "입력하신 닉네임과 일치하는 이메일을 찾을 수 없습니다."
+    );
+  }
+};
+
 const handleAxiosError = (error, defaultMessage) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);

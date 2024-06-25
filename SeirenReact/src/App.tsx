@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginForm from "./components/Login/LoginForm";
 import SignUpForm from "./components/SignUp/SignUpForm";
 import OAuth2RedirectHandler from "./components/Login/OAuth2RedirectHandler";
+import PasswordRecoveryEmailLookup from "./components/Recovery/PasswordRecoveryEmailLookup"; // 통합 컴포넌트 추가
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./App.css";
 
@@ -20,6 +21,8 @@ function App() {
               path="/oauth2/redirect"
               element={<OAuth2RedirectHandler />}
             />
+            <Route path="/recovery" element={<PasswordRecoveryEmailLookup />} />{" "}
+            {/* 통합 라우트 */}
           </Routes>
         </div>
       </Router>

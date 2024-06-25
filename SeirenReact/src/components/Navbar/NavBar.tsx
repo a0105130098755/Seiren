@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 import "./NavBar.css";
 
-const NavBar: React.FC = () => {
+const NavBar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();

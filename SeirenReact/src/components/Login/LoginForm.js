@@ -88,7 +88,7 @@ const LoginForm = () => {
           </div>
           {error && <div className="error">{error}</div>}
           <div className="remember-forgot">
-            <a href="#">비밀번호를 잊으셨나요?</a>
+            <Link to="/recovery">아이디/비밀번호 찾기</Link> {/* 통합 링크 */}
           </div>
           <div className="register">
             <Link to="/signup">회원가입 하시겠어요?</Link>
