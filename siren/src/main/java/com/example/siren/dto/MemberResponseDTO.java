@@ -21,6 +21,7 @@ public class MemberResponseDTO {
     private int point;
     private LocalDateTime regDate;
 
+    // Member 객체를 MemberResponseDTO 객체로 변환하는 역할
     public static MemberResponseDTO of(Member member){
         return MemberResponseDTO.builder()
                 .name(member.getName())

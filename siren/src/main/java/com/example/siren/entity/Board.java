@@ -23,6 +23,8 @@ public class Board {
     private Member member;
 
     private String title;
+    @Lob
+    @Column(length = 500)
     private String content;
     private LocalDateTime regDate;
 
