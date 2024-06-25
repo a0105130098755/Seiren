@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginWithGoogle } from "../api/Api";
+import { loginWithGoogle } from "../../api/Api";
 
 const OAuth2RedirectHandler = () => {
   const navigate = useNavigate();

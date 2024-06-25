@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import LoginForm from "./components/LoginForm";
-import SignUpForm from "./components/SignUpForm";
-import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
+import LoginForm from "./components/Login/LoginForm";
+import SignUpForm from "./components/SignUp/SignUpForm";
+import OAuth2RedirectHandler from "./components/Login/OAuth2RedirectHandler";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./App.css";
 

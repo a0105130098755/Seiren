@@ -8,9 +8,9 @@ import React, {
 import { FaLock, FaUser, FaEye, FaEyeSlash, FaPhone } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 import Modal from "react-modal";
-import { signUp, sendEmailCode, checkExist } from "../api/Api";
-import useTimer from "../hooks/useTimer";
-import NavBar from "./NavBar";
+import { signUp, sendEmailCode, checkExist } from "../../api/Api";
+import useTimer from "../../hooks/useTimer";
+import NavBar from "../Navbar/NavBar";
 import "./SignUpForm.css";
 import { Link } from "react-router-dom";
 

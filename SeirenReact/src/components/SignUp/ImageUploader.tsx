@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
-import { storage, db } from "../firebase"; // firebase 설정 파일 경로에 맞게 수정
+import { storage, db } from "../../firebase"; // firebase 설정 파일 경로에 맞게 수정
 import Modal from "react-modal";
 import "./ImageUploader.css";
 

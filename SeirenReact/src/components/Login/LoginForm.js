@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { MdAlternateEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../api/Api";
+import { login } from "../../api/Api";
 import "./LoginForm.css";
-import NavBar from "./NavBar";
+import NavBar from "../Navbar/NavBar";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
