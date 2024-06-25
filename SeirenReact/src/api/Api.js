@@ -55,7 +55,7 @@ export const sendEmailCode = async (email) => {
     const response = await api.get("/auth/sendmail", {
       params: { email },
     });
-    return response.data;
+    return response;
   } catch (error) {
     handleAxiosError(error, "인증번호 발송에 실패했습니다. 다시 시도해주세요.");
   }

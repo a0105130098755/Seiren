@@ -84,7 +84,7 @@ public class AuthService {
     public boolean existsEmail(String email){
         try{
             // 이미 있는 메일이면 true 반환
-            return memberRepository.existsByEmail(email);
+            return !memberRepository.existsByEmail(email);
         }catch (Exception e){
             log.error("이메일 확인 중 에러 발생 :" + e);
             return true;
@@ -94,9 +94,19 @@ public class AuthService {
     public boolean existsNickname(String nickname){
         try{
             // 이미 있는 닉네임이면 true 반환
-            return memberRepository.existsByEmail(nickname);
+            return !memberRepository.existsByEmail(nickname);
         }catch (Exception e){
             log.error("닉네임 확인 중 에러 발생 :" + e);
+            return true;
+        }
+    }
+
+    public boolean existsPhone(String phone){
+        try{
+            // 이미 있는 닉네임이면 false 반환
+            return !memberRepository.existsByPhone(phone);
+        }catch (Exception e){
+            log.error("전화번호 확인 중 에러 발생 :" + e);
             return true;
         }
     }

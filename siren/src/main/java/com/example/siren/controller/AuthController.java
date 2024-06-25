@@ -44,6 +44,11 @@ public class AuthController {
         return ResponseEntity.ok(code);
     }
 
+    @GetMapping("/checkExist")
+    public ResponseEntity<Boolean> nicknameCheck(@RequestParam Map<String, String> value){
+        boolean isExist;
+        return ResponseEntity.ok(isExist);
+    }
 
 
 }

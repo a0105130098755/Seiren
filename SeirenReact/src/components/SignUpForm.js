@@ -169,7 +169,7 @@ const SignUpForm = () => {
       return;
     }
 
-    if (emailCode === generatedCode) {
+    if (emailCode == generatedCode) {
       setIsEmailVerified(true);
       stop();
       alert("이메일 인증이 완료되었습니다.");
