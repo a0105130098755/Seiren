@@ -187,8 +187,8 @@ const SignUpForm = () => {
     }
 
     try {
-      const emailExists = await checkExist({ type: "email", value: email });
-      if (emailExists) {
+      const emailExists = checkExistence("email", email);
+      if (!emailExists) {
         setErrors((prev) => ({
           ...prev,
           email: "이미 사용 중인 이메일입니다.",
@@ -334,7 +334,7 @@ const SignUpForm = () => {
           password,
           nickname,
           phone,
-          profileImage: profileImageUrl,
+          profile: profileImageUrl,
         });
         console.log("회원 가입 성공:", response);
         alert("회원가입이 완료되었습니다.");

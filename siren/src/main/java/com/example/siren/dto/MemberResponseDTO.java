@@ -26,6 +26,7 @@ public class MemberResponseDTO {
         return MemberResponseDTO.builder()
                 .name(member.getName())
                 .email(member.getEmail())
+                .phone(member.getPhone())
                 .profile(member.getProfile())
                 .nickname(member.getNickname())
                 .point(member.getPoint())

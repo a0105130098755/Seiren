@@ -66,7 +66,7 @@ export const sendEmailCode = async (email) => {
 export const checkExist = async ({ type, value }) => {
   try {
     const response = await api.post("/auth/checkExist", { type, value });
-    return response.data.isUnique;
+    return response.data;
   } catch (error) {
     handleAxiosError(
       error,
