@@ -2,19 +2,28 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
+import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./App.css";
 
 function App() {
-  console.log("Google Client ID:", process.env.REACT_APP_GOOGLE_CLIENT_ID); // 환경 변수 확인
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/signup" element={<SignUpForm />} />
-        </Routes>
-      </div>
-    </Router>
+    <GoogleOAuthProvider
+      clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}
+    >
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/signup" element={<SignUpForm />} />
+            <Route
+              path="/oauth2/redirect"
+              element={<OAuth2RedirectHandler />}
+            />
+          </Routes>
+        </div>
+      </Router>
+    </GoogleOAuthProvider>
   );
 }
 

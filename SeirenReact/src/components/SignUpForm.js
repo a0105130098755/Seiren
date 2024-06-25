@@ -1,4 +1,10 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  ChangeEvent,
+  FormEvent,
+} from "react";
 import { FaLock, FaUser, FaEye, FaEyeSlash, FaPhone } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 import Modal from "react-modal";
@@ -33,6 +39,14 @@ const SignUpForm = () => {
   const [isNicknameUnique, setIsNicknameUnique] = useState(null);
   const [isPhoneUnique, setIsPhoneUnique] = useState(null);
   const { timeLeft, isActive, start, stop } = useTimer(180);
+  const emailInputRef = useRef(null);
+
+  useEffect(() => {
+    // 이메일 입력 필드에 포커스 주기
+    if (emailInputRef.current) {
+      emailInputRef.current.focus();
+    }
+  }, []);
 
   // 입력 필드 변경 핸들러
   const handleChange = (e) => {
@@ -124,7 +138,7 @@ const SignUpForm = () => {
     try {
       const response = await sendEmailCode(email);
       console.log("인증 코드 발송 성공:", response.data);
-      setGeneratedCode(response.data); // response.data로 수정
+      setGeneratedCode(response.data);
       start();
       alert("인증번호가 발송되었습니다. 이메일을 확인해 주세요.");
     } catch (error) {
@@ -335,6 +349,7 @@ const SignUpForm = () => {
                 value={email}
                 onChange={handleChange}
                 id="email"
+                ref={emailInputRef}
                 className="email-input"
               />
               <MdAlternateEmail className="icon" />
@@ -364,6 +379,9 @@ const SignUpForm = () => {
                 인증번호 확인
               </button>
             </div>
+            {isActive && (
+              <p className="timer">인증번호 유효 시간: {timeLeft}초</p>
+            )}
             <div className="input box full-width">
               <input
                 type={showPassword ? "text" : "password"}

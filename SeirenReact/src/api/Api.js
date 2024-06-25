@@ -30,7 +30,7 @@ export const requestRefreshToken = async (refreshToken) => {
 
 export const loginWithGoogle = async (tokenId) => {
   try {
-    const response = await api.post("/google-login", { tokenId });
+    const response = await api.post("/google-login", { token: tokenId });
     return response.data;
   } catch (error) {
     handleAxiosError(error, "구글 로그인에 실패했습니다. 다시 시도해주세요.");

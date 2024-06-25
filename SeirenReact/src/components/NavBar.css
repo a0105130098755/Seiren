@@ -58,7 +58,7 @@ html {
   bottom: -5px;
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform 0.8s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 }
 
 .nav-links a:hover::after {
@@ -99,7 +99,7 @@ html {
 .sidebar {
   position: fixed;
   top: 0;
-  right: -250px; /* Initially off-screen */
+  right: -250px;
   width: 250px;
   height: 100%;
   background-color: #ffffff;
@@ -109,11 +109,11 @@ html {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  transition: right 0.4s ease; /* Smoother slide animation */
+  transition: right 0.4s ease;
 }
 
 .sidebar.open {
-  right: 0; /* Slide in when open */
+  right: 0;
 }
 
 .close-icon {

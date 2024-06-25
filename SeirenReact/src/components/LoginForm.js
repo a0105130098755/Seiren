@@ -1,33 +1,21 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState } from "react";
 import { MdAlternateEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { login, requestRefreshToken, loginWithGoogle } from "../api/Api";
-import {
-  GoogleOAuthProvider,
-  GoogleLogin,
-  CredentialResponse,
-} from "@react-oauth/google";
+import { login } from "../api/Api";
 import "./LoginForm.css";
 import NavBar from "./NavBar";
 
-const LoginForm: React.FC = () => {
+const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  console.log(
-    "Google Client ID in LoginForm:",
-    process.env.REACT_APP_GOOGLE_CLIENT_ID
-  ); // 환경 변수 확인
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
 
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setEmail(e.target.value);
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setPassword(e.target.value);
-
-  const validateForm = (): boolean => {
+  const validateForm = () => {
     if (!email || !password) {
       setError("모든 필드를 입력해주세요.");
       return false;
@@ -40,7 +28,7 @@ const LoginForm: React.FC = () => {
     return true;
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     if (validateForm()) {
@@ -48,9 +36,10 @@ const LoginForm: React.FC = () => {
         const data = await login(email, password);
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
+        alert("환영합니다!");
         navigate("/dashboard");
       } catch (error) {
-        const errorMessage = (error as Error).message;
+        const errorMessage = error.message;
         setError(
           errorMessage ||
             "로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요."
@@ -59,25 +48,20 @@ const LoginForm: React.FC = () => {
     }
   };
 
-  const onSuccess = async (response: CredentialResponse) => {
-    try {
-      const data = await loginWithGoogle(response.credential as string);
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      navigate("/dashboard");
-    } catch (error) {
-      setError("구글 로그인에 실패했습니다. 다시 시도해주세요.");
-    }
-  };
+  const handleGoogleLogin = () => {
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const redirectUri = "http://localhost:3000/oauth2/redirect";
+    const scope = "openid profile email";
+    const responseType = "token";
+    const state = "random_state_string"; // 선택 사항
 
-  const onFailure = () => {
-    setError("구글 로그인에 실패했습니다. 다시 시도해주세요.");
+    const googleLoginUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&state=${state}`;
+
+    window.location.href = googleLoginUrl;
   };
 
   return (
-    <GoogleOAuthProvider
-      clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}
-    >
+    <div>
       <NavBar />
       <div className="form-container">
         <form onSubmit={handleSubmit} className="form login-form wrapper">
@@ -112,18 +96,12 @@ const LoginForm: React.FC = () => {
           <button type="submit" className="button">
             로그인
           </button>
-          <div className="google-login-button">
-            <GoogleLogin
-              onSuccess={onSuccess}
-              onError={onFailure}
-              useOneTap
-              auto_select
-              width="100%"
-            />
-          </div>
+          <button type="button" className="button" onClick={handleGoogleLogin}>
+            Google 로그인
+          </button>
         </form>
       </div>
-    </GoogleOAuthProvider>
+    </div>
   );
 };
 

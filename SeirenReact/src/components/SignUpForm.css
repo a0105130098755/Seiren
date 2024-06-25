@@ -4,9 +4,9 @@
   max-width: 500px;
   margin: 100px auto 0;
   padding: 20px;
-  background: #f9f9f9;
+  background: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 .topbar {
@@ -30,7 +30,7 @@
 
 .nav-links a {
   text-decoration: none;
-  color: #333;
+  color: #000000;
   font-weight: bold;
   position: relative;
 }
@@ -40,8 +40,8 @@
   display: block;
   width: 0;
   height: 2px;
-  background: #007bff;
-  transition: width 0.3s;
+  background: #000000;
+  transition: width 0.5s;
 }
 
 .nav-links a:hover::after {
@@ -107,7 +107,7 @@
   padding: 10px 10px 10px 40px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  height: 40px; /* 입력 필드 높이 */
+  height: 40px;
   background: #fff;
   color: #333;
 }
@@ -128,14 +128,14 @@
 .email-confirm-button {
   position: absolute;
   right: 0;
-  padding: 0 15px; /* 버튼 내부 여백 */
+  padding: 0 15px;
   border: none;
-  background-color: #444; /* 고급스러운 색상으로 변경 */
-  color: white;
+  background-color: #0075ff;
+  color: #f4f9ff;
   border-radius: 0 5px 5px 0;
   cursor: pointer;
-  height: 40px; /* 버튼 높이를 입력 필드와 동일하게 설정 */
-  white-space: nowrap; /* 버튼 내부 텍스트 줄바꿈 방지 */
+  height: 40px;
+  white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,12 +143,11 @@
 
 .email-button:hover,
 .email-confirm-button:hover {
-  background-color: #555; /* 호버 시 색상 변경 */
+  background-color: #2caeff;
 }
 
 .check-button {
-  background-color: #444; /* 고급스러운 색상으로 변경 */
-  color: white;
+  background-color: #0075ff;
   border: none;
   padding: 10px 15px;
   border-radius: 5px;
@@ -157,11 +156,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 10px; /* 버튼과 입력 필드 사이 간격 */
+  margin-left: 10px;
+  color: #f4f9ff;
 }
 
 .check-button:hover {
-  background-color: #555; /* 호버 시 색상 변경 */
+  background-color: #2caeff;
 }
 
 .eye-icon {
@@ -179,13 +179,13 @@
   padding: 10px;
   cursor: pointer;
   border-radius: 5px;
-  background-color: #444; /* 고급스러운 색상으로 변경 */
+  background-color: #0075ff;
   color: white;
   margin-right: 10px;
 }
 
 .file-upload-label:hover {
-  background-color: #555; /* 호버 시 색상 변경 */
+  background-color: #0075ff;
 }
 
 .file-upload-input {
@@ -198,7 +198,7 @@
 }
 
 .preview-button {
-  background-color: #444; /* 고급스러운 색상으로 변경 */
+  background-color: #0075ff;
   color: white;
   border: none;
   padding: 10px;
@@ -207,7 +207,7 @@
 }
 
 .preview-button:hover {
-  background-color: #555; /* 호버 시 색상 변경 */
+  background-color: #2caeff;
 }
 
 .cancel-button {
@@ -220,11 +220,11 @@
 }
 
 .cancel-button:hover {
-  background-color: #c82333; /* 호버 시 색상 변경 */
+  background-color: #c82333;
 }
 
 .button {
-  background-color: #444; /* 고급스러운 색상으로 변경 */
+  background-color: #0075ff;
   color: white;
   border: none;
   padding: 10px;
@@ -236,7 +236,7 @@
 }
 
 .button:hover {
-  background-color: #555; /* 호버 시 색상 변경 */
+  background-color: #2caeff;
 }
 
 .error {
@@ -276,7 +276,7 @@
 }
 
 .register a {
-  color: #444; /* 고급스러운 색상으로 변경 */
+  color: #0075ff;
   text-decoration: none;
 }
 
@@ -291,7 +291,7 @@
 }
 
 .modal-button {
-  background-color: #444; /* 고급스러운 색상으로 변경 */
+  background-color: #0075ff;
   color: white;
   border: none;
   padding: 10px;
@@ -300,10 +300,9 @@
 }
 
 .modal-button:hover {
-  background-color: #555; /* 호버 시 색상 변경 */
+  background-color: #2caeff;
 }
 
-/* 모달 내부 스타일 */
 .modal-content {
   font-size: 14px;
   line-height: 1.6;
@@ -351,9 +350,9 @@
   .email-confirm-button {
     position: absolute;
     right: 0;
-    top: 0; /* 버튼을 인풋과 동일한 높이에 배치 */
-    height: 100%; /* 버튼 높이를 인풋 높이와 동일하게 설정 */
-    width: auto; /* 너비를 자동으로 설정 */
+    top: 0;
+    height: 100%;
+    width: auto;
     border-radius: 0 5px 5px 0;
     white-space: nowrap;
   }
