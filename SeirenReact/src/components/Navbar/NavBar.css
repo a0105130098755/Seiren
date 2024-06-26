@@ -70,6 +70,7 @@ html {
   display: flex;
   align-items: center;
   cursor: pointer;
+  position: relative;
 }
 
 .profile-pic {
@@ -87,6 +88,69 @@ html {
 
 .profile-icon:hover {
   color: #007bff;
+}
+
+.profile-options {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+.logout-button {
+  background: #007bff;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 10px 20px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out;
+  white-space: nowrap; /* Ensure text does not wrap */
+}
+
+.logout-button:hover {
+  background-color: #0056b3;
+}
+
+.sidebar-logout {
+  font-size: 18px;
+  padding: 10px 0;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease-in-out;
+}
+
+.sidebar-logout::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #333;
+  left: 0;
+  bottom: 0;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-logout:hover {
+  color: #007bff;
+}
+
+.sidebar-logout:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .hamburger-icon {
@@ -132,8 +196,8 @@ html {
 .sidebar-links a {
   text-decoration: none;
   color: #333;
-  font-size: 18px; /* Increased font size for readability */
-  padding: 10px 0; /* Added padding for spacing */
+  font-size: 18px;
+  padding: 10px 0;
   transition: color 0.3s ease-in-out;
   position: relative;
 }
@@ -142,13 +206,13 @@ html {
   content: "";
   position: absolute;
   width: 100%;
-  height: 1px; /* Underline height */
-  background-color: #333; /* Underline color */
+  height: 1px;
+  background-color: #333;
   left: 0;
   bottom: 0;
-  transform: scaleX(1);
+  transform: scaleX(0);
   transform-origin: right;
-  transition: transform 0.8s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 }
 
 .sidebar-links a:hover::after {
@@ -160,11 +224,10 @@ html {
   color: #007bff;
 }
 
-/* Mobile Styles */
 @media (max-width: 768px) {
   .nav-links,
   .profile {
-    display: none !important; /* Hide in navbar on mobile */
+    display: none !important;
   }
 
   .hamburger-icon {
@@ -176,11 +239,11 @@ html {
   }
 
   .sidebar-links {
-    display: flex; /* Show links in sidebar on mobile */
+    display: flex;
   }
 
   .sidebar .profile {
-    display: flex; /* Show profile in sidebar on mobile */
+    display: flex;
     align-items: center;
     margin-bottom: 20px;
   }

@@ -13,6 +13,9 @@ body {
 }
 
 .wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: rgba(255, 255, 255, 0.9); /* White with slight transparency */
   padding: 40px 30px;
   border-radius: 15px;
@@ -31,15 +34,15 @@ h1 {
 .input.box {
   position: relative;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .input.box input {
   width: 100%;
-  padding: 15px 15px 15px 40px; /* Adjusted padding */
+  padding: 10px 40px 10px 10px; /* Adjusted padding */
   border: 1px solid #ccc;
-  border-radius: 25px;
+  border-radius: 5px; /* Reduced border-radius */
   font-size: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: border-color 0.3s;
 }
 
@@ -50,7 +53,7 @@ h1 {
 
 .icon {
   position: absolute;
-  left: 15px; /* Changed to left */
+  right: 10px; /* Changed to right */
   top: 50%;
   transform: translateY(-50%);
   color: #888;
@@ -78,17 +81,45 @@ button[type="submit"] {
   width: 100%;
   padding: 15px;
   border: none;
-  border-radius: 25px;
+  border-radius: 5px; /* Reduced border-radius */
   background-color: #007bff;
   color: white;
   font-size: 18px;
   cursor: pointer;
   transition: background-color 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
 }
 
 button[type="submit"]:hover {
   background-color: #0056b3;
+}
+
+.google-login-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px; /* Reduced border-radius */
+  background-color: #ffffff;
+  color: #333;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.google-login-button:hover {
+  background-color: #f4f4f4;
+}
+
+.google-login-button img {
+  margin-right: 10px;
+  width: 24px;
+  height: 24px;
 }
 
 .error {
@@ -97,26 +128,27 @@ button[type="submit"]:hover {
   margin-bottom: 15px;
 }
 
-.google-login-button {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px;
-  width: 100%; /* 부모 요소의 너비를 100%로 설정 */
-}
-
-.google-login-button > div {
-  width: 100% !important; /* 구글 로그인 버튼의 너비를 100%로 설정 */
-  display: flex;
-  justify-content: center; /* 텍스트를 가운데 정렬 */
-  height: 40px; /* 버튼 높이 */
-}
-
-.google-login-button > div > div {
-  flex: 1; /* 내부 요소가 전체 너비를 차지하도록 설정 */
-}
-
 @media (max-width: 768px) {
   .wrapper {
     padding: 20px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .input.box input {
+    padding: 10px 35px 10px 10px; /* Adjusted padding */
+  }
+
+  button[type="submit"],
+  .google-login-button {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .google-login-button img {
+    width: 20px;
+    height: 20px;
   }
 }

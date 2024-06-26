@@ -19,9 +19,11 @@ export const login = async (email, password) => {
   }
 };
 
-export const requestRefreshToken = async (refreshToken) => {
+export const requestRefreshToken = async () => {
   try {
-    const response = await api.post("/refresh-token", { refreshToken });
+    const refreshToken = localStorage.getItem("refreshToken");
+    const response = await api.post("/auth/reissued", { refreshToken });
+    localStorage.setItem("accessToken", response.data.accessToken);
     return response.data;
   } catch (error) {
     handleAxiosError(error, "토큰 재발행에 실패했습니다. 다시 시도해주세요.");
@@ -30,9 +32,9 @@ export const requestRefreshToken = async (refreshToken) => {
 
 export const loginWithGoogle = async (tokenId) => {
   try {
-    console.log("Sending token to backend:", tokenId); // 콘솔 로그 추가
+    console.log("Sending token to backend:", tokenId);
     const response = await api.post("/google/login", { token: tokenId });
-    console.log("Backend response:", response.data); // 콘솔 로그 추가
+    console.log("Backend response:", response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error, "구글 로그인에 실패했습니다. 다시 시도해주세요.");
@@ -75,24 +77,15 @@ export const checkExist = async ({ type, value }) => {
   }
 };
 
-// 비밀번호 찾기 함수 추가
-export const forgotPassword = async (email) => {
-  try {
-    const response = await api.post("/auth/forgot-password", { email });
-    return response.data;
-  } catch (error) {
-    handleAxiosError(
-      error,
-      "비밀번호를 찾는 데 문제가 발생했습니다. 다시 시도해주세요."
-    );
-  }
-};
-
 // 이메일 찾기 함수
 export const findEmail = async (nickname) => {
   try {
-    const response = await api.post("/auth/find-email", { nickname });
-    return response.data.email;
+    const response = await checkExist({ type: "nickname", value: nickname });
+    if (response) {
+      return response;
+    } else {
+      throw new Error("입력하신 닉네임과 일치하는 이메일을 찾을 수 없습니다.");
+    }
   } catch (error) {
     handleAxiosError(
       error,
@@ -101,6 +94,100 @@ export const findEmail = async (nickname) => {
   }
 };
 
+// 비밀번호 찾기 함수
+export const forgotPassword = async (email) => {
+  try {
+    const response = await checkExist({ type: "email", value: email });
+    if (response) {
+      return response;
+    } else {
+      throw new Error("입력하신 이메일과 일치하는 사용자를 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    handleAxiosError(
+      error,
+      "입력하신 이메일과 일치하는 사용자를 찾을 수 없습니다."
+    );
+  }
+};
+// 게시글 리스트 조회 함수
+export const fetchBoardList = async (page, size) => {
+  try {
+    const response = await api.get("/board/list", {
+      params: { page, size },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(
+      error,
+      "게시글 리스트를 가져오는데 실패했습니다. 다시 시도해주세요."
+    );
+  }
+};
+
+// 게시글 상세 조회 함수
+export const fetchBoardDetail = async (boardId) => {
+  try {
+    const response = await api.get(`/board/${boardId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(
+      error,
+      "게시글 상세 정보를 가져오는데 실패했습니다. 다시 시도해주세요."
+    );
+  }
+};
+
+// 게시글 작성 함수
+export const createBoard = async (boardData) => {
+  try {
+    const response = await api.post("/board", boardData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "게시글 작성에 실패했습니다. 다시 시도해주세요.");
+  }
+};
+
+// 게시글 수정 함수
+export const updateBoard = async (boardId, boardData) => {
+  try {
+    const response = await api.put(`/board/${boardId}`, boardData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "게시글 수정에 실패했습니다. 다시 시도해주세요.");
+  }
+};
+
+// 게시글 삭제 함수
+export const deleteBoard = async (boardId) => {
+  try {
+    const response = await api.delete(`/board/${boardId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "게시글 삭제에 실패했습니다. 다시 시도해주세요.");
+  }
+};
 const handleAxiosError = (error, defaultMessage) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);

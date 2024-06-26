@@ -22,7 +22,7 @@ const PasswordRecoveryForm = () => {
 
     try {
       const response = await forgotPassword(email);
-      setPassword(response.password);
+      setPassword(response.password); // assuming response contains the password or reset link
     } catch (error) {
       setError(error.message);
     }

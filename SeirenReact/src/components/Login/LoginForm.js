@@ -37,14 +37,35 @@ const LoginForm = () => {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         alert("환영합니다!");
-        navigate("/dashboard");
+        navigate("/main");
       } catch (error) {
-        const errorMessage = error.message;
-        setError(
-          errorMessage ||
-            "로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요."
-        );
+        handleError(error);
       }
+    }
+  };
+
+  const handleError = (error) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 400:
+          setError("잘못된 요청입니다. 입력한 정보를 확인해주세요.");
+          break;
+        case 401:
+          setError("이메일 또는 비밀번호가 잘못되었습니다.");
+          break;
+        case 404:
+          setError("서버를 찾을 수 없습니다. 나중에 다시 시도해주세요.");
+          break;
+        case 500:
+          setError("서버에 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+          break;
+        default:
+          setError("알 수 없는 오류가 발생했습니다. 나중에 다시 시도해주세요.");
+      }
+    } else if (error.request) {
+      setError("서버로부터 응답이 없습니다. 네트워크를 확인해주세요.");
+    } else {
+      setError("요청을 생성하는 중 오류가 발생했습니다.");
     }
   };
 
@@ -96,7 +117,12 @@ const LoginForm = () => {
           <button type="submit" className="button">
             로그인
           </button>
-          <button type="button" className="button" onClick={handleGoogleLogin}>
+          <button
+            type="button"
+            className="google-login-button"
+            onClick={handleGoogleLogin}
+          >
+            <img src="/google-logo.png.png" alt="Google Icon" />
             Google 로그인
           </button>
         </form>

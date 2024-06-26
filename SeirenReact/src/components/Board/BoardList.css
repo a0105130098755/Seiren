@@ -1,0 +1,31 @@
+.board-list {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.board-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.board-item {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.board-title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.board-content {
+  margin-bottom: 10px;
+}
+
+.board-author {
+  color: #555;
+}

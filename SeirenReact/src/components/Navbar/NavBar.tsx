@@ -6,6 +6,7 @@ import "./NavBar.css";
 const NavBar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showProfileOptions, setShowProfileOptions] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -18,10 +19,19 @@ const NavBar = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    setIsLoggedIn(false);
-    toggleSidebar(); // 사이드바 닫기
+    if (isLoggedIn) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      setIsLoggedIn(false);
+      setShowProfileOptions(false);
+      setSidebarOpen(false);
+    } else {
+      alert("로그인을 먼저 하셔야 합니다.");
+    }
+  };
+
+  const toggleProfileOptions = () => {
+    setShowProfileOptions(!showProfileOptions);
   };
 
   return (
@@ -34,11 +44,11 @@ const NavBar = () => {
         </div>
         <nav className="nav-links">
           <Link to="/">메인 페이지</Link>
-          <Link to="/posts">게시글</Link>
+          <Link to="/board">게시글</Link>
           <Link to="/jobs">구인 구직</Link>
           <Link to="/charge">충전</Link>
         </nav>
-        <div className="profile">
+        <div className="profile" onClick={toggleProfileOptions}>
           {isLoggedIn ? (
             <img
               src="/default-profile.png"
@@ -47,6 +57,13 @@ const NavBar = () => {
             />
           ) : (
             <FaUserCircle className="profile-icon" />
+          )}
+          {showProfileOptions && (
+            <div className="profile-options">
+              <button className="logout-button" onClick={handleLogout}>
+                로그 아웃
+              </button>
+            </div>
           )}
         </div>
         <FaBars className="hamburger-icon" onClick={toggleSidebar} />
@@ -75,11 +92,12 @@ const NavBar = () => {
           <Link to="/charge" onClick={toggleSidebar}>
             충전
           </Link>
-          {isLoggedIn && (
-            <button className="logout-button" onClick={handleLogout}>
-              로그아웃
-            </button>
-          )}
+          <button
+            className="logout-button sidebar-logout"
+            onClick={handleLogout}
+          >
+            로그 아웃
+          </button>
         </nav>
       </div>
     </>
