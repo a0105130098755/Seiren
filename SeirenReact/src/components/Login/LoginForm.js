@@ -3,6 +3,7 @@ import { MdAlternateEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../api/Api";
+import KakaoLoginButton from "./KakaoLoginButton";
 import "./LoginForm.css";
 import NavBar from "../Navbar/NavBar";
 
@@ -69,18 +70,6 @@ const LoginForm = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    const redirectUri = "http://localhost:3000/oauth2/redirect";
-    const scope = "openid profile email";
-    const responseType = "token";
-    const state = "random_state_string"; // 선택 사항
-
-    const googleLoginUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&state=${state}`;
-
-    window.location.href = googleLoginUrl;
-  };
-
   return (
     <div>
       <NavBar />
@@ -117,14 +106,7 @@ const LoginForm = () => {
           <button type="submit" className="button">
             로그인
           </button>
-          <button
-            type="button"
-            className="google-login-button"
-            onClick={handleGoogleLogin}
-          >
-            <img src="/google-logo.png.png" alt="Google Icon" />
-            Google 로그인
-          </button>
+          <KakaoLoginButton />
         </form>
       </div>
     </div>

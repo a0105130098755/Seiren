@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { findEmail } from "../../api/Api";
-import "./PasswordRecoveryEmailLookup.css"; // 필요한 스타일을 가져오기 위해 임포트
+import "./PasswordRecoveryEmailLookup.css";
 
 const EmailLookupForm = () => {
   const [nickname, setNickname] = useState("");

@@ -30,14 +30,15 @@ export const requestRefreshToken = async () => {
   }
 };
 
-export const loginWithGoogle = async (tokenId) => {
+// 카카오 로그인 관련 API 함수 추가
+export const loginWithKakao = async (code) => {
   try {
-    console.log("Sending token to backend:", tokenId);
-    const response = await api.post("/google/login", { token: tokenId });
-    console.log("Backend response:", response.data);
+    const response = await api.post("/kakao/login", { code });
+    localStorage.setItem("accessToken", response.data.accessToken);
+    localStorage.setItem("refreshToken", response.data.refreshToken);
     return response.data;
   } catch (error) {
-    handleAxiosError(error, "구글 로그인에 실패했습니다. 다시 시도해주세요.");
+    handleAxiosError(error, "카카오 로그인에 실패했습니다. 다시 시도해주세요.");
   }
 };
 
@@ -188,6 +189,7 @@ export const deleteBoard = async (boardId) => {
     handleAxiosError(error, "게시글 삭제에 실패했습니다. 다시 시도해주세요.");
   }
 };
+
 const handleAxiosError = (error, defaultMessage) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);

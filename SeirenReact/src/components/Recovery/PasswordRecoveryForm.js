@@ -16,7 +16,7 @@ const PasswordRecoveryForm = () => {
     setPassword("");
 
     if (!email) {
-      setError("아이디(이메일)를 입력해주세요.");
+      setError("이메일을 입력해주세요.");
       return;
     }
 
@@ -34,7 +34,7 @@ const PasswordRecoveryForm = () => {
       <div className="input box">
         <input
           type="text"
-          placeholder="아이디(이메일) 입력"
+          placeholder="이메일 입력"
           value={email}
           onChange={handleEmailChange}
           required

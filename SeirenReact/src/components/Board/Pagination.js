@@ -1,25 +1,26 @@
 import React from "react";
-import "./Pagination.css"; // 스타일링을 위한 CSS 파일
+import "./Pagination.css"; // 페이지네이션을 위한 CSS 파일
 
-function Pagination({ currentPage, totalPages, onPageChange }) {
-  const pages = [...Array(totalPages).keys()];
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const pages = [];
+
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i);
+  }
 
   return (
     <div className="pagination">
       {pages.map((page) => (
         <button
           key={page}
-          onClick={() => onPageChange(page + 1)}
-          disabled={page + 1 === currentPage}
-          className={`pagination-button ${
-            page + 1 === currentPage ? "active" : ""
-          }`}
+          onClick={() => onPageChange(page)}
+          className={page === currentPage ? "active" : ""}
         >
-          {page + 1}
+          {page}
         </button>
       ))}
     </div>
   );
-}
+};
 
 export default Pagination;

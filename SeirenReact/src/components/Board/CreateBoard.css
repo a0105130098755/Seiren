@@ -1,0 +1,33 @@
+.create-board {
+  margin: 20px 0;
+}
+
+.create-board form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-board label {
+  margin-bottom: 5px;
+}
+
+.create-board input,
+.create-board textarea {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.create-board button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.create-board button:hover {
+  background-color: #0056b3;
+}

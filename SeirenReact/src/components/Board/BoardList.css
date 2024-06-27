@@ -1,31 +1,130 @@
-.board-list {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* 가로 스크롤 바를 숨깁니다 */
 }
 
-.board-items {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.board-item {
+.container {
+  width: 100%;
+  max-width: 1200px; /* 최대 폭을 설정하여 너무 넓어지지 않도록 합니다 */
+  height: 90vh; /* 화면의 90% 높이 */
+  margin: 50px auto;
   padding: 20px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background-color: #fff;
+  overflow-y: auto;
+  overflow-x: hidden; /* 가로 스크롤 바를 숨깁니다 */
 }
 
-.board-title {
-  font-size: 1.5em;
-  margin-bottom: 10px;
+.header {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.board-content {
-  margin-bottom: 10px;
+.board-list {
+  text-align: center;
 }
 
-.board-author {
-  color: #555;
+.create-button {
+  margin: 20px 0;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.create-button:hover {
+  background-color: #0056b3;
+}
+
+.board-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.board-table th,
+.board-table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.board-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.board-table th:nth-child(1),
+.board-table td:nth-child(1) {
+  width: 20%;
+}
+
+.board-table th:nth-child(2),
+.board-table td:nth-child(2) {
+  width: 50%;
+}
+
+.board-table th:nth-child(3),
+.board-table td:nth-child(3) {
+  width: 15%;
+}
+
+.board-table th:nth-child(4),
+.board-table td:nth-child(4) {
+  width: 15%;
+}
+
+.board-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.board-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.loading,
+.no-boards {
+  font-size: 1.2em;
+  color: #777;
+  margin: 20px 0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.pagination button:hover {
+  background-color: #f1f1f1;
 }

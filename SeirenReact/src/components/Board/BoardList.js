@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
 import { useMediaQuery } from "react-responsive";
-import NavBar from "../Navbar/NavBar";
-import "./BoardList.css"; // 스타일링을 위한 CSS 파일
+import "./BoardList.css";
 import { fetchBoardList, requestRefreshToken } from "../../api/Api";
 
 function BoardList() {
@@ -12,18 +12,14 @@ function BoardList() {
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
-  useEffect(() => {
-    fetchBoards(page, size);
-  }, [page, size]);
+  const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("accessToken");
 
   const fetchBoards = useCallback(async (page, size) => {
     setLoading(true);
     try {
       const data = await fetchBoardList(page, size);
-      setBoards((prevBoards) =>
-        page === 0 ? data.content : [...prevBoards, ...data.content]
-      );
+      setBoards(data.content);
       setTotalPages(data.totalPages);
       setLoading(false);
     } catch (error) {
@@ -37,48 +33,82 @@ function BoardList() {
     }
   }, []);
 
+  useEffect(() => {
+    fetchBoards(page, size);
+  }, [page, size, fetchBoards]);
+
   const handlePageChange = (newPage) => {
     setPage(newPage - 1);
     setSize(10);
   };
 
-  useEffect(() => {
-    if (isMobile) {
-      const handleScroll = () => {
-        if (
-          window.innerHeight + window.scrollY >=
-            document.body.offsetHeight - 2 &&
-          !loading
-        ) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      };
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
+  const handleCreateClick = () => {
+    if (isLoggedIn) {
+      navigate("/board/create");
+    } else {
+      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      navigate("/login");
     }
-  }, [isMobile, loading]);
+  };
 
   return (
-    <div className="board-list">
-      <NavBar /> {/* NavBar 추가 */}
-      <div className="board-items">
-        {boards.map((board) => (
-          <div key={board.id} className="board-item">
-            <h3 className="board-title">{board.title}</h3>
-            <p className="board-content">{board.content}</p>
-            <p className="board-author">작성자: {board.nickname}</p>
-          </div>
-        ))}
-      </div>
-      {isMobile ? (
-        loading && <p>Loading...</p>
-      ) : (
+    <div className="container">
+      <div className="header">게시판</div>
+      <div className="board-list">
+        <table className="board-table">
+          <thead>
+            <tr>
+              <th>작성자</th>
+              <th>제목</th>
+              <th>날짜</th>
+              <th>조회수</th>
+              {isLoggedIn && <th>수정</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {loading && boards.length === 0 ? (
+              <tr>
+                <td colSpan={isLoggedIn ? "5" : "4"} className="loading">
+                  Loading...
+                </td>
+              </tr>
+            ) : boards.length === 0 ? (
+              <tr>
+                <td colSpan={isLoggedIn ? "5" : "4"} className="no-boards">
+                  아직 게시글이 없습니다
+                </td>
+              </tr>
+            ) : (
+              boards.map((board) => (
+                <tr key={board.id}>
+                  <td>{board.nickname}</td>
+                  <td>{board.title}</td>
+                  <td>{new Date(board.regDate).toLocaleDateString()}</td>
+                  <td>{board.viewCount}</td>
+                  {isLoggedIn && (
+                    <td>
+                      <button
+                        onClick={() => navigate(`/board/edit/${board.id}`)}
+                      >
+                        수정
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
         <Pagination
           currentPage={page + 1}
           totalPages={totalPages}
           onPageChange={handlePageChange}
+          className="pagination"
         />
-      )}
+        <button onClick={handleCreateClick} className="create-button">
+          글 작성
+        </button>
+      </div>
     </div>
   );
 }
