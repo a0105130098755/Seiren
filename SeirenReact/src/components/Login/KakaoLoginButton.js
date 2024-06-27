@@ -22,19 +22,25 @@ const KakaoLoginButton = () => {
   const getAccessToken = async (code) => {
     try {
       const rsp = await KakaoApi.getToken(code, REST_API_KEY, REDIRECT_URI);
-      console.log(rsp.data);
-      getJWT(rsp.data.accessToken);
+      setActoken(rsp.data);
     } catch (e) {
       console.log("카카오 로그인 에러 : ", e);
     }
   };
+  useEffect(() => {
+    if (actoken !== "") {
+      console.log("actoken : ", actoken.access_token);
+      getJWT(actoken.access_token);
+    }
+  }, [actoken]);
 
   const getJWT = async (token) => {
     try {
+      console.log(token);
       const response = await KakaoApi.getInfo(token);
       console.log(response.data);
     } catch (error) {
-      console.error("Failed to get access token:", error);
+      console.error("토큰발행실패:", error);
     }
   };
 

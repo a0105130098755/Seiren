@@ -15,7 +15,9 @@ const KakaoApi = {
     });
   },
   getInfo: async (token) => {
-    return await axios.post(`http://localhost:8111/kakao`, token);
+    return await axios.post(`http://localhost:8111/auth/kakao`, {
+      token: token,
+    });
   },
 };
 export default KakaoApi;
