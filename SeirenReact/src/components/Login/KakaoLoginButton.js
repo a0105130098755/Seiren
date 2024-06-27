@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import KakaoApi from "../../api/KakaoApi";
+import KakaoApi from "../../api/kakaoApi";
 
 const KakaoLoginButton = () => {
   const [actoken, setActoken] = useState("");
