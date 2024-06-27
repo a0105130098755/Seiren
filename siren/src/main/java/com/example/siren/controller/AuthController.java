@@ -61,5 +61,10 @@ public class AuthController {
         return ResponseEntity.ok(isExist);
     }
 
+    @GetMapping("/kakao")
+    public ResponseEntity<TokenDTO> kakaoLogin(@RequestParam String accessToken){
+
+
+    }
 
 }

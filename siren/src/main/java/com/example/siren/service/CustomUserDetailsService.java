@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,11 +21,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return memberRepository.findByEmail(email)
-                .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(email + " 을 DB에서 찾을 수 없습니다"));
+        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+        if(memberOptional.isPresent()){
+            return createUserDetails(memberOptional.get());
+        }
+
+        // 값 없을 때 예외 처리
+        throw new UsernameNotFoundException(email + " 사용자를 찾을 수 없습니다.");
     }
 
+    // DB 에서 가져온 회원 정보를 UserDetails 타입으로 변환.
     private UserDetails createUserDetails(Member member) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getAuthority().toString());
 
