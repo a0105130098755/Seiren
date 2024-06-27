@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import KakaoApi from "../../api/kakaoApi";
 
 const KakaoLoginButton = () => {
   const [actoken, setActoken] = useState("");
@@ -20,9 +20,18 @@ const KakaoLoginButton = () => {
 
   const getAccessToken = async (code) => {
     try {
-      const response = await axios.get(`localhost:8111/auth/kakao`, {
-        params: { accessToken: code },
-      });
+      const rsp = await KaKaoApi.getToken(code, REST_API_KEY, REDIRECT_URI);
+      console.log(rsp.data);
+      getJWT(rsp.data.accessToken);
+    } catch (e) {
+      console.log("카카오 로그인 에러 : ", e);
+    }
+  };
+
+  const getJWT = async (token) => {
+    try {
+      const response = await KakaoApi.getInfo(token);
+      console.log(response.data);
     } catch (error) {
       console.error("Failed to get access token:", error);
     }

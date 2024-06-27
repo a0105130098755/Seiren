@@ -2,6 +2,7 @@ package com.example.siren.controller;
 
 import com.example.siren.dto.*;
 import com.example.siren.service.AuthService;
+import com.example.siren.service.KaKaoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.Map;
 @Slf4j
 public class AuthController {
     private final AuthService authService;
+    private final KaKaoService kakaoService;
 
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDTO> signup(@RequestBody MemberRequestDTO requestDto) {
@@ -61,9 +63,12 @@ public class AuthController {
         return ResponseEntity.ok(isExist);
     }
 
-    @GetMapping("/kakao")
-    public ResponseEntity<TokenDTO> kakaoLogin(@RequestParam String accessToken){
-
+    @PostMapping("/kakao")
+    public ResponseEntity<Map<String,Object>> kakaoLogin(@RequestBody Map<String,String> accessToken){
+        log.info("카카오 토근 : {}", accessToken.get("token"));
+        Map<String, Object> response = kakaoService.kakaoUserInfo(accessToken.get("token"));
+        log.info("response : {}" , response);
+        return ResponseEntity.ok(response);
 
     }
 
