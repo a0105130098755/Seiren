@@ -42,8 +42,11 @@ public class KaKaoService {
                     KakaoDTO.class
             );
             KakaoDTO kakaoDto = responseEntity.getBody();
+            log.info(kakaoDto.toString());
             log.info("id : {}", kakaoDto.getId());
             log.info("email : {}" , kakaoDto.getKakaoAccount().getEmail());
+            log.info("profile : {}", kakaoDto.getKakaoAccount().getProfile().getProfile());
+            log.info("nickname : {}" , kakaoDto.getKakaoAccount().getProfile().getNickname());
             return kakaoInfo;
         }catch(Exception e) {
             log.error("카카오 서비스 오류 발생" + e);

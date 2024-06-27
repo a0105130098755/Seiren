@@ -19,11 +19,12 @@ public class KaKao {
 
     private String email;
     private String profile;
-    private String name;
+    private String nickname;
 
     @Builder
-    public KaKao(Long id, String email, String profile){
+    public KaKao(Long id, String email, String profile, String nickname){
         this.id = id;
+        this.nickname = nickname;
         this.email = email;
         this.profile = profile;
     }

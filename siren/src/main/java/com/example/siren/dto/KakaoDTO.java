@@ -21,8 +21,9 @@ public class KakaoDTO {
 
         @Data
         public static class Profile {
+            private String nickname;
             @JsonProperty("profile_image_url")
-            private String profileImageUrl;
+            private String profile;
         }
     }
 
@@ -30,7 +31,8 @@ public class KakaoDTO {
         return KaKao.builder()
                 .id(id)
                 .email(kakaoAccount.getEmail())
-                .profile(kakaoAccount.getProfile().getProfileImageUrl())
+                .nickname(kakaoAccount.getProfile().getNickname())
+                .profile(kakaoAccount.getProfile().getProfile())
                 .build();
     }
 
