@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import KakaoApi from "../../api/kakaoApi";
+import KakaoApi from "../../api/KakaoApi";
 
 const KakaoLoginButton = () => {
   const [actoken, setActoken] = useState("");
@@ -14,13 +14,14 @@ const KakaoLoginButton = () => {
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get("code");
     if (code) {
+      console.log("인가 code : ", code);
       getAccessToken(code);
     }
   }, []);
 
   const getAccessToken = async (code) => {
     try {
-      const rsp = await KaKaoApi.getToken(code, REST_API_KEY, REDIRECT_URI);
+      const rsp = await KakaoApi.getToken(code, REST_API_KEY, REDIRECT_URI);
       console.log(rsp.data);
       getJWT(rsp.data.accessToken);
     } catch (e) {

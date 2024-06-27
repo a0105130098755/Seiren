@@ -4,37 +4,34 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
 
 function BbsWrite() {
-  const { auth, setAuth } = useContext(AuthContext);
-  const { headers, setHeaders } = useContext(HttpHeadersContext);
-
+  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const changeTitle = (event) => {
-    setTitle(event.target.value);
-  };
-
-  const changeContent = (event) => {
-    setContent(event.target.value);
-  };
+  const changeTitle = (event) => setTitle(event.target.value);
+  const changeContent = (event) => setContent(event.target.value);
 
   const createBbs = async () => {
     const req = {
-      id: localStorage.getItem("id"),
+      id: auth,
       title: title,
       content: content,
     };
 
     await axios
-      .post("http://localhost:3000/bbs", req, { headers: headers })
+      .post("http://localhost:3000/bbs", req, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
       .then((resp) => {
         console.log("[BbsWrite.js] createBbs() success :D");
         console.log(resp.data);
-
         alert("새로운 게시글을 성공적으로 등록했습니다 :D");
-        navigate(`/bbsdetail/${resp.data.seq}`);
+        navigate(`/bbsdetail/${resp.data.seq}`); // 새롭게 등록한 글 상세로 이동
       })
       .catch((err) => {
         console.log("[BbsWrite.js] createBbs() error :<");
@@ -47,7 +44,7 @@ function BbsWrite() {
       alert("로그인 한 사용자만 게시글을 작성할 수 있습니다 !");
       navigate(-1);
     }
-  }, []);
+  }, [auth, navigate]);
 
   return (
     <div>
@@ -65,7 +62,6 @@ function BbsWrite() {
               />
             </td>
           </tr>
-
           <tr>
             <th className="table-primary">제목</th>
             <td>
@@ -78,7 +74,6 @@ function BbsWrite() {
               />
             </td>
           </tr>
-
           <tr>
             <th className="table-primary">내용</th>
             <td>
@@ -92,7 +87,6 @@ function BbsWrite() {
           </tr>
         </tbody>
       </table>
-
       <div className="my-5 d-flex justify-content-center">
         <button className="btn btn-outline-secondary" onClick={createBbs}>
           <i className="fas fa-pen"></i> 등록하기

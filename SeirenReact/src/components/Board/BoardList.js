@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
 import { fetchBoardList } from "../../api/Api";
@@ -7,36 +7,46 @@ import "./BoardList.css";
 
 function BoardList() {
   const [bbsList, setBbsList] = useState([]);
-  const [choiceVal, setChoiceVal] = useState("");
-  const [searchVal, setSearchVal] = useState("");
   const [page, setPage] = useState(0);
   const [totalCnt, setTotalCnt] = useState(0);
-  const navigate = useNavigate();
+  const [isFetching, setIsFetching] = useState(false);
 
-  const getBbsList = async (choice, search, page) => {
+  const fetchBoardList = useCallback(async (page, size) => {
     try {
-      const response = await fetchBoardList(page, 10);
-      setBbsList(response.bbsList);
-      setTotalCnt(response.pageCnt);
+      setIsFetching(true);
+      const response = await axios.get("/board/list", {
+        params: { page, size },
+      });
+      setBbsList((prev) => [...prev, ...response.data.bbsList]);
+      setTotalCnt(response.data.pageCnt);
+      setIsFetching(false);
     } catch (error) {
       console.error("게시글 리스트를 가져오는데 실패했습니다.", error);
     }
+  }, []);
+
+  useEffect(() => {
+    fetchBoardList(0, 10);
+  }, [fetchBoardList]);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+        document.documentElement.offsetHeight ||
+      isFetching
+    )
+      return;
+    setPage((prevPage) => prevPage + 1);
   };
 
   useEffect(() => {
-    getBbsList("", "", 0);
-  }, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
-  const changeChoice = (event) => setChoiceVal(event.target.value);
-  const changeSearch = (event) => setSearchVal(event.target.value);
-  const search = () => {
-    getBbsList(choiceVal, searchVal, 0);
-  };
-
-  const changePage = (page) => {
-    setPage(page);
-    getBbsList(choiceVal, searchVal, page - 1);
-  };
+  useEffect(() => {
+    if (page > 0) fetchBoardList(page, 10);
+  }, [page, fetchBoardList]);
 
   return (
     <div className="board-page">
@@ -44,24 +54,14 @@ function BoardList() {
         <div className="board-header sticky-header">
           <h1 className="board-title">게시판</h1>
           <div className="search-container">
-            <select
-              className="custom-select"
-              value={choiceVal}
-              onChange={changeChoice}
-            >
+            <select className="custom-select">
               <option>검색 옵션 선택</option>
               <option value="title">제목</option>
               <option value="content">내용</option>
               <option value="writer">작성자</option>
             </select>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="검색어"
-              value={searchVal}
-              onChange={changeSearch}
-            />
-            <button type="button" className="btn btn-search" onClick={search}>
+            <input type="text" className="form-control" placeholder="검색어" />
+            <button type="button" className="btn btn-search">
               검색
             </button>
           </div>
@@ -92,13 +92,13 @@ function BoardList() {
               pageRangeDisplayed={5}
               prevPageText={"‹"}
               nextPageText={"›"}
-              onChange={changePage}
+              onChange={setPage}
             />
           )}
         </div>
 
         <div className="write-button-container">
-          <Link className="btn btn-outline-secondary" to="/bbswrite">
+          <Link className="btn btn-write" to="/board/create">
             <i className="fas fa-pen"></i> &nbsp; 글쓰기
           </Link>
         </div>

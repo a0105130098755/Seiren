@@ -11,8 +11,10 @@ import PasswordRecoveryEmailLookup from "./components/Recovery/PasswordRecoveryE
 import BoardList from "./components/Board/BoardList";
 import CreateBoard from "./components/Board/CreateBoard";
 import EditBoard from "./components/Board/EditBoard";
+import MainPage from "./components/Main/MainPage";
 import NavBar from "./components/Navbar/NavBar";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import AuthProvider from "./components/context/AuthProvider";
 import "./App.css";
 
 function App() {
@@ -20,20 +22,26 @@ function App() {
     <GoogleOAuthProvider
       clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}
     >
-      <Router>
-        <div className="App">
-          <NavBar />
-          <Routes>
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/signup" element={<SignUpForm />} />
-            <Route path="/recovery" element={<PasswordRecoveryEmailLookup />} />
-            <Route path="/board" element={<BoardList />} />
-            <Route path="/board/create" element={<CreateBoard />} />
-            <Route path="/board/edit/:id" element={<EditBoard />} />
-            <Route path="*" element={<Navigate to="/board" />} />
-          </Routes>
-        </div>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <div className="App">
+            <NavBar />
+            <Routes>
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/signup" element={<SignUpForm />} />
+              <Route
+                path="/recovery"
+                element={<PasswordRecoveryEmailLookup />}
+              />
+              <Route path="/board" element={<BoardList />} />
+              <Route path="/board/create" element={<CreateBoard />} />
+              <Route path="/board/edit/:id" element={<EditBoard />} />
+              <Route path="/" element={<MainPage />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
     </GoogleOAuthProvider>
   );
 }
