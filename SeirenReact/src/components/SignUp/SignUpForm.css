@@ -1,15 +1,14 @@
-/* Add your styles for the form here */
-
-.container {
-  max-width: 500px;
-  margin: 100px auto 0;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+body {
+  margin: 0;
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #f0f2f5; /* Slightly lighter background for better contrast */
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-.topbar {
+.navbar {
   width: 100%;
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -21,55 +20,34 @@
   top: 0;
   left: 0;
   z-index: 1000;
+  height: 64px; /* Set a fixed height for the navbar */
 }
 
-.nav-links {
+.page-container {
+  margin-top: 74px; /* Adjusted to ensure it starts below the navbar */
   display: flex;
-  gap: 15px;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(
+    100vh - 64px
+  ); /* Ensures container takes up full height excluding the navbar */
+  padding: 20px;
 }
 
-.nav-links a {
-  text-decoration: none;
-  color: #000000;
-  font-weight: bold;
-  position: relative;
-}
-
-.nav-links a::after {
-  content: "";
-  display: block;
-  width: 0;
-  height: 2px;
-  background: #000000;
-  transition: width 0.5s;
-}
-
-.nav-links a:hover::after {
-  width: 100%;
-}
-
-.nav-profile {
-  display: flex;
-  align-items: center;
-}
-
-.profile-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.profile-icon {
-  font-size: 24px;
-  color: #333;
-}
-
-.topbar img {
-  height: 40px;
+.container {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  max-width: 800px; /* Increased max-width for better readability */
+  width: 100%; /* Ensure it takes full width within max-width */
+  position: relative; /* Changed to relative for scrolling */
+  overflow-y: auto; /* Allows vertical scrolling if content overflows */
+  max-height: calc(100vh - 84px); /* Makes the container scrollable */
 }
 
 .form-container {
-  margin-top: 60px;
+  margin-top: 20px;
 }
 
 .form {
@@ -247,6 +225,11 @@
   margin-top: 10px;
 }
 
+.success {
+  color: green;
+  margin-top: 10px;
+}
+
 .modal {
   background: white;
   padding: 20px;
@@ -331,9 +314,15 @@
 }
 
 @media (max-width: 768px) {
-  .container {
-    margin: 100px 20px 0;
+  .page-container {
+    margin-top: 64px; /* Ensure it adjusts correctly for mobile view */
     padding: 10px;
+  }
+
+  .container {
+    max-height: none; /* Remove fixed height for mobile */
+    padding: 10px;
+    width: 100%;
   }
 
   .form-group {

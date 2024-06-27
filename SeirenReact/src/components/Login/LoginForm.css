@@ -9,19 +9,20 @@ body {
   align-items: center;
   min-height: 100vh;
   min-width: 100vw;
-  background: whitesmoke;
+  background: #f0f2f5; /* Slightly lighter background for better contrast */
 }
 
-.wrapper {
+.form-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(255, 255, 255, 0.9); /* White with slight transparency */
+  background: #fff; /* Solid white background */
   padding: 40px 30px;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   width: 100%;
+  margin-top: 100px; /* Center vertically */
 }
 
 h1 {
@@ -39,9 +40,9 @@ h1 {
 
 .input.box input {
   width: 100%;
-  padding: 10px 40px 10px 10px; /* Adjusted padding */
+  padding: 10px 40px 10px 10px;
   border: 1px solid #ccc;
-  border-radius: 5px; /* Reduced border-radius */
+  border-radius: 5px;
   font-size: 16px;
   transition: border-color 0.3s;
 }
@@ -53,7 +54,7 @@ h1 {
 
 .icon {
   position: absolute;
-  right: 10px; /* Changed to right */
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   color: #888;
@@ -81,7 +82,7 @@ button[type="submit"] {
   width: 100%;
   padding: 15px;
   border: none;
-  border-radius: 5px; /* Reduced border-radius */
+  border-radius: 5px;
   background-color: #007bff;
   color: white;
   font-size: 18px;
@@ -95,6 +96,30 @@ button[type="submit"]:hover {
   background-color: #0056b3;
 }
 
+.kakao-login-button {
+  width: 100%; /* Make the Kakao button same width as the submit button */
+  margin-top: 10px;
+  background-color: #fee500; /* Kakao's signature yellow color */
+  border: none;
+  border-radius: 5px;
+  color: #000000; /* Black text for contrast */
+  font-size: 16px;
+  font-weight: bold;
+  padding: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.kakao-login-button:hover {
+  background-color: #ffd700; /* Slightly darker yellow for hover effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for hover effect */
+}
+
+.kakao-login-button:active {
+  background-color: #fccb00; /* Even darker yellow for active effect */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow for active effect */
+}
+
 .error {
   color: red;
   text-align: center;
@@ -102,7 +127,7 @@ button[type="submit"]:hover {
 }
 
 @media (max-width: 768px) {
-  .wrapper {
+  .form-container {
     padding: 20px;
   }
 
@@ -111,11 +136,11 @@ button[type="submit"]:hover {
   }
 
   .input.box input {
-    padding: 10px 35px 10px 10px; /* Adjusted padding */
+    padding: 10px 35px 10px 10px;
   }
 
   button[type="submit"],
-  .google-login-button {
+  .kakao-login-button {
     padding: 12px;
     font-size: 16px;
   }

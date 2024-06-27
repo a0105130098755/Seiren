@@ -363,251 +363,256 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="container">
+    <div className="page-container">
       <NavBar />
-      <div className="form-container">
-        <form className="form" onSubmit={handleSignUpSubmit}>
-          <h1>회원 가입</h1>
-          <div className="form-group">
-            <div className="input box full-width">
-              <input
-                type="text"
-                placeholder="이름"
-                name="name"
-                value={name}
-                onChange={handleChange}
-                id="name"
-              />
-              <FaUser className="icon" />
-            </div>
-            {errors.name && <p className="error">{errors.name}</p>}
-            <div className="input box full-width">
-              <div className="email-input-container">
+      <div className="container">
+        <div className="form-container">
+          <form className="form" onSubmit={handleSignUpSubmit}>
+            <h1>회원 가입</h1>
+            <div className="form-group">
+              <div className="input box full-width">
                 <input
                   type="text"
-                  placeholder="이메일"
-                  name="email"
-                  value={email}
+                  placeholder="이름"
+                  name="name"
+                  value={name}
                   onChange={handleChange}
-                  id="email"
-                  ref={emailInputRef}
-                  className="email-input"
-                  disabled={isEmailInputDisabled}
+                  id="name"
                 />
+                <FaUser className="icon" />
               </div>
-              <MdAlternateEmail className="icon" />
-              <button
-                type="button"
-                className="email-button"
-                onClick={handleSendEmailCode}
-                disabled={isActive || isEmailVerified}
-              >
-                인증번호 발송
-              </button>
-            </div>
-            {errors.email && <p className="error">{errors.email}</p>}
-            <div className="input box full-width">
-              <input
-                type="text"
-                placeholder="인증번호"
-                name="emailCode"
-                value={emailCode}
-                onChange={handleChange}
-              />
-              <button
-                type="button"
-                className="email-confirm-button"
-                onClick={handleVerifyEmailCode}
-              >
-                인증번호 확인
-              </button>
-            </div>
-            {errors.emailCode && <p className="error">{errors.emailCode}</p>}
-            {isActive && (
-              <p className="timer">인증번호 유효 시간: {timeLeft}초</p>
-            )}
-            <div className="input box full-width">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="비밀번호"
-                name="password"
-                value={password}
-                onChange={handleChange}
-                id="password"
-              />
-              <FaLock className="icon" />
-              <span
-                className="eye-icon"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
-            </div>
-            {errors.password && <p className="error">{errors.password}</p>}
-            <div className="input box full-width">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="비밀번호 확인"
-                name="confirmPassword"
-                value={confirmPassword}
-                onChange={handleChange}
-                id="confirmPassword"
-              />
-              <FaLock className="icon" />
-              <span
-                className="eye-icon"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
-            </div>
-            {errors.confirmPassword && (
-              <p className="error">{errors.confirmPassword}</p>
-            )}
-            <div className="input box full-width">
-              <input
-                type="text"
-                placeholder="별명"
-                name="nickname"
-                value={nickname}
-                onChange={handleChange}
-                id="nickname"
-              />
-              <FaUser className="icon" />
-              <button
-                type="button"
-                className="check-button"
-                onClick={() => checkExistence("nickname", nickname)}
-              >
-                중복 확인
-              </button>
-            </div>
-            {errors.nickname && <p className="error">{errors.nickname}</p>}
-            {isNicknameUnique === false && (
-              <p className="error">이미 사용 중인 닉네임입니다.</p>
-            )}
-            {isNicknameUnique === true && (
-              <p className="success">사용 가능한 닉네임입니다.</p>
-            )}
-            <div className="input box full-width">
-              <input
-                type="text"
-                placeholder="전화번호 (000-0000-0000)"
-                name="phone"
-                value={phone}
-                onChange={handleChange}
-                id="phone"
-              />
-              <FaPhone className="icon" />
-              <button
-                type="button"
-                className="check-button"
-                onClick={() => checkExistence("phone", phone)}
-              >
-                중복 확인
-              </button>
-            </div>
-            {errors.phone && <p className="error">{errors.phone}</p>}
-            {isPhoneUnique === false && (
-              <p className="error">이미 사용 중인 전화번호입니다.</p>
-            )}
-            {isPhoneUnique === true && (
-              <p className="success">사용 가능한 전화번호입니다.</p>
-            )}
-            <label className="file-upload-label">
-              <input
-                type="file"
-                onChange={handleProfileImageChange}
-                className="file-upload-input"
-              />
-              파일 선택
-            </label>
-            {profileImage && (
-              <div className="button-group">
+              {errors.name && <p className="error">{errors.name}</p>}
+              <div className="input box full-width">
+                <div className="email-input-container">
+                  <input
+                    type="text"
+                    placeholder="이메일"
+                    name="email"
+                    value={email}
+                    onChange={handleChange}
+                    id="email"
+                    ref={emailInputRef}
+                    className="email-input"
+                    disabled={isEmailInputDisabled}
+                  />
+                </div>
+                <MdAlternateEmail className="icon" />
                 <button
                   type="button"
-                  className="preview-button"
-                  onClick={() => setModalIsOpen(true)}
+                  className="email-button"
+                  onClick={handleSendEmailCode}
+                  disabled={isActive || isEmailVerified}
                 >
-                  미리보기
-                </button>
-                <button
-                  type="button"
-                  className="cancel-button"
-                  onClick={handleProfileImageClear}
-                >
-                  취소
+                  인증번호 발송
                 </button>
               </div>
-            )}
-            <div className="checkbox-container">
-              <label>
+              {errors.email && <p className="error">{errors.email}</p>}
+              <div className="input box full-width">
                 <input
-                  type="checkbox"
-                  checked={termsAgreed}
-                  onChange={(e) => setTermsAgreed(e.target.checked)}
+                  type="text"
+                  placeholder="인증번호"
+                  name="emailCode"
+                  value={emailCode}
+                  onChange={handleChange}
                 />
-                개인정보 처리방침 동의
+                <button
+                  type="button"
+                  className="email-confirm-button"
+                  onClick={handleVerifyEmailCode}
+                >
+                  인증번호 확인
+                </button>
+              </div>
+              {errors.emailCode && <p className="error">{errors.emailCode}</p>}
+              {isActive && (
+                <p className="timer">인증번호 유효 시간: {timeLeft}초</p>
+              )}
+              <div className="input box full-width">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="비밀번호"
+                  name="password"
+                  value={password}
+                  onChange={handleChange}
+                  id="password"
+                />
+                <FaLock className="icon" />
+                <span
+                  className="eye-icon"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+              {errors.password && <p className="error">{errors.password}</p>}
+              <div className="input box full-width">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="비밀번호 확인"
+                  name="confirmPassword"
+                  value={confirmPassword}
+                  onChange={handleChange}
+                  id="confirmPassword"
+                />
+                <FaLock className="icon" />
+                <span
+                  className="eye-icon"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+              {errors.confirmPassword && (
+                <p className="error">{errors.confirmPassword}</p>
+              )}
+              <div className="input box full-width">
+                <input
+                  type="text"
+                  placeholder="별명"
+                  name="nickname"
+                  value={nickname}
+                  onChange={handleChange}
+                  id="nickname"
+                />
+                <FaUser className="icon" />
+                <button
+                  type="button"
+                  className="check-button"
+                  onClick={() => checkExistence("nickname", nickname)}
+                >
+                  중복 확인
+                </button>
+              </div>
+              {errors.nickname && <p className="error">{errors.nickname}</p>}
+              {isNicknameUnique === false && (
+                <p className="error">이미 사용 중인 닉네임입니다.</p>
+              )}
+              {isNicknameUnique === true && (
+                <p className="success">사용 가능한 닉네임입니다.</p>
+              )}
+              <div className="input box full-width">
+                <input
+                  type="text"
+                  placeholder="전화번호 (000-0000-0000)"
+                  name="phone"
+                  value={phone}
+                  onChange={handleChange}
+                  id="phone"
+                />
+                <FaPhone className="icon" />
+                <button
+                  type="button"
+                  className="check-button"
+                  onClick={() => checkExistence("phone", phone)}
+                >
+                  중복 확인
+                </button>
+              </div>
+              {errors.phone && <p className="error">{errors.phone}</p>}
+              {isPhoneUnique === false && (
+                <p className="error">이미 사용 중인 전화번호입니다.</p>
+              )}
+              {isPhoneUnique === true && (
+                <p className="success">사용 가능한 전화번호입니다.</p>
+              )}
+              <label className="file-upload-label">
+                <input
+                  type="file"
+                  onChange={handleProfileImageChange}
+                  className="file-upload-input"
+                />
+                파일 선택
               </label>
-              <button
-                type="button"
-                onClick={() => setPrivacyModalIsOpen(true)}
-                className="modal-button"
-              >
-                개인정보 처리방침
+              {profileImage && (
+                <div className="button-group">
+                  <button
+                    type="button"
+                    className="preview-button"
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    미리보기
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel-button"
+                    onClick={handleProfileImageClear}
+                  >
+                    취소
+                  </button>
+                </div>
+              )}
+              <div className="checkbox-container">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={termsAgreed}
+                    onChange={(e) => setTermsAgreed(e.target.checked)}
+                  />
+                  개인정보 처리방침 동의
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setPrivacyModalIsOpen(true)}
+                  className="modal-button"
+                >
+                  개인정보 처리방침
+                </button>
+              </div>
+              {errors.termsAgreed && (
+                <p className="error">{errors.termsAgreed}</p>
+              )}
+              {errors.submit && <p className="error">{errors.submit}</p>}
+              <button type="submit" className="button">
+                계정 생성
               </button>
+              <p className="register">
+                이미 계정이 있으신가요? <Link to="/login">로그인</Link>
+              </p>
             </div>
-            {errors.termsAgreed && (
-              <p className="error">{errors.termsAgreed}</p>
-            )}
-            {errors.submit && <p className="error">{errors.submit}</p>}
-            <button type="submit" className="button">
-              계정 생성
-            </button>
-            <p className="register">
-              이미 계정이 있으신가요? <Link to="/login">로그인</Link>
-            </p>
-          </div>
-        </form>
-      </div>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        contentLabel="Image Preview"
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <h2>이미지 미리보기</h2>
-        {profileImage && (
-          <img
-            src={URL.createObjectURL(profileImage)}
-            alt="프로필 미리보기"
-            className="image-preview"
-          />
-        )}
-        <button onClick={() => setModalIsOpen(false)} className="modal-button">
-          닫기
-        </button>
-      </Modal>
-      <Modal
-        isOpen={privacyModalIsOpen}
-        onRequestClose={() => setPrivacyModalIsOpen(false)}
-        contentLabel="Terms and Conditions"
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <h2>개인정보 처리방침</h2>
-        <div className="modal-content">
-          {/* 개인정보 처리방침 내용 */}
-          <p>{/* 주석 처리된 개인정보 처리방침 내용 */}</p>
+          </form>
         </div>
-        <button
-          onClick={() => setPrivacyModalIsOpen(false)}
-          className="modal-button"
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={() => setModalIsOpen(false)}
+          contentLabel="Image Preview"
+          className="modal"
+          overlayClassName="overlay"
         >
-          닫기
-        </button>
-      </Modal>
+          <h2>이미지 미리보기</h2>
+          {profileImage && (
+            <img
+              src={URL.createObjectURL(profileImage)}
+              alt="프로필 미리보기"
+              className="image-preview"
+            />
+          )}
+          <button
+            onClick={() => setModalIsOpen(false)}
+            className="modal-button"
+          >
+            닫기
+          </button>
+        </Modal>
+        <Modal
+          isOpen={privacyModalIsOpen}
+          onRequestClose={() => setPrivacyModalIsOpen(false)}
+          contentLabel="Terms and Conditions"
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <h2>개인정보 처리방침</h2>
+          <div className="modal-content">
+            {/* 개인정보 처리방침 내용 */}
+            <p>{/* 주석 처리된 개인정보 처리방침 내용 */}</p>
+          </div>
+          <button
+            onClick={() => setPrivacyModalIsOpen(false)}
+            className="modal-button"
+          >
+            닫기
+          </button>
+        </Modal>
+      </div>
     </div>
   );
 };

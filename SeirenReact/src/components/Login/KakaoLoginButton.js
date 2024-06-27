@@ -46,7 +46,11 @@ const KakaoLoginButton = () => {
 
   return (
     <>
-      <button type="button" onClick={handleLogin}>
+      <button
+        type="button"
+        className="kakao-login-button"
+        onClick={handleLogin}
+      >
         카카오로 로그인
       </button>
     </>
