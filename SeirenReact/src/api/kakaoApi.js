@@ -1,11 +1,11 @@
 import axios from "axios";
 
 const KakaoApi = {
-  getToken: async (code) => {
+  getToken: async (code, key, uri) => {
     const data = {
       grant_type: "authorization_code",
-      client_id: process.env.REACT_APP_KAKAO_API_KEY,
-      redirect_uri: process.env.REACT_APP_KAKAO_REDIRECT_URI,
+      client_id: key,
+      redirect_uri: uri,
       code: code,
     };
     return await axios.post("https://kauth.kakao.com/oauth/token", data, {
@@ -15,7 +15,7 @@ const KakaoApi = {
     });
   },
   getInfo: async (token) => {
-    return await axios.post(Common.CP_DOMAIN + `/kakao/ismember`, token);
+    return await axios.post(`http://localhost:8111/kakao`, token);
   },
 };
 export default KakaoApi;
