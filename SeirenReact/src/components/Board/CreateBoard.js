@@ -20,7 +20,6 @@ function BbsWrite() {
     setContent(event.target.value);
   };
 
-  /* [POST /bbs]: 게시글 작성 */
   const createBbs = async () => {
     const req = {
       id: localStorage.getItem("id"),
@@ -35,7 +34,7 @@ function BbsWrite() {
         console.log(resp.data);
 
         alert("새로운 게시글을 성공적으로 등록했습니다 :D");
-        navigate(`/bbsdetail/${resp.data.seq}`); // 새롭게 등록한 글 상세로 이동
+        navigate(`/bbsdetail/${resp.data.seq}`);
       })
       .catch((err) => {
         console.log("[BbsWrite.js] createBbs() error :<");
