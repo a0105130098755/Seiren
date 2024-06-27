@@ -1,113 +1,116 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
-import { useMediaQuery } from "react-responsive";
+import { fetchBoardList } from "../api/api";
+import BoardCard from "./BoardCard"; // BoardCard 컴포넌트 임포트
 import "./BoardList.css";
-import { fetchBoardList, requestRefreshToken } from "../../api/Api";
 
 function BoardList() {
-  const [boards, setBoards] = useState([]);
+  const [bbsList, setBbsList] = useState([]);
+  const [choiceVal, setChoiceVal] = useState("");
+  const [searchVal, setSearchVal] = useState("");
   const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
-  const [totalPages, setTotalPages] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const [totalCnt, setTotalCnt] = useState(0);
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem("accessToken");
 
-  const fetchBoards = useCallback(async (page, size) => {
-    setLoading(true);
+  const getBbsList = async (choice, search, page) => {
     try {
-      const data = await fetchBoardList(page, size);
-      setBoards(data.content);
-      setTotalPages(data.totalPages);
-      setLoading(false);
+      const response = await fetchBoardList(page, 10);
+      setBbsList(response.bbsList);
+      setTotalCnt(response.pageCnt);
     } catch (error) {
-      if (error.message.includes("401")) {
-        await requestRefreshToken();
-        fetchBoards(page, size);
-      } else {
-        console.error(error);
-        setLoading(false);
-      }
+      console.error("게시글 리스트를 가져오는데 실패했습니다.", error);
     }
-  }, []);
-
-  useEffect(() => {
-    fetchBoards(page, size);
-  }, [page, size, fetchBoards]);
-
-  const handlePageChange = (newPage) => {
-    setPage(newPage - 1);
-    setSize(10);
   };
 
-  const handleCreateClick = () => {
-    if (isLoggedIn) {
-      navigate("/board/create");
-    } else {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
-    }
+  useEffect(() => {
+    getBbsList("", "", 0);
+  }, []);
+
+  const changeChoice = (event) => setChoiceVal(event.target.value);
+  const changeSearch = (event) => setSearchVal(event.target.value);
+  const search = () => {
+    getBbsList(choiceVal, searchVal, 0);
+  };
+
+  const changePage = (page) => {
+    setPage(page);
+    getBbsList(choiceVal, searchVal, page - 1);
   };
 
   return (
-    <div className="container">
-      <div className="header">게시판</div>
+    <div className="board-container">
+      <h1 className="board-title">게시판</h1>
+      <table className="search">
+        <tbody>
+          <tr>
+            <td>
+              <select
+                className="custom-select"
+                value={choiceVal}
+                onChange={changeChoice}
+              >
+                <option>검색 옵션 선택</option>
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+                <option value="writer">작성자</option>
+              </select>
+            </td>
+            <td>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="검색어"
+                value={searchVal}
+                onChange={changeSearch}
+              />
+            </td>
+            <td>
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={search}
+              >
+                <i className="fas fa-search"></i> 검색
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+
       <div className="board-list">
-        <table className="board-table">
-          <thead>
-            <tr>
-              <th>작성자</th>
-              <th>제목</th>
-              <th>날짜</th>
-              <th>조회수</th>
-              {isLoggedIn && <th>수정</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {loading && boards.length === 0 ? (
-              <tr>
-                <td colSpan={isLoggedIn ? "5" : "4"} className="loading">
-                  Loading...
-                </td>
-              </tr>
-            ) : boards.length === 0 ? (
-              <tr>
-                <td colSpan={isLoggedIn ? "5" : "4"} className="no-boards">
-                  아직 게시글이 없습니다
-                </td>
-              </tr>
-            ) : (
-              boards.map((board) => (
-                <tr key={board.id}>
-                  <td>{board.nickname}</td>
-                  <td>{board.title}</td>
-                  <td>{new Date(board.regDate).toLocaleDateString()}</td>
-                  <td>{board.viewCount}</td>
-                  {isLoggedIn && (
-                    <td>
-                      <button
-                        onClick={() => navigate(`/board/edit/${board.id}`)}
-                      >
-                        수정
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+        {bbsList.length > 0 ? (
+          bbsList.map((bbs, idx) => (
+            <BoardCard
+              key={idx}
+              title={bbs.title}
+              content={bbs.content}
+              writer={bbs.writer}
+            />
+          ))
+        ) : (
+          <div className="no-posts">게시글이 없습니다.</div>
+        )}
+      </div>
+
+      {totalCnt > 0 && (
         <Pagination
-          currentPage={page + 1}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
           className="pagination"
+          activePage={page + 1}
+          itemsCountPerPage={10}
+          totalItemsCount={totalCnt}
+          pageRangeDisplayed={5}
+          prevPageText={"‹"}
+          nextPageText={"›"}
+          onChange={changePage}
         />
-        <button onClick={handleCreateClick} className="create-button">
-          글 작성
-        </button>
+      )}
+
+      <div className="my-5 d-flex justify-content-center">
+        <Link className="btn btn-outline-secondary" to="/bbswrite">
+          <i className="fas fa-pen"></i> &nbsp; 글쓰기
+        </Link>
       </div>
     </div>
   );

@@ -1,0 +1,29 @@
+.board-card {
+  background-color: #2b2e4a;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 15px;
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  max-width: 300px; /* 카드 최대 너비 설정 */
+}
+
+.board-card:hover {
+  transform: translateY(-10px);
+}
+
+.board-card-title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.board-card-content {
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+.board-card-writer {
+  font-size: 0.9em;
+  color: #aaa;
+}

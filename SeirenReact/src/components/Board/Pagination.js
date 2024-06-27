@@ -1,8 +1,15 @@
 import React from "react";
-import "./Pagination.css"; // 페이지네이션을 위한 CSS 파일
+import "./Pagination.css";
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination = ({
+  activePage,
+  itemsCountPerPage,
+  totalItemsCount,
+  pageRangeDisplayed,
+  onChange,
+}) => {
   const pages = [];
+  const totalPages = Math.ceil(totalItemsCount / itemsCountPerPage);
 
   for (let i = 1; i <= totalPages; i++) {
     pages.push(i);
@@ -13,8 +20,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       {pages.map((page) => (
         <button
           key={page}
-          onClick={() => onPageChange(page)}
-          className={page === currentPage ? "active" : ""}
+          onClick={() => onChange(page)}
+          className={page === activePage ? "active" : ""}
         >
           {page}
         </button>
