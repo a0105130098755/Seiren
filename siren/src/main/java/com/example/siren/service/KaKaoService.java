@@ -59,6 +59,7 @@ public class KaKaoService {
             MemberRequestDTO memberDTO = MemberRequestDTO.builder()
                     .email(kakaoDto.getKakaoAccount().getEmail())
                     .name(kakaoDto.getKakaoAccount().getProfile().getNickname())
+                    .nickname(kakaoDto.getKakaoAccount().getProfile().getNickname())
                     .profile(kakaoDto.getKakaoAccount().getProfile().getProfile())
                     .password(String.valueOf(kakaoDto.getId()))
                     .nickname(kakaoDto.getKakaoAccount().getProfile().getNickname())

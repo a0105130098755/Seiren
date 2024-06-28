@@ -24,6 +24,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDTO> signup(@RequestBody MemberRequestDTO requestDto) {
         return ResponseEntity.ok(authService.signup(requestDto));
+        // 500 에러 -> 이미 가입된 이메일
     }
 
     @PostMapping("/login")
@@ -70,7 +71,7 @@ public class AuthController {
         TokenDTO response = kakaoService.kakaoUserInfo(accessToken.get("token"));
         log.info("response : {}" , response);
         return ResponseEntity.ok(response);
-
+        // 500에러 -> 이미 가입된 이메일
     }
 
 }
