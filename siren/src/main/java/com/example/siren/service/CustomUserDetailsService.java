@@ -1,7 +1,6 @@
 package com.example.siren.service;
 
 import com.example.siren.entity.Member;
-import com.example.siren.repository.KaKaoRepository;
 import com.example.siren.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +18,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
-    private final KaKaoRepository kaKaoRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

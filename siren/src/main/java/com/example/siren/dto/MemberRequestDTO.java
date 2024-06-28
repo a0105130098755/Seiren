@@ -21,7 +21,7 @@ public class MemberRequestDTO {
     private String profile;
     private String phone;
 
-    public Member toEntity(PasswordEncoder passwordEncoder){
+    public Member toEntity(PasswordEncoder passwordEncoder, boolean kakao){
         return Member.builder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
@@ -29,6 +29,7 @@ public class MemberRequestDTO {
                 .nickname(nickname)
                 .profile(profile)
                 .phone(phone)
+                .kakao(kakao)
                 .authority(Authority.ROLE_USER)
                 .build();
     }

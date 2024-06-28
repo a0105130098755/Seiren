@@ -41,7 +41,8 @@ public class AuthService {
         if(memberRepository.existsByEmail(requestDTO.getEmail())){
             throw new RuntimeException("이미 가입된 유저");
         }
-        Member member = requestDTO.toEntity(passwordEncoder);
+        // 카카오 유저가 아니면 카카오 필드 false 저장
+        Member member = requestDTO.toEntity(passwordEncoder, false);
         return MemberResponseDTO.of(memberRepository.save(member));
         // save 는 저장 뒤 해당 저장된 객체를 반환한다.
     }

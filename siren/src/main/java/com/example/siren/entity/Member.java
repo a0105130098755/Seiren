@@ -28,13 +28,15 @@ public class Member {
     private String phone;
     private int point;
     private LocalDateTime regDate;
+    private boolean kakao;
     private boolean status;
+
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
     @Builder
-    public Member(String email, String password, String name, String nickname, String profile, String phone, Authority authority){
+    public Member(String email, String password, String name, String nickname, String profile, String phone, Authority authority, boolean kakao){
         this.email = email;
         this.password = password;
         this.name = name;
@@ -43,6 +45,7 @@ public class Member {
         this.phone = phone;
         this.point = 0;
         this.status = true;
+        this.kakao = kakao;
         this.authority = authority;
         this.regDate = LocalDateTime.now();
     }

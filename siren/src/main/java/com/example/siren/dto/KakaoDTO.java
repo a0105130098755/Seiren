@@ -26,13 +26,5 @@ public class KakaoDTO {
         }
     }
 
-    public Kakao toEntity() {
-        return Kakao.builder()
-                .id(id)
-                .email(kakaoAccount.getEmail())
-                .nickname(kakaoAccount.getProfile().getNickname())
-                .profile(kakaoAccount.getProfile().getProfile())
-                .build();
-    }
 
 }
