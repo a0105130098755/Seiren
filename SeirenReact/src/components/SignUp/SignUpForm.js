@@ -363,7 +363,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="fullscreen-container">
       <NavBar />
       <div className="container">
         <div className="form-container">

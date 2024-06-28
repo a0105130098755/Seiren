@@ -4,9 +4,9 @@ body {
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #f0f2f5; /* Slightly lighter background for better contrast */
-  overflow-y: scroll; /* Enable vertical scroll for the entire page */
-  height: 100vh; /* Ensure body takes full height */
+  background: #ffffff;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .navbar {
@@ -21,19 +21,19 @@ body {
   top: 0;
   left: 0;
   z-index: 1000;
-  height: 64px; /* Set a fixed height for the navbar */
+  height: 64px;
 }
 
-.page-container {
-  margin-top: 64px; /* Adjusted to ensure it starts below the navbar */
+.fullscreen-container {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: calc(
-    100vh - 64px
-  ); /* Ensures container takes up full height excluding the navbar */
-  padding: 20px;
-  overflow: auto; /* Enables scrolling for the entire page */
 }
 
 .container {
@@ -41,13 +41,13 @@ body {
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-  max-width: 800px; /* Increased max-width for better readability */
-  width: 100%; /* Ensure it takes full width within max-width */
-  position: relative; /* Changed to relative for scrolling */
+  max-width: 800px;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .form-container {
-  margin-top: 80px; /* Ensure form container is below the navbar */
+  width: 100%;
 }
 
 .form {
@@ -314,19 +314,14 @@ body {
 }
 
 @media (max-width: 768px) {
-  .page-container {
-    margin-top: 64px; /* Ensure it adjusts correctly for mobile view */
-    padding: 10px;
-  }
-
   .container {
-    max-height: none; /* Remove fixed height for mobile */
+    max-height: none;
     padding: 10px;
     width: 100%;
   }
 
   .form-container {
-    margin-top: 80px; /* Ensure form container is below the navbar */
+    margin-top: 80px;
   }
 
   .form-group {
