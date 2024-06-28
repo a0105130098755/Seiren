@@ -1,6 +1,5 @@
 package com.example.siren.dto;
 
-import com.example.siren.entity.KaKao;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -27,8 +26,8 @@ public class KakaoDTO {
         }
     }
 
-    public KaKao toEntity() {
-        return KaKao.builder()
+    public Kakao toEntity() {
+        return Kakao.builder()
                 .id(id)
                 .email(kakaoAccount.getEmail())
                 .nickname(kakaoAccount.getProfile().getNickname())

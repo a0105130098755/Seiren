@@ -1,6 +1,7 @@
 package com.example.siren.controller;
 
 import com.example.siren.dto.*;
+import com.example.siren.entity.Token;
 import com.example.siren.service.AuthService;
 import com.example.siren.service.KaKaoService;
 import lombok.RequiredArgsConstructor;
@@ -64,9 +65,9 @@ public class AuthController {
     }
 
     @PostMapping("/kakao")
-    public ResponseEntity<Map<String,Object>> kakaoLogin(@RequestBody Map<String,String> accessToken){
+    public ResponseEntity<TokenDTO> kakaoLogin(@RequestBody Map<String,String> accessToken){
         log.info("카카오 토근 : {}", accessToken.get("token"));
-        Map<String, Object> response = kakaoService.kakaoUserInfo(accessToken.get("token"));
+        TokenDTO response = kakaoService.kakaoUserInfo(accessToken.get("token"));
         log.info("response : {}" , response);
         return ResponseEntity.ok(response);
 
