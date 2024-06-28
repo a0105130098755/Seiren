@@ -31,3 +31,15 @@
 .create-board button:hover {
   background-color: #0056b3;
 }
+
+@media (max-width: 768px) {
+  .create-board {
+    padding: 10px;
+  }
+
+  .create-board input,
+  .create-board textarea,
+  .create-board button {
+    width: 100%;
+  }
+}

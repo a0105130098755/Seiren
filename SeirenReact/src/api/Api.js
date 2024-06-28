@@ -189,7 +189,19 @@ export const deleteBoard = async (boardId) => {
     handleAxiosError(error, "게시글 삭제에 실패했습니다. 다시 시도해주세요.");
   }
 };
-
+export const fetchBoardSearch = async (keyword, type, page, size) => {
+  try {
+    const response = await api.get("/board/search", {
+      params: { keyword, type, page, size },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "게시글 검색에 실패했습니다. 다시 시도해주세요.");
+  }
+};
 const handleAxiosError = (error, defaultMessage) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);

@@ -5,7 +5,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: #f0f2f5; /* Slightly lighter background for better contrast */
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-y: scroll; /* Enable vertical scroll for the entire page */
+  height: 100vh; /* Ensure body takes full height */
 }
 
 .navbar {
@@ -24,7 +25,7 @@ body {
 }
 
 .page-container {
-  margin-top: 74px; /* Adjusted to ensure it starts below the navbar */
+  margin-top: 64px; /* Adjusted to ensure it starts below the navbar */
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -32,6 +33,7 @@ body {
     100vh - 64px
   ); /* Ensures container takes up full height excluding the navbar */
   padding: 20px;
+  overflow: auto; /* Enables scrolling for the entire page */
 }
 
 .container {
@@ -42,12 +44,10 @@ body {
   max-width: 800px; /* Increased max-width for better readability */
   width: 100%; /* Ensure it takes full width within max-width */
   position: relative; /* Changed to relative for scrolling */
-  overflow-y: auto; /* Allows vertical scrolling if content overflows */
-  max-height: calc(100vh - 84px); /* Makes the container scrollable */
 }
 
 .form-container {
-  margin-top: 20px;
+  margin-top: 80px; /* Ensure form container is below the navbar */
 }
 
 .form {
@@ -325,6 +325,10 @@ body {
     width: 100%;
   }
 
+  .form-container {
+    margin-top: 80px; /* Ensure form container is below the navbar */
+  }
+
   .form-group {
     flex-direction: column;
     gap: 10px;
@@ -360,10 +364,6 @@ body {
   .topbar {
     padding: 10px;
     flex-direction: column;
-  }
-
-  .form-container {
-    margin-top: 60px;
   }
 
   .modal-content {
