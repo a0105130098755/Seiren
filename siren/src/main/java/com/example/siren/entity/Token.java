@@ -13,9 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Token {
     @Id
-    @Column(name="token_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private String email;
     private String refreshToken;
 
