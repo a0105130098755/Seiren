@@ -9,6 +9,7 @@ import com.example.siren.entity.Token;
 import com.example.siren.jwt.TokenProvider;
 import com.example.siren.repository.MemberRepository;
 import com.example.siren.repository.TokenRepository;
+import static com.example.siren.security.SecurityUtil.getCurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,6 +17,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,24 +66,32 @@ public class AuthService {
             throw new RuntimeException("exist_error");
         }
 
-        // toAuthentication() 은 객체 변환 메소드
         UsernamePasswordAuthenticationToken authenticationToken = requestDTO.toAuthentication();
-        
-        // 검증을 거친 뒤 해당 변환된 객체 UsernamePasswordAuthenticationToken 을
-        // managerBuilder.getObject().authenticate() 로 인증을 수행.
-        // 인증이 성공할 때 Authentication 객체 반환
-        Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
-        // 인증된 사용자 정보를 사용해 Token 생성 뒤 해당 객체를 반환해주면 끝
-        TokenDTO token = tokenProvider.generateTokenDto(authentication);
 
-        // DB에 사용자 email 의 RefreshToken 저장
-        Token tokenEntity = Token.builder()
-                .email(requestDTO.getEmail())
-                .refreshToken(token.getRefreshToken())
-                .build();
-        tokenRepository.save(tokenEntity);
+        try {
+            // AuthenticationManager를 사용하여 사용자 인증을 시도하고, 인증에 성공하면 Authentication 객체를 반환
+            Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
-        return token;
+            // 인증에 성공한 Authentication 객체를 SecurityContextHolder에 설정
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // 인증된 사용자 정보를 사용하여 Token 생성 및 반환
+            TokenDTO token = tokenProvider.generateTokenDto(authentication);
+
+            // DB에 사용자 email 의 RefreshToken 저장
+            Token tokenEntity = Token.builder()
+                    .email(requestDTO.getEmail())
+                    .refreshToken(token.getRefreshToken())
+                    .build();
+            tokenRepository.save(tokenEntity);
+            Optional<Member> member = memberRepository.findById(getCurrentMemberId());
+            log.warn(member.toString());
+            return token;
+        } catch (AuthenticationException e) {
+            // 인증 실패 시 처리
+            throw new RuntimeException("Authentication failed: " + e.getMessage());
+        }
+
     }
 
     public boolean existsEmail(String email){

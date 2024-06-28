@@ -5,7 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUtil {
     private SecurityUtil() { }
-
+    // Security Context Holder 의 Authentication 객체로 회원의 정보를 가져 온다.
     public static Long getCurrentMemberId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -15,4 +15,5 @@ public class SecurityUtil {
 
         return Long.parseLong(authentication.getName());
     }
+
 }
