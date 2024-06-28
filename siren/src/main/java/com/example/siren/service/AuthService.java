@@ -50,16 +50,17 @@ public class AuthService {
     public TokenDTO login(MemberRequestDTO requestDTO){
         Optional<Member> optionalMember
                 = memberRepository.findByEmail(requestDTO.getEmail());
+
         if(optionalMember.isPresent()){
             Member member = optionalMember.get();
             // 탈퇴한 회원이라면
             if(!member.isStatus()) {
                 log.info("탈퇴한 회원 입니다. 이메일 : " + member.getEmail());
-                return null;
+                throw new RuntimeException("status_error");
             }
         }else{
             log.info("없는 회원");
-            return null;
+            throw new RuntimeException("exist_error");
         }
 
         // toAuthentication() 은 객체 변환 메소드
