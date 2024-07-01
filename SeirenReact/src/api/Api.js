@@ -127,34 +127,40 @@ export const fetchBoardList = async (page, size, title) => {
   }
 };
 
-export const fetchBoardDetail = async (id) => {
+export const fetchBoardDetail = async (title, nickname, profile) => {
   try {
-    const response = await api.get(`/board/${id}`, {
+    const response = await api.get("/board/detail", {
+      params: { title, nickname, profile },
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
-    return response.data;
+    return response.data.boardDTOS[0]; // 첫 번째 게시글 반환
   } catch (error) {
-    handleAxiosError(
-      error,
+    throw new Error(
       "게시글 상세 정보를 가져오는데 실패했습니다. 다시 시도해주세요."
     );
   }
 };
 
-// 게시글 작성 함수
-export const createBoard = async (boardData) => {
+export const createBoard = async (title, content) => {
   try {
-    const response = await api.post("/board", boardData, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    });
+    console.log(
+      "create axios 타이밍의 token : " + localStorage.getItem("accessToken")
+    );
+    const response = await api.post(
+      "/board/save",
+      { title, content },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
-    handleAxiosError(error, "게시글 작성에 실패했습니다. 다시 시도해주세요.");
+    throw new Error("게시글 작성에 실패했습니다. 다시 시도해주세요.");
   }
 };
 

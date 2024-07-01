@@ -1,91 +1,54 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { createBoard } from "../../api/Api";
+import "./CreateBoard.css";
 
 function CreateBoard() {
   const navigate = useNavigate();
-
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [profile, setProfile] = useState("");
+  const [nickname, setNickname] = useState(
+    localStorage.getItem("nickname") || ""
+  );
+  const [profile, setProfile] = useState(localStorage.getItem("profile") || "");
 
-  useEffect(() => {
-    const storedNickname = localStorage.getItem("nickname");
-    const storedProfile = localStorage.getItem("profile");
-
-    if (storedNickname) setNickname(storedNickname);
-    if (storedProfile) setProfile(storedProfile);
-  }, []);
-
-  const changeTitle = (event) => {
-    if (event.target.value.length <= 100) {
-      setTitle(event.target.value);
+  const handleChange = (setter, maxLen) => (event) => {
+    if (event.target.value.length <= maxLen) {
+      setter(event.target.value);
     } else {
-      alert("제목은 최대 100자까지 입력 가능합니다.");
+      alert(`최대 ${maxLen}자까지 입력 가능합니다.`);
     }
   };
 
-  const changeContent = (event) => {
-    if (event.target.value.length <= 500) {
-      setContent(event.target.value);
-    } else {
-      alert("내용은 최대 500자까지 입력 가능합니다.");
-    }
-  };
-
-  const createBbs = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const accessToken = localStorage.getItem("accessToken");
+    console.log(accessToken);
     if (!accessToken) {
       alert("로그인 한 사용자만 게시글을 작성할 수 있습니다!");
-      navigate("/login"); // 로그인 페이지로 이동
+      navigate("/login");
       return;
     }
 
-    if (title.trim() === "") {
-      alert("제목을 입력해주세요.");
+    if (!title.trim() || !content.trim()) {
+      alert("제목과 내용을 모두 입력해주세요.");
       return;
     }
 
-    if (content.trim() === "") {
-      alert("내용을 입력해주세요.");
-      return;
+    try {
+      const response = await createBoard(title, content);
+      alert("새로운 게시글을 성공적으로 등록했습니다 :D");
+      navigate(`/bbsdetail/${response.seq}`);
+    } catch (err) {
+      console.error("게시글 작성에 실패했습니다.", err);
     }
-
-    const req = {
-      title: title,
-      content: content,
-    };
-
-    await axios
-      .post("http://localhost:3000/board/save", req, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((resp) => {
-        console.log("[CreateBoard.js] createBbs() success :D");
-        console.log(resp.data);
-        alert("새로운 게시글을 성공적으로 등록했습니다 :D");
-        navigate(`/bbsdetail/${resp.data.seq}`); // 새롭게 등록한 글 상세로 이동
-      })
-      .catch((err) => {
-        console.log("[CreateBoard.js] createBbs() error :<");
-        console.log(err);
-      });
   };
 
   return (
     <div className="create-board-container">
       <div className="create-board">
         <h2 className="form-title">게시글 작성</h2>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            createBbs();
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <div className="profile-section">
             {profile && (
               <img src={profile} alt="Profile" className="profile-image" />
@@ -98,7 +61,7 @@ function CreateBoard() {
               type="text"
               className="form-control"
               value={title}
-              onChange={changeTitle}
+              onChange={handleChange(setTitle, 100)}
               required
             />
           </div>
@@ -107,7 +70,7 @@ function CreateBoard() {
             <textarea
               className="form-control"
               value={content}
-              onChange={changeContent}
+              onChange={handleChange(setContent, 500)}
               rows="10"
               required
             ></textarea>

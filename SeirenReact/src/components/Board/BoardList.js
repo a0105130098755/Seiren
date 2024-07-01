@@ -5,14 +5,14 @@ import Pagination from "./Pagination";
 import BoardCard from "./BoardCard";
 import "./BoardList.css";
 
-function BoardList() {
+function BoardList({ board, setBoard }) {
   const [bbsList, setBbsList] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [title, setTitle] = useState("all");
   const [profile, setProfile] = useState({
-    image: localStorage.getItem("profileImage"),
+    image: localStorage.getItem("profile"),
     nickname: localStorage.getItem("nickname"),
   });
   const size = 15; // 페이지 사이즈를 변수로 정의
@@ -76,12 +76,14 @@ function BoardList() {
           <div className="board-list">
             {bbsList.length > 0 ? (
               bbsList.map((bbs, idx) => (
-                <BoardCard
+                <Link
+                  to={`/board/details`}
                   key={idx}
-                  id={bbs.id}
-                  title={bbs.title}
-                  writer={bbs.nickname}
-                />
+                  className="board-card-link"
+                  onClick={() => setBoard(bbs)}
+                >
+                  <BoardCard title={bbs.title} writer={bbs.nickname} />
+                </Link>
               ))
             ) : (
               <div className="no-posts">게시글이 없습니다.</div>

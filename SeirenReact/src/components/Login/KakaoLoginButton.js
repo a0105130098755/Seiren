@@ -38,7 +38,8 @@ const KakaoLoginButton = () => {
     try {
       console.log(token);
       const response = await KakaoApi.getInfo(token);
-      console.log(response.data);
+      console.log(response.data.accessToken);
+      localStorage.setItem("accessToken", response.data.accessToken);
     } catch (error) {
       console.error("토큰발행실패:", error);
     }
