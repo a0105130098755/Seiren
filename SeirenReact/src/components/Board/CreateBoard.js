@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
 
-function BbsWrite() {
+function CreateBoard() {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -14,6 +14,12 @@ function BbsWrite() {
   const changeContent = (event) => setContent(event.target.value);
 
   const createBbs = async () => {
+    if (!auth) {
+      alert("로그인 한 사용자만 게시글을 작성할 수 있습니다!");
+      navigate("/login"); // 로그인 페이지로 이동
+      return;
+    }
+
     const req = {
       id: auth,
       title: title,
@@ -39,61 +45,50 @@ function BbsWrite() {
       });
   };
 
-  useEffect(() => {
-    if (!auth) {
-      alert("로그인 한 사용자만 게시글을 작성할 수 있습니다 !");
-      navigate(-1);
-    }
-  }, [auth, navigate]);
-
   return (
-    <div>
-      <table className="table">
-        <tbody>
-          <tr>
-            <th className="table-primary">작성자</th>
-            <td>
-              <input
-                type="text"
-                className="form-control"
-                value={localStorage.getItem("id")}
-                size="50px"
-                readOnly
-              />
-            </td>
-          </tr>
-          <tr>
-            <th className="table-primary">제목</th>
-            <td>
-              <input
-                type="text"
-                className="form-control"
-                value={title}
-                onChange={changeTitle}
-                size="50px"
-              />
-            </td>
-          </tr>
-          <tr>
-            <th className="table-primary">내용</th>
-            <td>
-              <textarea
-                className="form-control"
-                value={content}
-                onChange={changeContent}
-                rows="10"
-              ></textarea>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div className="my-5 d-flex justify-content-center">
-        <button className="btn btn-outline-secondary" onClick={createBbs}>
-          <i className="fas fa-pen"></i> 등록하기
-        </button>
+    <div className="create-board-container">
+      <div className="create-board">
+        <h2 className="form-title">게시글 작성</h2>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            createBbs();
+          }}
+        >
+          <div className="form-group">
+            <label>작성자</label>
+            <input
+              type="text"
+              className="form-control"
+              value={localStorage.getItem("id")}
+              readOnly
+            />
+          </div>
+          <div className="form-group">
+            <label>제목</label>
+            <input
+              type="text"
+              className="form-control"
+              value={title}
+              onChange={changeTitle}
+            />
+          </div>
+          <div className="form-group">
+            <label>내용</label>
+            <textarea
+              className="form-control"
+              value={content}
+              onChange={changeContent}
+              rows="10"
+            ></textarea>
+          </div>
+          <button className="btn btn-primary" type="submit">
+            <i className="fas fa-pen"></i> 등록하기
+          </button>
+        </form>
       </div>
     </div>
   );
 }
 
-export default BbsWrite;
+export default CreateBoard;

@@ -11,14 +11,20 @@ function BoardList() {
   const [totalCnt, setTotalCnt] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [searchType, setSearchType] = useState("");
+  const [profile, setProfile] = useState({
+    image: localStorage.getItem("profileImage"),
+    nickname: localStorage.getItem("nickname"),
+  });
 
-  const fetchBoards = useCallback(async (page, size) => {
+  const fetchBoards = useCallback(async (page = 0, size = 15) => {
     try {
       setIsFetching(true);
       const response = await fetchBoardList(page, size);
       if (response) {
-        setBbsList(response.bbsList || []);
+        setBbsList((prevBbsList) => [
+          ...prevBbsList,
+          ...(response.bbsList || []),
+        ]);
         setTotalCnt(response.pageCnt || 0);
       } else {
         setBbsList([]);
@@ -34,7 +40,7 @@ function BoardList() {
   const handleSearch = async () => {
     try {
       setIsFetching(true);
-      const response = await fetchBoardSearch(searchKeyword, searchType, 0, 10);
+      const response = await fetchBoardSearch(searchKeyword, "title", 0, 15);
       if (response) {
         setBbsList(response.bbsList || []);
         setTotalCnt(response.pageCnt || 0);
@@ -50,8 +56,35 @@ function BoardList() {
   };
 
   useEffect(() => {
-    fetchBoards(0, 10);
+    fetchBoards(0, 15);
   }, [fetchBoards]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("로그인이 필요합니다.");
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+          document.documentElement.offsetHeight ||
+        isFetching
+      )
+        return;
+      setPage((prevPage) => prevPage + 1);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isFetching]);
+
+  useEffect(() => {
+    if (page > 0) {
+      fetchBoards(page, 15);
+    }
+  }, [page, fetchBoards]);
 
   return (
     <div className="board-page">
@@ -59,16 +92,6 @@ function BoardList() {
         <div className="board-header sticky-header">
           <h1 className="board-title">게시판</h1>
           <div className="search-container">
-            <select
-              className="custom-select"
-              value={searchType}
-              onChange={(e) => setSearchType(e.target.value)}
-            >
-              <option value="">검색 옵션 선택</option>
-              <option value="title">제목</option>
-              <option value="content">내용</option>
-              <option value="writer">작성자</option>
-            </select>
             <input
               type="text"
               className="form-control"
@@ -103,18 +126,18 @@ function BoardList() {
             )}
           </div>
 
-          {totalCnt > 0 && (
+          {totalCnt > 0 && !isFetching && (
             <Pagination
               className="pagination"
               activePage={page + 1}
-              itemsCountPerPage={10}
+              itemsCountPerPage={15}
               totalItemsCount={totalCnt}
               pageRangeDisplayed={5}
               prevPageText={"‹"}
               nextPageText={"›"}
               onChange={(pageNumber) => {
                 setPage(pageNumber - 1);
-                fetchBoards(pageNumber - 1, 10);
+                fetchBoards(pageNumber - 1, 15);
               }}
             />
           )}
