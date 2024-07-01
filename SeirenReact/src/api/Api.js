@@ -129,10 +129,9 @@ export const fetchBoardList = async (page, size) => {
   }
 };
 
-// 게시글 상세 조회 함수
-export const fetchBoardDetail = async (boardId) => {
+export const fetchBoardDetail = async (id) => {
   try {
-    const response = await api.get(`/board/${boardId}`, {
+    const response = await api.get(`/board/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },

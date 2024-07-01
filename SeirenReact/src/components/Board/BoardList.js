@@ -60,13 +60,6 @@ function BoardList() {
   }, [fetchBoards]);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      alert("로그인이 필요합니다.");
-    }
-  }, []);
-
-  useEffect(() => {
     const handleScroll = () => {
       if (
         window.innerHeight + document.documentElement.scrollTop !==

@@ -20,13 +20,26 @@ function CreateBoard() {
     if (storedProfileImage) setProfileImage(storedProfileImage);
   }, []);
 
-  const changeTitle = (event) => setTitle(event.target.value);
-  const changeContent = (event) => setContent(event.target.value);
+  const changeTitle = (event) => {
+    if (event.target.value.length <= 100) {
+      setTitle(event.target.value);
+    } else {
+      alert("제목은 최대 100자까지 입력 가능합니다.");
+    }
+  };
+
+  const changeContent = (event) => {
+    if (event.target.value.length <= 500) {
+      setContent(event.target.value);
+    } else {
+      alert("내용은 최대 500자까지 입력 가능합니다.");
+    }
+  };
 
   const createBbs = async () => {
     if (!auth) {
       alert("로그인 한 사용자만 게시글을 작성할 수 있습니다!");
-      navigate("/login");
+      navigate("/login"); // 로그인 페이지로 이동
       return;
     }
 
