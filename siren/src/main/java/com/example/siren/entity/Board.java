@@ -21,7 +21,7 @@ public class Board {
     @ManyToOne
     @JoinColumn(name="user_nickname")
     private Member member;
-
+    private String profile;
     private String title;
     @Lob
     @Column(length = 500)
@@ -31,6 +31,7 @@ public class Board {
     @Builder
     public Board (Member member, String title, String content){
         this.member = member;
+        this.profile = member.getProfile();
         this.title = title;
         this.content = content;
         this.regDate = LocalDateTime.now();
