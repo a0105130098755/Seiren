@@ -3,42 +3,61 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #ffffff; /* 배경색을 흰색으로 변경 */
+  background-color: #ffffff;
 }
 
 .create-board {
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 40px; /* 패딩을 늘려서 공간을 확보 */
-  max-width: 600px; /* 최대 너비를 600px로 증가 */
+  padding: 40px;
+  max-width: 600px;
   width: 100%;
 }
 
 .form-title {
-  margin-bottom: 30px; /* 제목 아래 여백을 증가 */
-  font-size: 2em; /* 제목 폰트 크기를 증가 */
+  margin-bottom: 30px;
+  font-size: 2em;
   color: #333333;
   text-align: center;
 }
 
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.nickname {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333333;
+}
+
 .form-group {
-  margin-bottom: 20px; /* 각 폼 그룹 사이 여백을 증가 */
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 10px; /* 라벨 아래 여백을 증가 */
+  margin-bottom: 10px;
   font-weight: bold;
   color: #333333;
 }
 
 .form-control {
   width: 100%;
-  padding: 15px; /* 입력 필드와 텍스트 영역의 패딩을 증가 */
+  padding: 15px;
   border: 1px solid #dddddd;
   border-radius: 5px;
-  font-size: 1.2em; /* 입력 필드와 텍스트 영역의 폰트 크기를 증가 */
+  font-size: 1.2em;
   color: #333333;
 }
 
@@ -50,12 +69,12 @@
 
 .btn-primary {
   width: 100%;
-  padding: 15px; /* 버튼 패딩을 증가 */
+  padding: 15px;
   border: none;
   border-radius: 5px;
   background-color: #007bff;
   color: white;
-  font-size: 1.2em; /* 버튼 폰트 크기를 증가 */
+  font-size: 1.2em;
   cursor: pointer;
 }
 
@@ -69,14 +88,14 @@
   }
 
   .form-title {
-    font-size: 1.5em; /* 모바일에서 제목 폰트 크기를 조정 */
+    font-size: 1.5em;
   }
 
   .form-control {
-    font-size: 1em; /* 모바일에서 입력 필드와 텍스트 영역의 폰트 크기를 조정 */
+    font-size: 1em;
   }
 
   .btn-primary {
-    font-size: 1em; /* 모바일에서 버튼 폰트 크기를 조정 */
+    font-size: 1em;
   }
 }

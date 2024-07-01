@@ -9,6 +9,16 @@ function CreateBoard() {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [profileImage, setProfileImage] = useState("");
+
+  useEffect(() => {
+    const storedNickname = localStorage.getItem("nickname");
+    const storedProfileImage = localStorage.getItem("profileImage");
+
+    if (storedNickname) setNickname(storedNickname);
+    if (storedProfileImage) setProfileImage(storedProfileImage);
+  }, []);
 
   const changeTitle = (event) => setTitle(event.target.value);
   const changeContent = (event) => setContent(event.target.value);
@@ -16,7 +26,17 @@ function CreateBoard() {
   const createBbs = async () => {
     if (!auth) {
       alert("로그인 한 사용자만 게시글을 작성할 수 있습니다!");
-      navigate("/login"); // 로그인 페이지로 이동
+      navigate("/login");
+      return;
+    }
+
+    if (title.trim() === "") {
+      alert("제목을 입력해주세요.");
+      return;
+    }
+
+    if (content.trim() === "") {
+      alert("내용을 입력해주세요.");
       return;
     }
 
@@ -27,7 +47,7 @@ function CreateBoard() {
     };
 
     await axios
-      .post("http://localhost:3000/bbs", req, {
+      .post("http://localhost:3000/board/save", req, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -55,14 +75,11 @@ function CreateBoard() {
             createBbs();
           }}
         >
-          <div className="form-group">
-            <label>작성자</label>
-            <input
-              type="text"
-              className="form-control"
-              value={localStorage.getItem("id")}
-              readOnly
-            />
+          <div className="profile-section">
+            {profileImage && (
+              <img src={profileImage} alt="Profile" className="profile-image" />
+            )}
+            <span className="nickname">{nickname}</span>
           </div>
           <div className="form-group">
             <label>제목</label>
@@ -71,6 +88,7 @@ function CreateBoard() {
               className="form-control"
               value={title}
               onChange={changeTitle}
+              required
             />
           </div>
           <div className="form-group">
@@ -80,6 +98,7 @@ function CreateBoard() {
               value={content}
               onChange={changeContent}
               rows="10"
+              required
             ></textarea>
           </div>
           <button className="btn btn-primary" type="submit">
