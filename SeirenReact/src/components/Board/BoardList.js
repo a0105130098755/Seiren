@@ -15,7 +15,7 @@ function BoardList({ board, setBoard }) {
     image: localStorage.getItem("profile"),
     nickname: localStorage.getItem("nickname"),
   });
-  const size = 15; // 페이지 사이즈를 변수로 정의
+  const size = 10; // 페이지 사이즈를 변수로 정의
 
   useEffect(() => {
     const fetchBoards = async (page = 0) => {
