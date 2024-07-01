@@ -111,19 +111,17 @@ export const forgotPassword = async (email) => {
     );
   }
 };
-// 게시글 리스트 조회 함수
-export const fetchBoardList = async (page, size) => {
+export const fetchBoardList = async (page, size, title) => {
   try {
     const response = await api.get("/board/list", {
-      params: { page, size },
+      params: { page, size, title },
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
     return response.data;
   } catch (error) {
-    handleAxiosError(
-      error,
+    throw new Error(
       "게시글 리스트를 가져오는데 실패했습니다. 다시 시도해주세요."
     );
   }
