@@ -30,4 +30,10 @@ public class BoardController {
         boolean isSave = boardService.saveBoard(boardDTO);
         return ResponseEntity.ok(isSave);
     }
+
+    @PostMapping("/delete")
+    public ResponseEntity<Boolean> deleteBoard(@RequestBody BoardDTO boardDTO){
+        boolean isDel = boardService.deleteBoard(boardDTO);
+        return ResponseEntity.ok(isDel);
+    }
 }

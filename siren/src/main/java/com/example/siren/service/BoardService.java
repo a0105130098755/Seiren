@@ -63,4 +63,10 @@ public class BoardService {
         log.warn("게시글 저장 실패" );
         return false;
     }
+    
+    public boolean deleteBoard(BoardDTO boardDTO){
+        boardRepository.deleteById(boardDTO.getId());
+        // true 면 삭제 잘 된것
+        return !boardRepository.existsById(boardDTO.getId());
+    }
 }
