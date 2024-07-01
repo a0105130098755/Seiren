@@ -19,8 +19,9 @@ public class BoardController {
 
     @GetMapping("/list")
     public ResponseEntity<BoardResDTO> showBoard(@RequestParam(defaultValue = "0") int page,
-                                                      @RequestParam(defaultValue = "10")int size){
-        BoardResDTO pageList = boardService.selectPage(page, size);
+                                                 @RequestParam(defaultValue = "10")int size,
+                                                 @RequestParam String title){
+        BoardResDTO pageList = boardService.selectPage(page, size,title);
         return ResponseEntity.ok(pageList);
     }
 

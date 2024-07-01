@@ -26,9 +26,14 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
 
-    public BoardResDTO selectPage(int page, int size){
+    public BoardResDTO selectPage(int page, int size, String title){
         Pageable pageable = PageRequest.of(page,size);
-        Page<Board> boards = boardRepository.findAll(pageable);
+        Page<Board> boards;
+        if(title.equals("all") ){
+            boards = boardRepository.findAll(pageable);
+        }else {
+            boards = boardRepository.findByTitleContaining(title,pageable);
+        }
         log.info(" 전체 페이지 : {}" ,boards.getTotalPages());
         List<BoardDTO> boardDTOS = new ArrayList<>();
         for(Board b : boards){
