@@ -1,23 +1,21 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthProvider";
 
 function CreateBoard() {
-  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [nickname, setNickname] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [profile, setProfile] = useState("");
 
   useEffect(() => {
     const storedNickname = localStorage.getItem("nickname");
-    const storedProfileImage = localStorage.getItem("profileImage");
+    const storedProfile = localStorage.getItem("profile");
 
     if (storedNickname) setNickname(storedNickname);
-    if (storedProfileImage) setProfileImage(storedProfileImage);
+    if (storedProfile) setProfile(storedProfile);
   }, []);
 
   const changeTitle = (event) => {
@@ -37,7 +35,8 @@ function CreateBoard() {
   };
 
   const createBbs = async () => {
-    if (!auth) {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
       alert("로그인 한 사용자만 게시글을 작성할 수 있습니다!");
       navigate("/login"); // 로그인 페이지로 이동
       return;
@@ -54,7 +53,6 @@ function CreateBoard() {
     }
 
     const req = {
-      id: auth,
       title: title,
       content: content,
     };
@@ -63,17 +61,17 @@ function CreateBoard() {
       .post("http://localhost:3000/board/save", req, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((resp) => {
-        console.log("[BbsWrite.js] createBbs() success :D");
+        console.log("[CreateBoard.js] createBbs() success :D");
         console.log(resp.data);
         alert("새로운 게시글을 성공적으로 등록했습니다 :D");
         navigate(`/bbsdetail/${resp.data.seq}`); // 새롭게 등록한 글 상세로 이동
       })
       .catch((err) => {
-        console.log("[BbsWrite.js] createBbs() error :<");
+        console.log("[CreateBoard.js] createBbs() error :<");
         console.log(err);
       });
   };
@@ -89,8 +87,8 @@ function CreateBoard() {
           }}
         >
           <div className="profile-section">
-            {profileImage && (
-              <img src={profileImage} alt="Profile" className="profile-image" />
+            {profile && (
+              <img src={profile} alt="Profile" className="profile-image" />
             )}
             <span className="nickname">{nickname}</span>
           </div>
