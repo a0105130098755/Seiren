@@ -38,4 +38,13 @@ public class BoardDTO {
                 .regDate(board.getRegDate())
                 .build();
     }
+
+    public Board toEntity(Member member){
+        return Board.builder()
+                .title(title)
+                .member(member)
+                .content(content)
+                .location(location)
+                .build();
+    }
 }
