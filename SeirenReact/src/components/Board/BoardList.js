@@ -1,83 +1,53 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchBoardList, fetchBoardSearch } from "../../api/Api";
+import { fetchBoardList } from "../../api/Api";
 import Pagination from "./Pagination";
 import BoardCard from "./BoardCard";
 import "./BoardList.css";
 
 function BoardList() {
   const [bbsList, setBbsList] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(0);
-  const [totalCnt, setTotalCnt] = useState(0);
-  const [isFetching, setIsFetching] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [title, setTitle] = useState("all");
   const [profile, setProfile] = useState({
     image: localStorage.getItem("profileImage"),
     nickname: localStorage.getItem("nickname"),
   });
+  const size = 15; // 페이지 사이즈를 변수로 정의
 
-  const fetchBoards = useCallback(async (page = 0, size = 15) => {
-    try {
-      setIsFetching(true);
-      const response = await fetchBoardList(page, size);
-      if (response) {
-        setBbsList((prevBbsList) => [
-          ...prevBbsList,
-          ...(response.bbsList || []),
-        ]);
-        setTotalCnt(response.pageCnt || 0);
-      } else {
-        setBbsList([]);
-        setTotalCnt(0);
+  useEffect(() => {
+    const fetchBoards = async (page = 0) => {
+      try {
+        const response = await fetchBoardList(page, size, title);
+        if (response.boardDTOS) {
+          setBbsList(response.boardDTOS);
+          setTotalPages(response.size); // 총 페이지 수 설정
+        } else {
+          setBbsList([]);
+          setTotalPages(0);
+        }
+      } catch (error) {
+        console.error("게시글 리스트를 가져오는데 실패했습니다.", error);
       }
-      setIsFetching(false);
-    } catch (error) {
-      console.error("게시글 리스트를 가져오는데 실패했습니다.", error);
-      setIsFetching(false);
-    }
-  }, []);
+    };
+
+    fetchBoards(page);
+  }, [page, title]);
 
   const handleSearch = async () => {
-    try {
-      setIsFetching(true);
-      const response = await fetchBoardSearch(searchKeyword, "title", 0, 15);
-      if (response) {
-        setBbsList(response.bbsList || []);
-        setTotalCnt(response.pageCnt || 0);
-      } else {
-        setBbsList([]);
-        setTotalCnt(0);
-      }
-      setIsFetching(false);
-    } catch (error) {
-      console.error("검색 결과를 가져오는데 실패했습니다.", error);
-      setIsFetching(false);
+    setPage(0); // 검색 시 첫 페이지로 이동
+    const response = await fetchBoardList(0, size, searchKeyword);
+    if (response.boardDTOS) {
+      setBbsList(response.boardDTOS);
+      setTotalPages(response.size);
+      setTitle(searchKeyword);
+    } else {
+      setBbsList([]);
+      setTotalPages(0);
     }
   };
-
-  useEffect(() => {
-    fetchBoards(0, 15);
-  }, [fetchBoards]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop !==
-          document.documentElement.offsetHeight ||
-        isFetching
-      )
-        return;
-      setPage((prevPage) => prevPage + 1);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isFetching]);
-
-  useEffect(() => {
-    if (page > 0) {
-      fetchBoards(page, 15);
-    }
-  }, [page, fetchBoards]);
 
   return (
     <div className="board-page">
@@ -96,7 +66,6 @@ function BoardList() {
               type="button"
               className="btn btn-search"
               onClick={handleSearch}
-              disabled={isFetching}
             >
               검색
             </button>
@@ -109,9 +78,9 @@ function BoardList() {
               bbsList.map((bbs, idx) => (
                 <BoardCard
                   key={idx}
+                  id={bbs.id}
                   title={bbs.title}
-                  content={bbs.content}
-                  writer={bbs.writer}
+                  writer={bbs.nickname}
                 />
               ))
             ) : (
@@ -119,19 +88,16 @@ function BoardList() {
             )}
           </div>
 
-          {totalCnt > 0 && !isFetching && (
+          {totalPages > 0 && (
             <Pagination
               className="pagination"
               activePage={page + 1}
-              itemsCountPerPage={15}
-              totalItemsCount={totalCnt}
+              itemsCountPerPage={size}
+              totalItemsCount={totalPages * size} // 총 게시물 수 계산
               pageRangeDisplayed={5}
               prevPageText={"‹"}
               nextPageText={"›"}
-              onChange={(pageNumber) => {
-                setPage(pageNumber - 1);
-                fetchBoards(pageNumber - 1, 15);
-              }}
+              onChange={(pageNumber) => setPage(pageNumber - 1)}
             />
           )}
         </div>
