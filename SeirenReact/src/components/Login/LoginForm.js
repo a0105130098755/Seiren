@@ -37,8 +37,9 @@ const LoginForm = () => {
         const data = await login(email, password);
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
-        localStorage.setItem("nickname", data.nickname); // 닉네임 저장 추가
+        localStorage.setItem("nickname", data.nickname);
         localStorage.setItem("profile", data.profile);
+        console.log("Saved nickname:", data.nickname);
         alert("환영합니다!");
         navigate("/main");
       } catch (error) {

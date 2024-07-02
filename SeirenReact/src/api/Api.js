@@ -10,6 +10,7 @@ const api = axios.create({
 export const login = async (email, password) => {
   try {
     const response = await api.post("/auth/login", { email, password });
+    console.log("Server response:", response.data); // 추가된 로그
     return response.data;
   } catch (error) {
     handleAxiosError(
@@ -253,6 +254,7 @@ export const deleteComment = async (commentDTO) => {
     });
     return response.data;
   } catch (error) {
+    console.error("Error in deleteComment API call:", error);
     handleAxiosError(error, "댓글을 삭제하는데 실패했습니다.");
   }
 };

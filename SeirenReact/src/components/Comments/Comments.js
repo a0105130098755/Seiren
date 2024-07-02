@@ -77,8 +77,6 @@ const Comments = ({ boardId, onCommentCountUpdate }) => {
     }
   };
 
-  console.log("Current user nickname:", userNickname);
-
   return (
     <div className="comments-section">
       <h3>댓글 ({comments.length})</h3>
@@ -86,23 +84,18 @@ const Comments = ({ boardId, onCommentCountUpdate }) => {
       {comments.length > 0 ? (
         <ul>
           {comments.map((comment) => (
-            <li key={comment.id} className="comment">
+            <li key={comment.id}>
               <p>
                 {comment.content} - {comment.nickname}
               </p>
-              <button
-                className={
-                  userNickname === comment.nickname ? "active" : "inactive"
-                }
-                onClick={() =>
-                  handleDeleteComment(comment.id, comment.nickname)
-                }
-                disabled={userNickname !== comment.nickname}
-              >
-                삭제
-              </button>
-              {console.log(
-                `User Nickname: ${userNickname}, Comment Nickname: ${comment.nickname}`
+              {userNickname === comment.nickname && (
+                <button
+                  onClick={() =>
+                    handleDeleteComment(comment.id, comment.nickname)
+                  }
+                >
+                  삭제
+                </button>
               )}
             </li>
           ))}
