@@ -205,6 +205,57 @@ export const fetchBoardSearch = async (keyword, type, page, size) => {
     handleAxiosError(error, "게시글 검색에 실패했습니다. 다시 시도해주세요.");
   }
 };
+
+export const fetchComments = async (boardDTO) => {
+  console.log("API: Fetching comments for board:", boardDTO);
+  try {
+    const response = await api.post("/comment/show", boardDTO, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log("API: Fetch comments response:", response);
+    return response.data;
+  } catch (error) {
+    console.error("API: Error fetching comments:", error);
+    handleAxiosError(error, "댓글을 불러오는데 실패했습니다.");
+  }
+};
+
+export const saveComment = async (commentDTO) => {
+  try {
+    const response = await api.post("/comment/save", commentDTO, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "API: Error saving comment:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || "댓글을 저장하는데 실패했습니다."
+    );
+  }
+};
+
+export const deleteComment = async (commentDTO) => {
+  try {
+    const response = await api.post("/comment/del", commentDTO, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "댓글을 삭제하는데 실패했습니다.");
+  }
+};
 const handleAxiosError = (error, defaultMessage) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);

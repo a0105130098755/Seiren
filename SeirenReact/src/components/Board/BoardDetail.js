@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
+import Comments from "../Comments/Comments";
 import "./BoardDetail.css";
 
 function BoardDetail({ boardContent }) {
   const [board, setBoard] = useState(null);
+  const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
     setBoard(boardContent);
   }, [boardContent]);
+
+  const handleCommentCountUpdate = (count) => {
+    setCommentCount(count);
+  };
 
   if (!board) {
     return <div>게시글을 불러오는 중입니다...</div>;
@@ -30,10 +36,10 @@ function BoardDetail({ boardContent }) {
           </div>
           <div className="board-content">{board.content}</div>
         </div>
-        <div className="comments-section">
-          <h3>댓글</h3>
-          <div className="no-comments">댓글이 없습니다.</div>
-        </div>
+        <Comments
+          boardId={board.id}
+          onCommentCountUpdate={handleCommentCountUpdate}
+        />
       </div>
     </div>
   );
