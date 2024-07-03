@@ -27,7 +27,7 @@ public class BoardService {
         Pageable pageable = PageRequest.of(page,size);
         Page<Board> boards;
         title = title.trim();
-        if(title.equals("")){
+        if(title.isEmpty()){
             boards = boardRepository.findAll(pageable);
         }else {
             boards = boardRepository.findByTitleContaining(title,pageable);
