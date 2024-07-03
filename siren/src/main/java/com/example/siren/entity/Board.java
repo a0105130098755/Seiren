@@ -19,7 +19,7 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
-    @JoinColumn(name="user_nickname")
+    @JoinColumn(name="nickname")
     private Member member;
     private String profile;
     private String title;
