@@ -27,6 +27,7 @@ public class HiringService {
                         .getContext().getAuthentication().getName()));
         if(memberOptional.isPresent()){
             String nickname = memberOptional.get().getNickname();
+            if(hiringRepository.findByNicknameContaining(nickname).size()>=4) return false;
             Hiring hiring = hiringDTO.toEntity(nickname);
             hiringRepository.save(hiring);
             return true;
