@@ -4,6 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  margin-top: 70px; /* 네비게이션 바 높이에 따라 적절히 설정 */
 }
 
 .board-detail-container {
@@ -12,8 +13,9 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   max-width: 800px;
-  width: 800px; /* 고정된 너비 */
+  width: 800px;
   margin: 20px 0;
+  position: relative; /* position 속성 추가 */
 }
 
 .board-detail {
@@ -23,7 +25,7 @@
 .board-title {
   font-size: 2em;
   margin-bottom: 20px;
-  text-align: left; /* 제목을 왼쪽 정렬 */
+  text-align: left;
 }
 
 .board-info {
@@ -49,23 +51,24 @@
   font-size: 1.2em;
   line-height: 1.6;
   margin-bottom: 20px;
-  white-space: pre-wrap; /* 개행문자 적용 */
-  text-align: left; /* 내용 왼쪽 정렬 */
+  white-space: pre-wrap;
+  text-align: left;
 }
 
 .comments-section {
   margin-top: 20px;
+  min-height: 200px;
 }
 
 .no-comments {
-  text-align: left; /* 댓글이 없을 때 메시지를 왼쪽 정렬 */
+  text-align: left;
   font-size: 1.2em;
   color: #888888;
 }
 
 @media (max-width: 768px) {
   .board-detail-container {
-    width: 100%; /* 모바일에서 너비 100% */
+    width: 100%;
     padding: 10px;
   }
 

@@ -45,8 +45,9 @@ const NavBar = () => {
         <nav className="nav-links">
           <Link to="/">메인 페이지</Link>
           <Link to="/board">게시글</Link>
-          <Link to="/jobs">구인 구직</Link>
+          <Link to="/job">구인 구직</Link>
           <Link to="/charge">충전</Link>
+          {isLoggedIn && <Link to="/mypage">마이페이지</Link>}
         </nav>
         <div className="profile" onClick={toggleProfileOptions}>
           {isLoggedIn ? (
@@ -60,6 +61,9 @@ const NavBar = () => {
           )}
           {showProfileOptions && (
             <div className="profile-options">
+              <Link to="/mypage" className="mypage-link">
+                마이페이지
+              </Link>
               <button className="logout-button" onClick={handleLogout}>
                 로그 아웃
               </button>
@@ -83,15 +87,20 @@ const NavBar = () => {
           )}
         </div>
         <nav className="sidebar-links">
-          <Link to="/posts" onClick={toggleSidebar}>
+          <Link to="/board" onClick={toggleSidebar}>
             게시글
           </Link>
-          <Link to="/jobs" onClick={toggleSidebar}>
+          <Link to="/job" onClick={toggleSidebar}>
             구인 구직
           </Link>
           <Link to="/charge" onClick={toggleSidebar}>
             충전
           </Link>
+          {isLoggedIn && (
+            <Link to="/mypage" onClick={toggleSidebar}>
+              마이페이지
+            </Link>
+          )}
           <button
             className="logout-button sidebar-logout"
             onClick={handleLogout}

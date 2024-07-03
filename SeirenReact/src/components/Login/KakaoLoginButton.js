@@ -40,6 +40,9 @@ const KakaoLoginButton = () => {
       const response = await KakaoApi.getInfo(token);
       console.log(response.data.accessToken);
       localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem("nickname", response.data.nickname);
+      localStorage.setItem("profile", response.data.profile);
     } catch (error) {
       console.error("토큰발행실패:", error);
     }

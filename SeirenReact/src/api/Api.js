@@ -114,6 +114,7 @@ export const forgotPassword = async (email) => {
 };
 export const fetchBoardList = async (page, size, title) => {
   try {
+    console.log("axios title : ", title);
     const response = await api.get("/board/list", {
       params: { page, size, title },
       headers: {
@@ -162,21 +163,6 @@ export const createBoard = async (title, content) => {
     return response.data;
   } catch (error) {
     throw new Error("게시글 작성에 실패했습니다. 다시 시도해주세요.");
-  }
-};
-
-// 게시글 수정 함수
-export const updateBoard = async (boardId, boardData) => {
-  try {
-    const response = await api.put(`/board/${boardId}`, boardData, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    handleAxiosError(error, "게시글 수정에 실패했습니다. 다시 시도해주세요.");
   }
 };
 
@@ -258,6 +244,100 @@ export const deleteComment = async (commentDTO) => {
     handleAxiosError(error, "댓글을 삭제하는데 실패했습니다.");
   }
 };
+
+export const createHiring = async (hiringData) => {
+  try {
+    const response = await api.post("/hiring/save", hiringData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "구인구직 글 작성에 실패했습니다.");
+  }
+};
+
+export const fetchHiringList = async (page, size) => {
+  try {
+    const response = await api.get("/hiring/searchName", {
+      params: { nickname: "", page, size },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "구인구직 목록을 가져오는데 실패했습니다.");
+  }
+};
+export const fetchHiringDetail = async (id) => {
+  try {
+    const response = await api.get(`/hiring/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log("Fetched hiring detail:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching hiring detail:", error);
+    throw error;
+  }
+};
+export const searchHiringByTitle = async (title, page, size) => {
+  try {
+    const response = await api.get("/hiring/searchTitle", {
+      params: { title, page, size },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "제목으로 구인구직 검색에 실패했습니다.");
+  }
+};
+export const searchHiringByNickname = async (nickname, page, size) => {
+  try {
+    const response = await api.get("/hiring/searchName", {
+      params: { nickname, page, size },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "작성자로 구인구직 검색에 실패했습니다.");
+  }
+};
+
+export const fetchMyHiring = async () => {
+  try {
+    const response = await api.get("/hiring/myHiring", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "내 구인구직 글 목록을 가져오는데 실패했습니다.");
+  }
+};
+
+export const deleteHiring = async (hiringDTO) => {
+  try {
+    const response = await api.post("/hiring/delete", hiringDTO, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "구인구직 글 삭제에 실패했습니다.");
+  }
+};
+
 const handleAxiosError = (error, defaultMessage) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);

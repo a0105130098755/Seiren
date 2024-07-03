@@ -1,5 +1,7 @@
+// BoardDetail.js
 import React, { useState, useEffect } from "react";
 import Comments from "../Comments/Comments";
+import DeleteButton from "./DeleteButton";
 import "./BoardDetail.css";
 
 function BoardDetail({ boardContent }) {
@@ -33,6 +35,7 @@ function BoardDetail({ boardContent }) {
                 {new Date(board.regDate).toLocaleString()}
               </span>
             </div>
+            <DeleteButton boardId={board.id} nickname={board.nickname} />
           </div>
           <div className="board-content">{board.content}</div>
         </div>

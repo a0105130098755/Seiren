@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchBoardList } from "../../api/Api";
-import Pagination from "./Pagination";
+import Pagination from "./BoardPagination";
 import BoardCard from "./BoardCard";
 import "./BoardList.css";
 
@@ -10,17 +10,16 @@ function BoardList({ board, setBoard }) {
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [title, setTitle] = useState("all");
   const [profile, setProfile] = useState({
     image: localStorage.getItem("profile"),
     nickname: localStorage.getItem("nickname"),
   });
-  const size = 6; // 페이지 사이즈를 변수로 정의
+  const size = 9; // 페이지 사이즈를 변수로 정의
 
   useEffect(() => {
     const fetchBoards = async (page = 0) => {
       try {
-        const response = await fetchBoardList(page, size, title);
+        const response = await fetchBoardList(page, size, searchKeyword);
         if (response.boardDTOS) {
           setBbsList(response.boardDTOS);
           setTotalPages(response.size); // 총 페이지 수 설정
@@ -34,18 +33,25 @@ function BoardList({ board, setBoard }) {
     };
 
     fetchBoards(page);
-  }, [page, title]);
+  }, [page]);
 
   const handleSearch = async () => {
-    setPage(0); // 검색 시 첫 페이지로 이동
-    const response = await fetchBoardList(0, size, searchKeyword);
-    if (response.boardDTOS) {
-      setBbsList(response.boardDTOS);
-      setTotalPages(response.size);
-      setTitle(searchKeyword);
-    } else {
-      setBbsList([]);
-      setTotalPages(0);
+    setPage(0);
+    if (searchKeyword === "") {
+      fetchBoards(0);
+      return;
+    }
+    try {
+      const response = await fetchBoardList(0, size, searchKeyword);
+      if (response.boardDTOS) {
+        setBbsList(response.boardDTOS);
+        setTotalPages(response.totalPages);
+      } else {
+        setBbsList([]);
+        setTotalPages(0);
+      }
+    } catch (error) {
+      console.error("게시글 리스트를 가져오는데 실패했습니다.", error);
     }
   };
 

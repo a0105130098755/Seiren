@@ -16,7 +16,7 @@ const Comments = ({ boardId, onCommentCountUpdate }) => {
     try {
       const boardDTO = { id: boardId };
       const data = await fetchComments(boardDTO);
-      const commentList = Array.isArray(data) ? data : [];
+      const commentList = data ? data : [];
       setComments(commentList);
       if (typeof onCommentCountUpdate === "function") {
         onCommentCountUpdate(commentList.length);
@@ -54,26 +54,28 @@ const Comments = ({ boardId, onCommentCountUpdate }) => {
   };
 
   const handleDeleteComment = async (commentId, commentNickname) => {
-    if (userNickname !== commentNickname) {
-      setError("자신의 댓글만 삭제할 수 있습니다.");
-      return;
-    }
+    if (confirm("정말 삭제 하시겠습니까?")) {
+      if (userNickname !== commentNickname) {
+        setError("자신의 댓글만 삭제할 수 있습니다.");
+        return;
+      }
 
-    try {
-      const commentDTO = {
-        id: commentId,
-        nickname: userNickname,
-      };
-      const response = await deleteComment(commentDTO);
-      if (response === true) {
-        await loadComments();
-        setError(null);
-      } else {
+      try {
+        const commentDTO = {
+          id: commentId,
+          nickname: userNickname,
+        };
+        const response = await deleteComment(commentDTO);
+        if (response === true) {
+          await loadComments();
+          setError(null);
+        } else {
+          setError("댓글 삭제에 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("Error deleting comment:", error);
         setError("댓글 삭제에 실패했습니다.");
       }
-    } catch (error) {
-      console.error("Error deleting comment:", error);
-      setError("댓글 삭제에 실패했습니다.");
     }
   };
 
