@@ -23,7 +23,12 @@ public class HiringController {
         return ResponseEntity.ok(hiringService.saveHiring(hiringDTO));
     }
 
-    @GetMapping("/list")
+    @GetMapping("/myHiring")
+    public ResponseEntity<List<HiringDTO>> myHiring(){
+        return ResponseEntity.ok(hiringService.myHiring());
+    }
+
+    @GetMapping("/search")
     public ResponseEntity<HiringResDTO> searchHiring(@RequestParam String nickname,
                                                            @RequestParam(defaultValue = "0") int page,
                                                            @RequestParam(defaultValue = "10")int size){

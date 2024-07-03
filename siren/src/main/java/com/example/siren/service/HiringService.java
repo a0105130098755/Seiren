@@ -50,23 +50,32 @@ public class HiringService {
             HiringDTO hiringDTO = HiringDTO.of(h);
             hiringDTOS.add(hiringDTO);
         }
-        HiringResDTO hiringResDTO = HiringResDTO.builder()
+
+        return HiringResDTO.builder()
                 .hiringDTOS(hiringDTOS)
                 .size(hiringList.getTotalPages())
                 .build();
-        return hiringResDTO;
+    }
+
+    public List<HiringDTO> myHiring(){
+        String nickname = authGetInfo.getMember().getNickname();
+        List<Hiring>hiringList = hiringRepository.findByNickname(nickname);
+        List<HiringDTO> hiringDTOS = new ArrayList<>();
+        for(Hiring h : hiringList){
+            HiringDTO hiringDTO = HiringDTO.of(h);
+            hiringDTOS.add(hiringDTO);
+        }
+        return hiringDTOS;
     }
 
     public boolean delHiring(HiringDTO hiringDTO){
-        Member member = authGetInfo.getMember();
-        if(member != null){
-            String nickname = member.getNickname();
+        String nickname = authGetInfo.getMember().getNickname();
+        if(nickname != null){
             if(nickname.equals(hiringDTO.getNickname())){
                 hiringRepository.deleteById(hiringDTO.getId());
                 return true;
             }
         }
-
         return false;
     }
 

@@ -37,6 +37,7 @@ public class HiringDTO {
                 .content(hiring.getContent())
                 .current(hiring.getCurrent())
                 .max(hiring.getMax())
+                .location(hiring.getLocation())
                 .build();
     }
 
