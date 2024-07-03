@@ -57,6 +57,25 @@ public class HiringService {
                 .build();
     }
 
+    public HiringResDTO searchTitle(String title, int page, int size){
+        title = title.trim();
+        log.warn("title : [{}]", title);
+        if(title.isEmpty()){
+            this.search("all",page,size);
+        }
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Hiring> hiringList = hiringRepository.findByTitleContaining(title, pageable);
+        List<HiringDTO> hiringDTOS = new ArrayList<>();
+        for(Hiring h : hiringList){
+            HiringDTO hiringDTO = HiringDTO.of(h);
+            hiringDTOS.add(hiringDTO);
+        }
+        return HiringResDTO.builder()
+                .hiringDTOS(hiringDTOS)
+                .size(hiringList.getTotalPages())
+                .build();
+    }
+
     public List<HiringDTO> myHiring(){
         String nickname = authGetInfo.getMember().getNickname();
         List<Hiring>hiringList = hiringRepository.findByNickname(nickname);
