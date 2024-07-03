@@ -12,7 +12,9 @@ import java.util.List;
 public interface HiringRepository extends JpaRepository<Hiring, Long> {
     Page<Hiring> findAll(Pageable pageable);
     Page<Hiring> findByTitleContaining(String title, Pageable pageable);
-    List<Hiring> findByNicknameContaining(String nickname);
+    Page<Hiring> findByNicknameContaining(String nickname, Pageable pageable);
+
+    List<Hiring> findByNickname(String nickname);
 
     void deleteById(Long id);
 
