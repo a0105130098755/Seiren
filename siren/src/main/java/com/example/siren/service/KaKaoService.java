@@ -3,6 +3,7 @@ package com.example.siren.service;
 import com.example.siren.dto.KakaoDTO;
 import com.example.siren.dto.MemberRequestDTO;
 import com.example.siren.dto.TokenDTO;
+import com.example.siren.dto.TokenResponseDTO;
 import com.example.siren.entity.Member;
 import com.example.siren.jwt.TokenProvider;
 import com.example.siren.repository.MemberRepository;
@@ -37,7 +38,7 @@ public class KaKaoService {
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
 
-    public TokenDTO kakaoUserInfo(String kakaoToken) {
+    public TokenResponseDTO kakaoUserInfo(String kakaoToken) {
         Map<String, Object> kakaoInfo = new HashMap<>();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");

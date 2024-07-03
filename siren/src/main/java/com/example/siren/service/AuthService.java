@@ -1,9 +1,6 @@
 package com.example.siren.service;
 
-import com.example.siren.dto.AccessTokenDTO;
-import com.example.siren.dto.MemberRequestDTO;
-import com.example.siren.dto.MemberResponseDTO;
-import com.example.siren.dto.TokenDTO;
+import com.example.siren.dto.*;
 import com.example.siren.entity.Member;
 import com.example.siren.entity.Token;
 import com.example.siren.jwt.TokenProvider;
@@ -50,7 +47,7 @@ public class AuthService {
         // save 는 저장 뒤 해당 저장된 객체를 반환한다.
     }
 
-    public TokenDTO login(MemberRequestDTO requestDTO){
+    public TokenResponseDTO login(MemberRequestDTO requestDTO){
         Optional<Member> optionalMember
                 = memberRepository.findByEmail(requestDTO.getEmail());
 
@@ -85,8 +82,14 @@ public class AuthService {
                     .build();
             tokenRepository.save(tokenEntity);
             Optional<Member> member = memberRepository.findById(getCurrentMemberId());
+            TokenResponseDTO tresDTO = TokenResponseDTO.builder()
+                    .accessToken(token.getAccessToken())
+                    .refreshToken(token.getRefreshToken())
+                    .nickname(member.get().getNickname())
+                    .profile(member.get().getProfile())
+                    .build();
             log.warn(member.toString());
-            return token;
+            return tresDTO;
         } catch (AuthenticationException e) {
             // 인증 실패 시 처리
             throw new RuntimeException("Authentication failed: " + e.getMessage());

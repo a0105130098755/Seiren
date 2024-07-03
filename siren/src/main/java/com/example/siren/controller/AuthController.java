@@ -28,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody MemberRequestDTO requestDto) {
+    public ResponseEntity<TokenResponseDTO> login(@RequestBody MemberRequestDTO requestDto) {
         return ResponseEntity.ok(authService.login(requestDto));
     }
 
@@ -66,9 +66,9 @@ public class AuthController {
     }
 
     @PostMapping("/kakao")
-    public ResponseEntity<TokenDTO> kakaoLogin(@RequestBody Map<String,String> accessToken){
+    public ResponseEntity<TokenResponseDTO> kakaoLogin(@RequestBody Map<String,String> accessToken){
         log.info("카카오 토근 : {}", accessToken.get("token"));
-        TokenDTO response = kakaoService.kakaoUserInfo(accessToken.get("token"));
+        TokenResponseDTO response = kakaoService.kakaoUserInfo(accessToken.get("token"));
         log.info("response : {}" , response);
         return ResponseEntity.ok(response);
         // 500에러 -> 이미 가입된 이메일
