@@ -24,7 +24,7 @@ import java.util.*;
 public class BoardService {
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
-
+    private final AuthGetInfo authGetInfo;
 
     public BoardResDTO selectPage(int page, int size, String title){
         Pageable pageable = PageRequest.of(page,size);
@@ -47,12 +47,12 @@ public class BoardService {
     }
 
     public boolean saveBoard(BoardDTO boardDTO){
-        Optional<Member> memberOptional = memberRepository.findById(SecurityUtil.getCurrentMemberId());
-        if(memberOptional.isPresent()){
+        Member member = authGetInfo.getMember();
+        if(member != null){
             try {
-                Board board = boardDTO.toEntity(memberOptional.get());
+                Board board = boardDTO.toEntity(member);
                 boardRepository.save(board);
-                log.info("게시글 저장 user 정보 : " + memberOptional.get());
+                log.info("게시글 저장 user 정보 : " + member.toString());
                 log.info("게시글 저장 게시글 정보 : " + board);
                 return true;
             }catch (Exception e){
@@ -65,8 +65,12 @@ public class BoardService {
     }
     
     public boolean deleteBoard(BoardDTO boardDTO){
-        boardRepository.deleteById(boardDTO.getId());
+        Member member = authGetInfo.getMember();
+        if(member.getNickname().equals(boardDTO.getNickname())) {
+            boardRepository.deleteById(boardDTO.getId());
+            return !boardRepository.existsById(boardDTO.getId());
+        }
         // true 면 삭제 잘 된것
-        return !boardRepository.existsById(boardDTO.getId());
+        return false;
     }
 }

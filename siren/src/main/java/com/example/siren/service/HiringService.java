@@ -26,13 +26,12 @@ import java.util.Optional;
 public class HiringService {
     private final HiringRepository hiringRepository;
     private final MemberRepository memberRepository;
+    private final AuthGetInfo authGetInfo;
 
     public boolean saveHiring(HiringDTO hiringDTO){
-        Optional<Member> memberOptional =
-                memberRepository.findById(Long.valueOf(SecurityContextHolder
-                        .getContext().getAuthentication().getName()));
-        if(memberOptional.isPresent()){
-            String nickname = memberOptional.get().getNickname();
+        Member member = authGetInfo.getMember();
+        if(member != null){
+            String nickname = member.getNickname();
             if(hiringRepository.findByNickname(nickname).size()>=4) return false;
             Hiring hiring = hiringDTO.toEntity(nickname);
             hiringRepository.save(hiring);
