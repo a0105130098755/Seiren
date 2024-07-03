@@ -23,10 +23,15 @@ public class HiringController {
         return ResponseEntity.ok(hiringService.saveHiring(hiringDTO));
     }
 
-    @GetMapping("/search")
+    @GetMapping("/list")
     public ResponseEntity<HiringResDTO> searchHiring(@RequestParam String nickname,
                                                            @RequestParam(defaultValue = "0") int page,
                                                            @RequestParam(defaultValue = "10")int size){
         return ResponseEntity.ok(hiringService.search(nickname, page, size));
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<Boolean> delHiring(@RequestBody HiringDTO hiringDTO){
+        return ResponseEntity.ok(hiringService.delHiring(hiringDTO));
     }
 }

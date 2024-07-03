@@ -5,8 +5,6 @@ import com.example.siren.dto.BoardResDTO;
 import com.example.siren.entity.Board;
 import com.example.siren.entity.Member;
 import com.example.siren.repository.BoardRepository;
-import com.example.siren.repository.MemberRepository;
-import com.example.siren.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,7 +20,6 @@ import java.util.*;
 @Transactional
 @Slf4j
 public class BoardService {
-    private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
     private final AuthGetInfo authGetInfo;
 
@@ -66,6 +63,7 @@ public class BoardService {
     
     public boolean deleteBoard(BoardDTO boardDTO){
         Member member = authGetInfo.getMember();
+        log.warn("member 의 이름 : {}",member.getNickname());
         if(member.getNickname().equals(boardDTO.getNickname())) {
             boardRepository.deleteById(boardDTO.getId());
             return !boardRepository.existsById(boardDTO.getId());

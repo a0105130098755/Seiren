@@ -4,9 +4,11 @@ import com.example.siren.entity.Member;
 import com.example.siren.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 @RequiredArgsConstructor
 public class AuthGetInfo {
     private final MemberRepository memberRepository;
