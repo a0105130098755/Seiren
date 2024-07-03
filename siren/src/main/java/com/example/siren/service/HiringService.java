@@ -38,9 +38,10 @@ public class HiringService {
     }
 
     public HiringResDTO search(String nickname, int page, int size){
+        nickname = nickname.trim();
         Pageable pageable = PageRequest.of(page,size);
         Page<Hiring> hiringList;
-        if(nickname.equals("all")) {
+        if(nickname.isEmpty()) {
             hiringList = hiringRepository.findAll(pageable);
         }else{
             hiringList = hiringRepository.findByNicknameContaining(nickname,pageable);
@@ -60,11 +61,13 @@ public class HiringService {
     public HiringResDTO searchTitle(String title, int page, int size){
         title = title.trim();
         log.warn("title : [{}]", title);
-        if(title.isEmpty()){
-            this.search("all",page,size);
-        }
         Pageable pageable = PageRequest.of(page,size);
-        Page<Hiring> hiringList = hiringRepository.findByTitleContaining(title, pageable);
+        Page<Hiring> hiringList;
+        if(title.isEmpty()){
+            hiringList = hiringRepository.findAll(pageable);
+        }else{
+            hiringList = hiringRepository.findByTitleContaining(title, pageable);
+        }
         List<HiringDTO> hiringDTOS = new ArrayList<>();
         for(Hiring h : hiringList){
             HiringDTO hiringDTO = HiringDTO.of(h);

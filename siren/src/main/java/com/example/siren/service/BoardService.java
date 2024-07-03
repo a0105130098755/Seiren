@@ -26,7 +26,8 @@ public class BoardService {
     public BoardResDTO selectPage(int page, int size, String title){
         Pageable pageable = PageRequest.of(page,size);
         Page<Board> boards;
-        if(title.equals("all") ){
+        title = title.trim();
+        if(title.isEmpty()){
             boards = boardRepository.findAll(pageable);
         }else {
             boards = boardRepository.findByTitleContaining(title,pageable);
