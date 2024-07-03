@@ -20,7 +20,7 @@ public class BoardController {
     @GetMapping("/list")
     public ResponseEntity<BoardResDTO> showBoard(@RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "10")int size,
-                                                 @RequestParam String title){
+                                                 @RequestParam(defaultValue = "") String title){
         BoardResDTO pageList = boardService.selectPage(page, size,title);
         return ResponseEntity.ok(pageList);
     }
