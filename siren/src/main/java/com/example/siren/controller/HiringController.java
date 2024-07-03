@@ -31,7 +31,7 @@ public class HiringController {
     @GetMapping("/searchName")
     public ResponseEntity<HiringResDTO> searchNickname(@RequestParam String nickname,
                                                        @RequestParam(defaultValue = "0") int page,
-                                                       @RequestParam(defaultValue = "10")int size){
+                                                       @RequestParam(defaultValue = "9")int size){
         return ResponseEntity.ok(hiringService.search(nickname, page, size));
     }
 
