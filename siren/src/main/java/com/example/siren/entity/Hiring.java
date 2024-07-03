@@ -1,5 +1,6 @@
 package com.example.siren.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -17,8 +18,22 @@ public class Hiring {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="nickname")
-    private Member member;
+    private String nickname;
+    private String title;
+    private String content;
+    private int current;
+    private int max;
+    private String location;
+
+    @Builder
+    public Hiring(String nickname, String title, String content, int current, int max, String location){
+        this.nickname = nickname;
+        this.title = title;
+        this.content = content;
+        this.current = current;
+        this.max = max;
+        this.location = location;
+
+    }
 
 }
