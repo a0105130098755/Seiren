@@ -5,8 +5,11 @@ import styled from "styled-components";
 
 const CreateHiringContainer = styled.div`
   max-width: 600px;
-  margin: 0 auto;
+  margin: 80px auto 20px auto; /* Adjusted for navbar */
   padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const Form = styled.form`
@@ -17,11 +20,15 @@ const Form = styled.form`
 const Input = styled.input`
   margin-bottom: 10px;
   padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 `;
 
 const TextArea = styled.textarea`
   margin-bottom: 10px;
   padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
   height: 150px;
 `;
 
@@ -30,7 +37,13 @@ const Button = styled.button`
   background-color: #007bff;
   color: white;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
 
 function CreateHiring() {

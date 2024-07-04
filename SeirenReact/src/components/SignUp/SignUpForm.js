@@ -13,6 +13,8 @@ import useTimer from "../../hooks/useTimer";
 import NavBar from "../Navbar/NavBar";
 import "./SignUpForm.css";
 import { Link } from "react-router-dom";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../firebase"; // Import Firebase storage
 
 Modal.setAppElement("#root");
 
@@ -332,10 +334,39 @@ const SignUpForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // 이미지 업로드 핸들러
+  const uploadImg = async () => {
+    if (!profileImage) {
+      setErrors((prev) => ({
+        ...prev,
+        profileImage: "프로필 이미지를 선택해 주세요.",
+      }));
+      return;
+    }
+
+    const fileRef = ref(storage, `images/${profileImage.name}`);
+    try {
+      const snapshot = await uploadBytes(fileRef, profileImage);
+      console.log("이미지 파이어베이스 업로드 성공");
+
+      const url = await getDownloadURL(snapshot.ref);
+      setProfileImageUrl(url);
+      console.log("경로: " + url);
+    } catch (e) {
+      setErrors((prev) => ({
+        ...prev,
+        profileImage: "파일 업로드 에러: " + e,
+      }));
+      console.error("파일 업로드 에러: " + e);
+    }
+  };
+
   // 회원가입 폼 제출 핸들러
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
+      await uploadImg(); // 이미지 업로드 먼저 처리
+
       try {
         const response = await signUp({
           name,
@@ -343,7 +374,9 @@ const SignUpForm = () => {
           password,
           nickname,
           phone,
-          profile: profileImageUrl,
+          profile: profileImageUrl
+            ? profileImageUrl
+            : "https://firebasestorage.googleapis.com/v0/b/photo-island-dade4.appspot.com/o/images%2F%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C%20(1).jfif?alt=media&token=2af11d70-f855-431a-8ed3-bdac353e5d82",
         });
         console.log("회원 가입 성공:", response);
         alert("회원가입이 완료되었습니다.");

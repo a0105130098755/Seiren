@@ -8,11 +8,14 @@ const NavBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showProfileOptions, setShowProfileOptions] = useState(false);
   const location = useLocation();
+  const [profile, setProfile] = useState("/default-profile.png");
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
-    setIsLoggedIn(!!accessToken);
-  }, [location]);
+    const profileImg = localStorage.getItem("profile");
+    if (accessToken) setIsLoggedIn(true);
+    if (profileImg) setProfile(profileImg);
+  }, [location, isLoggedIn]);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -51,15 +54,13 @@ const NavBar = () => {
         </nav>
         <div className="profile" onClick={toggleProfileOptions}>
           {isLoggedIn ? (
-            <img
-              src="/default-profile.png"
-              alt="Profile"
-              className="profile-pic"
-            />
+            <img src={profile} alt="Profile" className="profile-pic" />
           ) : (
-            <FaUserCircle className="profile-icon" />
+            <Link to="/login">
+              <FaUserCircle className="profile-icon" />
+            </Link>
           )}
-          {showProfileOptions && (
+          {isLoggedIn && showProfileOptions && (
             <div className="profile-options">
               <Link to="/mypage" className="mypage-link">
                 마이페이지
@@ -77,13 +78,11 @@ const NavBar = () => {
         <FaTimes className="close-icon" onClick={toggleSidebar} />
         <div className="profile">
           {isLoggedIn ? (
-            <img
-              src="/default-profile.png"
-              alt="Profile"
-              className="profile-pic"
-            />
+            <img src={profile} alt="Profile" className="profile-pic" />
           ) : (
-            <FaUserCircle className="profile-icon" />
+            <Link to="/login">
+              <FaUserCircle className="profile-icon" />
+            </Link>
           )}
         </div>
         <nav className="sidebar-links">

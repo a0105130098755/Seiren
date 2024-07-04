@@ -332,6 +332,7 @@ export const deleteHiring = async (hiringDTO) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
+    console.log("hiring delete : ", response);
     return response.data;
   } catch (error) {
     handleAxiosError(error, "구인구직 글 삭제에 실패했습니다.");

@@ -19,7 +19,6 @@ import Mypage from "./components/MyPage/MyPage";
 import BackButton from "./components/BackButton";
 import HiringList from "./components/Job/HiringList";
 import CreateHiring from "./components/Job/CreateHiring";
-import JobDelete from "./components/Job/JobDelete";
 import HiringDetail from "./components/Job/HiringDetail.";
 
 interface HiringDTO {
@@ -58,9 +57,8 @@ function App() {
           <Route path="/job/create" element={<CreateHiring />} /> {/* 변경됨 */}
           <Route
             path="/job/details"
-            element={<HiringDetail hiringContent={hiring} />}
+            element={<HiringDetail hiring={hiring} />}
           />
-          <Route path="/job/delete/:jobId" element={<JobDelete />} />
           <Route path="/charge" element={<Charge />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/" element={<MainPage />} />

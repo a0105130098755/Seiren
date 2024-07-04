@@ -10,7 +10,7 @@ import Pagination from "../Board/BoardPagination";
 import MyHiring from "./MyHiring";
 
 const HiringPageContainer = styled.div`
-  padding: 20px;
+  padding: 100px 20px 20px 20px; /* NavBar와 마진 추가 */
   max-width: 1200px;
   margin: 0 auto;
 `;
@@ -31,9 +31,50 @@ const SearchContainer = styled.div`
   margin-bottom: 20px;
 `;
 
+const SearchBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  input,
+  select,
+  button {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+`;
+
+const MyHiringContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+`;
+
+const MyHiringCard = styled.div`
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 5px;
+  color: inherit;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  flex: 1 1 calc(25% - 40px); /* 4개씩 표시되도록 */
+  min-width: 200px;
+  box-sizing: border-box;
+
+  &:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+  }
+`;
+
 const HiringGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 `;
 
@@ -51,13 +92,6 @@ const HiringCard = styled.div`
   }
 `;
 
-const ProfileImage = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  margin-right: 10px;
-`;
-
 const CreateButton = styled(Link)`
   display: inline-block;
   padding: 10px 20px;
@@ -68,8 +102,8 @@ const CreateButton = styled(Link)`
 `;
 
 function HiringList({ setHiring }) {
-  const [myHiringList, setMyHiringList] = useState([]);
   const [hiringList, setHiringList] = useState([]);
+  const [myHiringList, setMyHiringList] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -116,7 +150,7 @@ function HiringList({ setHiring }) {
     <HiringPageContainer>
       <PageTitle>팀을 모집 해보세요</PageTitle>
       <SearchContainer>
-        <div>
+        <SearchBox>
           <select
             value={searchType}
             onChange={(e) => {
@@ -137,35 +171,22 @@ function HiringList({ setHiring }) {
             placeholder="검색어를 입력하세요"
           />
           <button onClick={handleSearch}>검색</button>
-        </div>
+        </SearchBox>
         <CreateButton to="/job/create">구인 하기</CreateButton>
       </SearchContainer>
       <SubTitle>내가 쓴 글</SubTitle>
-      <MyHiring setMyHiringList={setMyHiringList} />{" "}
-      {/* setMyHiringList 전달 */}
-      <HiringGrid>
-        {myHiringList.map((hiring) => (
-          <HiringCard key={hiring.id} onClick={() => handleHiringClick(hiring)}>
-            <ProfileImage
-              src={hiring.profile || "default-profile.jpg"}
-              alt="Profile"
-            />
-            <h3>{hiring.title}</h3>
-            <p>Position: {hiring.position}</p>
-            <p>{hiring.content}</p>
-          </HiringCard>
-        ))}
-      </HiringGrid>
+      <MyHiringContainer>
+        <MyHiring
+          setMyHiringList={setMyHiringList}
+          handleHiringClick={handleHiringClick}
+        />
+      </MyHiringContainer>
       <SubTitle>구인 중</SubTitle>
       <HiringGrid>
         {hiringList.map((hiring) => (
           <HiringCard key={hiring.id} onClick={() => handleHiringClick(hiring)}>
-            <ProfileImage
-              src={hiring.profile || "default-profile.jpg"}
-              alt="Profile"
-            />
             <h3>{hiring.title}</h3>
-            <p>Position: {hiring.position}</p>
+            <p>{hiring.nickname}</p>
             <p>{hiring.content}</p>
           </HiringCard>
         ))}
