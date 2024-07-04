@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team,Long> {
-    @Query("SELECT t FROM team t where t.hiring.id = :id")
+    @Query("SELECT t FROM Team t where t.hiring.id = :id")
     List<Send> findByHiringId(@Param("id")Long id);
     Optional<Team> findByNickname(String nickname);
 
