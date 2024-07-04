@@ -36,6 +36,7 @@ public class AuthService {
     private final AuthenticationManagerBuilder managerBuilder;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+    private final AuthGetInfo authGetInfo;
 
     public MemberResponseDTO signup(MemberRequestDTO requestDTO){
         if(memberRepository.existsByEmail(requestDTO.getEmail())){
@@ -160,10 +161,13 @@ public class AuthService {
     // RefreshToken 이용하여 AccessToken 재발급
     public AccessTokenDTO reissuedToken(String refreshToken){
         Optional<Token> optionalToken = tokenRepository.findByRefreshToken(refreshToken);
+        String email = authGetInfo.getMember().getEmail();
         if(optionalToken.isPresent()){
-            AccessTokenDTO reissuedAccessToken = tokenProvider.generateAccessTokenDto(tokenProvider.getAuthentication(refreshToken));
-            log.info("재발행 accessToken 값 {}", reissuedAccessToken);
-            return reissuedAccessToken;
+            if(email.equals(optionalToken.get().getEmail())) {
+                AccessTokenDTO reissuedAccessToken = tokenProvider.generateAccessTokenDto(tokenProvider.getAuthentication(refreshToken));
+                log.info("재발행 accessToken 값 {}", reissuedAccessToken);
+                return reissuedAccessToken;
+            }
         }
         return null;
     }
