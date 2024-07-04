@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SendDTO {
+    private Long id;
     private HiringDTO hiringDTO;
     private String nickname;
     // 0 -> 미확인
@@ -16,7 +17,8 @@ public class SendDTO {
     private int status;
 
     @Builder
-    public SendDTO(HiringDTO hiringDTO, String nickname, int status){
+    public SendDTO(Long id, HiringDTO hiringDTO, String nickname, int status){
+        this.id = id;
         this.hiringDTO = hiringDTO;
         this.nickname = nickname;
         this.status = status;
@@ -32,6 +34,7 @@ public class SendDTO {
 
     public static SendDTO of(Send send){
         return SendDTO.builder()
+                .id(send.getId())
                 .hiringDTO(HiringDTO.of(send.getHiring()))
                 .nickname(send.getNickname())
                 .status(send.getStatus())
