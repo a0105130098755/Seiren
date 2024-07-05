@@ -31,6 +31,8 @@ public class SendService {
     // 구직 신청
     public boolean sendHiring(SendDTO sendDTO){
         String nickname = authGetInfo.getMember().getNickname();
+        Optional<Send> sendOptional  = sendRepository.findByHiringId(sendDTO.getHiringDTO().getId());
+        if(sendOptional.isPresent()) return false;
         if(!nickname.isEmpty()) {
             Optional<Hiring> hiring = hiringRepository.findById(sendDTO.getHiringDTO().getId());
             Send send = sendDTO.toEntity(nickname,hiring.get());
