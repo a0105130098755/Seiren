@@ -1,5 +1,6 @@
 package com.example.siren.entity;
 
+import com.example.siren.dto.SendDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,11 @@ public class Send {
         this.hiring = hiring;
         this.nickname = nickname;
         this.status = status;
+    }
+
+    public Send updateEntity(SendDTO sendDTO){
+        this.nickname = sendDTO.getNickname();
+        this.status = sendDTO.getStatus();
+        return this;
     }
 }

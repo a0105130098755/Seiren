@@ -85,10 +85,12 @@ public class SendService {
                 );
             }
             // status 2 는 거절 상태. front 에서 로직 구현
-            Send send = sendDTO.toEntity(sendDTO.getNickname(),hiring.get());
-            sendRepository.save(send);
-            // 변경 완료
-            return true;
+            Optional<Send> sendOptional = sendRepository.findById(sendDTO.getId());
+            if(sendOptional.isPresent()) {
+                sendRepository.save(sendOptional.get().updateEntity(sendDTO));
+                return true;
+            }
+            else return false;
         }
             // 변경 실패
         return false;
