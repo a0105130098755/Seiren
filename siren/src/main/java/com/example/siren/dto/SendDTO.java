@@ -1,5 +1,6 @@
 package com.example.siren.dto;
 
+import com.example.siren.entity.Hiring;
 import com.example.siren.entity.Send;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,9 +25,9 @@ public class SendDTO {
         this.status = status;
     }
 
-    public Send toEntity(String nickname){
+    public Send toEntity(String nickname, Hiring hiring){
         return Send.builder()
-                .hiring(hiringDTO.toEntity(hiringDTO.getNickname()))
+                .hiring(hiring)
                 .nickname(nickname)
                 .status(0)
                 .build();

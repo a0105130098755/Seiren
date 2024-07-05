@@ -1,17 +1,21 @@
 package com.example.siren.service;
 
 import com.example.siren.dto.SendDTO;
+import com.example.siren.entity.Hiring;
 import com.example.siren.entity.Send;
 import com.example.siren.entity.Team;
+import com.example.siren.repository.HiringRepository;
 import com.example.siren.repository.SendRepository;
 import com.example.siren.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -20,6 +24,7 @@ import java.util.List;
 public class SendService {
     private final SendRepository sendRepository;
     private final TeamRepository teamRepository;
+    private final HiringRepository hiringRepository;
     private final AuthGetInfo authGetInfo;
 
 
@@ -27,7 +32,8 @@ public class SendService {
     public boolean sendHiring(SendDTO sendDTO){
         String nickname = authGetInfo.getMember().getNickname();
         if(!nickname.isEmpty()) {
-            Send send = sendDTO.toEntity(nickname);
+            Optional<Hiring> hiring = hiringRepository.findById(sendDTO.getHiringDTO().getId());
+            Send send = sendDTO.toEntity(nickname,hiring.get());
             sendRepository.save(send);
             // 제대로 신청이 들어감
             return true;
@@ -65,18 +71,19 @@ public class SendService {
     // 구직 상태 변경
     public boolean statusTrue(SendDTO sendDTO){
         String nickname = authGetInfo.getMember().getNickname();
+        Optional<Hiring> hiring = hiringRepository.findById(sendDTO.getHiringDTO().getId());
         if(nickname.equals(sendDTO.getHiringDTO().getNickname())){
             // status 1 은 수락. 따라서 send 한 hiring 과 nickname 을 Team 에 저장
             if(sendDTO.getStatus() == 1){
                 teamRepository.save(
                         Team.builder()
-                                .hiring(sendDTO.getHiringDTO().toEntity(sendDTO.getNickname()))
+                                .hiring(hiring.get())
                                 .nickname(sendDTO.getNickname())
                                 .build()
                 );
             }
             // status 2 는 거절 상태. front 에서 로직 구현
-            Send send = sendDTO.toEntity(sendDTO.getNickname());
+            Send send = sendDTO.toEntity(sendDTO.getNickname(),hiring.get());
             sendRepository.save(send);
             // 변경 완료
             return true;

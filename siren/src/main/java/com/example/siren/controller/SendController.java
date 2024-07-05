@@ -4,6 +4,7 @@ import com.example.siren.dto.SendDTO;
 import com.example.siren.service.SendService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,28 +21,30 @@ public class SendController {
     private final SendService sendService;
 
     @GetMapping("/send")
-    public List<SendDTO> sendList(){
-        return sendService.sendList(0);
+    public ResponseEntity<List<SendDTO>> sendList(){
+        return ResponseEntity.ok(sendService.sendList(0));
     }
 
     @GetMapping("/receive")
-    public List<SendDTO> receiveList(){
-        return sendService.sendList(1);
+    public ResponseEntity<List<SendDTO>> receiveList(){
+        return ResponseEntity.ok(sendService.sendList(1));
     }
 
     @PostMapping("/save")
-    public boolean sendHiring(@RequestBody SendDTO sendDTO){
-        return sendService.sendHiring(sendDTO);
+    public ResponseEntity<Boolean> sendHiring(@RequestBody SendDTO sendDTO){
+
+        return ResponseEntity.ok(sendService.sendHiring(sendDTO));
     }
 
     @PostMapping("/status")
-    public boolean setStatus(@RequestBody SendDTO sendDTO){
-        return sendService.statusTrue(sendDTO);
+    public ResponseEntity<Boolean> setStatus(@RequestBody SendDTO sendDTO){
+
+        return ResponseEntity.ok(sendService.statusTrue(sendDTO));
     }
 
     @PostMapping("/ok")
-    public boolean statusCheck(@RequestBody SendDTO sendDTO){
-        return sendService.sendDel(sendDTO);
+    public ResponseEntity<Boolean> statusCheck(@RequestBody SendDTO sendDTO){
+        return ResponseEntity.ok(sendService.sendDel(sendDTO));
     }
 
 
