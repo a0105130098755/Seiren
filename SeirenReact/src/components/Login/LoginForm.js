@@ -6,14 +6,12 @@ import { login } from "../../api/Api";
 import KakaoLoginButton from "./KakaoLoginButton";
 import "./LoginForm.css";
 import NavBar from "../Navbar/NavBar";
-import useAxiosInstance from "../../api/axiosInstance";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const api = useAxiosInstance();
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -36,9 +34,10 @@ const LoginForm = () => {
     setError("");
     if (validateForm()) {
       try {
-        const data = await login(api, email, password); // api 인스턴스 전달
+        const data = await login(email, password);
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
+        localStorage.setItem("tokenExpiresIn", data.tokenExpiresIn);
         localStorage.setItem("nickname", data.nickname);
         localStorage.setItem("profile", data.profile);
         alert("환영합니다!");

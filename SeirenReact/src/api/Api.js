@@ -6,7 +6,26 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+export const requestRefreshToken = async () => {
+  try {
+    const refreshToken = localStorage.getItem("refreshToken");
+    const response = await api.post("/auth/reissued", { refreshToken });
 
+    localStorage.setItem("accessToken", response.data.accessToken);
+    localStorage.setItem("tokenExpiresIn", response.data.accessTokenExpiresIn);
+
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      console.error("리프레시 토큰이 만료되었습니다. 다시 로그인해주세요.");
+      localStorage.clear();
+      window.location.href = "/login";
+    } else {
+      handleAxiosError(error, "토큰 재발행에 실패했습니다. 다시 시도해주세요.");
+    }
+    throw error;
+  }
+};
 export const login = async (email, password) => {
   try {
     const response = await api.post("/auth/login", { email, password });
