@@ -15,10 +15,7 @@ import org.springframework.web.socket.WebSocketSession;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,6 +30,11 @@ public class ChatService {
     @PostConstruct // 의존성 주입 후 초기화 수행 메소드
     private void init(){
         chatRooms = new LinkedHashMap<>(); // 채팅 방 정보 담을 맵.
+        List<ChatRoom> chatRoomList = chatroomRepository.findAll();
+        for(ChatRoom c : chatRoomList){
+            ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder().roomId(c.getRoomId()).build();
+            chatRooms.put(chatRoomDTO.getRoomId(),chatRoomDTO);
+        }
     }
     public List<ChatRoomDTO> findAllRoom(){ // 채팅방 전체 리스트 반환
         return new ArrayList<>(chatRooms.values());
@@ -63,22 +65,26 @@ public class ChatService {
 
     // 채팅방에 입장한 세션 추가 로직
     public void addSessionAndHandleEnter(String roomId, WebSocketSession session, ChatMessageDTO chatMessage){
-        ChatRoomDTO chatRoomDTO = findRoomById(roomId); // 현재 개설된 방 중 해당 roomId 의 방정보를 가져와서
+        // 현재 개설된 방 중 해당 roomId 의 방정보를 가져와서
+        Optional<ChatRoom> chatRoomOptional = chatroomRepository.findById(roomId);
         chatMessage.setSender(authGetInfo.getMember().getNickname());
-        if(chatRoomDTO != null){ // 방이 있다면
-            if(chatRoomDTO.getSessions().size() == 0){
+        if(chatRoomOptional.isPresent()){ // 방이 있다면
+            ChatRoomDTO chatRoomDTO = findRoomById(roomId); // 해당 방에 맞는 세션 관리하는 맵에서 가져오고
+            ChatRoom chatroom = chatRoomOptional.get(); // entity 값도 가져온다.
+            if(chatRoomDTO.getSessions().isEmpty()){
                 // 맨 처음 입장 = 방 개설자 = 해당 방 주인
                 // 따라서 시작함을 설정
-                chatRoomDTO.setLive(true);
+                chatroom.setLive(true);
                 chatRoomDTO.setRegDate(LocalDateTime.now());
-                chatRoomDTO.setAudience(0);
             }
             chatRoomDTO.setAudience(chatRoomDTO.getAudience()+1); // 청자 늘리고
             chatRoomDTO.getSessions().add(session); // 채팅방에 입장한 세션을 추가하고
+            chatroom.setAudience(chatRoomDTO.getAudience()); // 엔티티에 저장할 audience 수도 바꿔주고
             if(chatMessage.getSender() != null) {
                 chatMessage.setMessage(chatMessage.getSender() + "님이 입장했습니다.");
                 sendMessageToAll(roomId, chatMessage);
             }
+            chatroomRepository.save(chatroom); // 디비에 저장하도록 한다.
             log.warn("새 사용자 입장함! : {} ", chatMessage.getSender());
 
         }
@@ -87,13 +93,20 @@ public class ChatService {
     // 채팅방에서 퇴장한 세션
     public void removeSessionAndHandleExit(String roomId, WebSocketSession session, ChatMessageDTO chatMessage){
         ChatRoomDTO room = findRoomById(roomId); // 채팅방 정보 가져옴
+        Optional<ChatRoom> chatRoomOptional = chatroomRepository.findById(roomId);
+        ChatRoom chatRoom = chatRoomOptional.get();
         chatMessage.setSender(authGetInfo.getMember().getNickname());
         if(room != null) {
             room.getSessions().remove(session); // 방 정보에서 session 에 퇴장한거 삭제
+            chatRoom.setAudience(room.getSessions().size()); // 청중들 한명씩 제거
             if(chatMessage.getSender() != null ){
                 chatMessage.setMessage(chatMessage.getSender() + "님이 퇴장했습니다.");
                 sendMessageToAll(roomId, chatMessage);
             }
+            if(room.getSessions().isEmpty()){
+                chatRoom.setLive(false);
+            }
+            chatroomRepository.save(chatRoom); // 변경 내역 저장
             log.warn("퇴장 세션 삭제 : {}" , session);
         }
     }
