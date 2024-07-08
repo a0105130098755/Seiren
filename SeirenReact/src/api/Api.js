@@ -20,29 +20,6 @@ export const login = async (email, password) => {
   }
 };
 
-export const requestRefreshToken = async () => {
-  try {
-    const refreshToken = localStorage.getItem("refreshToken");
-    const response = await api.post("/auth/reissued", { refreshToken });
-    localStorage.setItem("accessToken", response.data.accessToken);
-    return response.data;
-  } catch (error) {
-    handleAxiosError(error, "토큰 재발행에 실패했습니다. 다시 시도해주세요.");
-  }
-};
-
-// 카카오 로그인 관련 API 함수 추가
-export const loginWithKakao = async (code) => {
-  try {
-    const response = await api.post("/kakao/login", { code });
-    localStorage.setItem("accessToken", response.data.accessToken);
-    localStorage.setItem("refreshToken", response.data.refreshToken);
-    return response.data;
-  } catch (error) {
-    handleAxiosError(error, "카카오 로그인에 실패했습니다. 다시 시도해주세요.");
-  }
-};
-
 export const signUp = async (userData) => {
   try {
     const response = await api.post("/auth/signup", userData, {

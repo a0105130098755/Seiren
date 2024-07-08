@@ -6,12 +6,14 @@ import { login } from "../../api/Api";
 import KakaoLoginButton from "./KakaoLoginButton";
 import "./LoginForm.css";
 import NavBar from "../Navbar/NavBar";
+import useAxiosInstance from "../../api/axiosInstance";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const api = useAxiosInstance();
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -34,12 +36,11 @@ const LoginForm = () => {
     setError("");
     if (validateForm()) {
       try {
-        const data = await login(email, password);
+        const data = await login(api, email, password); // api 인스턴스 전달
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("nickname", data.nickname);
         localStorage.setItem("profile", data.profile);
-        console.log("Saved nickname:", data.nickname);
         alert("환영합니다!");
         navigate("/main");
       } catch (error) {
@@ -101,7 +102,7 @@ const LoginForm = () => {
           </div>
           {error && <div className="error">{error}</div>}
           <div className="remember-forgot">
-            <Link to="/recovery">아이디/비밀번호 찾기</Link> {/* 통합 링크 */}
+            <Link to="/recovery">아이디/비밀번호 찾기</Link>
           </div>
           <div className="register">
             <Link to="/signup">회원가입 하시겠어요?</Link>

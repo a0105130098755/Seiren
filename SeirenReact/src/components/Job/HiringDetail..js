@@ -90,7 +90,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
       const response = await createJobApplication(detail);
       if (response) {
         alert("구인 신청이 성공적으로 제출되었습니다.");
-        setDetail({ ...detail, current: detail.current + 1 }); // 신청 인원 업데이트
+        setDetail({ ...detail, current: detail.current + 1 });
       } else {
         alert("이미 신청하신 글입니다.");
       }
@@ -130,7 +130,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
       if (response) {
         alert(`구인 신청이 ${status === 1 ? "수락" : "거절"}되었습니다.`);
         if (status === 1) {
-          setDetail({ ...detail, current: detail.current + 1 }); // 신청 인원 업데이트
+          setDetail({ ...detail, current: detail.current + 1 });
         }
       } else {
         alert("상태 변경에 실패했습니다.");
