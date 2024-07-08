@@ -1,6 +1,7 @@
 package com.example.siren.config;
 
 import com.example.siren.dto.ChatMessageDTO;
+import com.example.siren.service.ChatService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
