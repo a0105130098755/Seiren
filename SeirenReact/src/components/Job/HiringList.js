@@ -154,7 +154,6 @@ function HiringList({ setHiring }) {
           <select
             value={searchType}
             onChange={(e) => {
-              console.log("Search type changed to:", e.target.value);
               setSearchType(e.target.value);
             }}
           >
@@ -165,7 +164,6 @@ function HiringList({ setHiring }) {
             type="text"
             value={searchKeyword}
             onChange={(e) => {
-              console.log("Search keyword changed to:", e.target.value);
               setSearchKeyword(e.target.value);
             }}
             placeholder="검색어를 입력하세요"
@@ -197,7 +195,6 @@ function HiringList({ setHiring }) {
         totalItemsCount={totalPages * size}
         pageRangeDisplayed={5}
         onChange={(pageNumber) => {
-          console.log("Page changed to:", pageNumber);
           setPage(pageNumber - 1);
         }}
       />

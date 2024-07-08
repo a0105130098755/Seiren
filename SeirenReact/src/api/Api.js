@@ -338,7 +338,73 @@ export const deleteHiring = async (hiringDTO) => {
     handleAxiosError(error, "구인구직 글 삭제에 실패했습니다.");
   }
 };
+export const createJobApplication = async (hiringDTO) => {
+  try {
+    const response = await api.post(
+      "/send/save",
+      { hiringDTO },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "구인 신청에 실패했습니다.");
+  }
+};
 
+export const fetchMyApplications = async () => {
+  try {
+    const response = await api.get("/send/send", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "내 구인 신청 목록을 불러오는 데 실패했습니다.");
+  }
+};
+
+export const fetchReceivedApplications = async () => {
+  try {
+    const response = await api.get("/send/receive", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "받은 구인 신청 목록을 불러오는 데 실패했습니다.");
+  }
+};
+export const updateApplicationStatus = async (sendDTO) => {
+  try {
+    const response = await api.post("/send/status", sendDTO, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "구인 신청 상태 변경에 실패했습니다.");
+  }
+};
+
+// export const deleteHiring = async (hiringDTO) => {
+//   try {
+//     const response = await api.post("/hiring/delete", { id: hiringDTO.id, nickname: hiringDTO.nickname }, {
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+//       },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     handleAxiosError(error, "구인 글 삭제에 실패했습니다.");
+//   }
+// };
 const handleAxiosError = (error, defaultMessage) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);

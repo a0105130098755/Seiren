@@ -57,7 +57,7 @@ function App() {
           <Route path="/job/create" element={<CreateHiring />} /> {/* 변경됨 */}
           <Route
             path="/job/details"
-            element={<HiringDetail hiring={hiring} />}
+            element={<HiringDetail hiring={hiring} setHiring={setHiring} />}
           />
           <Route path="/charge" element={<Charge />} />
           <Route path="/mypage" element={<Mypage />} />
