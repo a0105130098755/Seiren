@@ -16,13 +16,13 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class ChatRoom {
     @Id
-    private String nickname;
+    private String roomId;
     private boolean live;
     private int audience;
 
     @Builder
-    public ChatRoom (String nickname, boolean live, int audience){
-        this.nickname = nickname;
+    public ChatRoom (String roomId, boolean live, int audience){
+        this.roomId = roomId;
         this.live = live;
         this.audience = audience;
     }

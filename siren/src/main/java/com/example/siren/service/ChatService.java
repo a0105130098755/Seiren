@@ -2,6 +2,7 @@ package com.example.siren.service;
 
 import com.example.siren.dto.ChatMessageDTO;
 import com.example.siren.dto.ChatRoomDTO;
+import com.example.siren.entity.ChatRoom;
 import com.example.siren.entity.Member;
 import com.example.siren.repository.ChatRoomRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +51,12 @@ public class ChatService {
         ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder()
                 .roomId(roomId)
                 .build();
+        ChatRoom chatRoom = ChatRoom.builder()
+                .roomId(chatRoomDTO.getRoomId())
+                .live(chatRoomDTO.isLive())
+                .audience(chatRoomDTO.getAudience())
+                .build();
+        chatroomRepository.save(chatRoom);
         chatRooms.put(roomId,chatRoomDTO); // 생성한 방을 현재 만들어진 방 정보 관리하는 Map 에 넘김
         log.info("회원가입한 {} 님의 방이 만들어졌습니다. ",roomId);
     }
