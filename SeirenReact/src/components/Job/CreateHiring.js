@@ -66,7 +66,7 @@ function CreateHiring() {
       const response = await createHiring(hiringData);
       if (response) {
         alert("구인구직 글이 성공적으로 등록되었습니다.");
-        navigate("/hiring");
+        navigate("/job");
       }
     } catch (error) {
       console.error("구인구직 글 등록에 실패했습니다.", error);

@@ -54,7 +54,7 @@ function App() {
             element={<BoardDetail boardContent={board} />}
           />
           <Route path="/job" element={<HiringList setHiring={setHiring} />} />
-          <Route path="/job/create" element={<CreateHiring />} /> {/* 변경됨 */}
+          <Route path="/job/create" element={<CreateHiring />} />
           <Route
             path="/job/details"
             element={<HiringDetail hiring={hiring} setHiring={setHiring} />}
