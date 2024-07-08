@@ -105,6 +105,7 @@ public class ChatService {
             }
             if(room.getSessions().isEmpty()){
                 chatRoom.setLive(false);
+                room.setRegDate(null);
             }
             chatroomRepository.save(chatRoom); // 변경 내역 저장
             log.warn("퇴장 세션 삭제 : {}" , session);
