@@ -36,6 +36,7 @@ public class AuthService {
     private final AuthenticationManagerBuilder managerBuilder;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+    private final ChatService chatService;
     private final AuthGetInfo authGetInfo;
 
     public MemberResponseDTO signup(MemberRequestDTO requestDTO){
@@ -44,6 +45,7 @@ public class AuthService {
         }
         // 카카오 유저가 아니면 카카오 필드 false 저장
         Member member = requestDTO.toEntity(passwordEncoder, false);
+        chatService.createRoom(member);
         return MemberResponseDTO.of(memberRepository.save(member));
         // save 는 저장 뒤 해당 저장된 객체를 반환한다.
     }
