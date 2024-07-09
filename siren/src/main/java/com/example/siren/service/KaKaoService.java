@@ -2,19 +2,15 @@ package com.example.siren.service;
 
 import com.example.siren.dto.KakaoDTO;
 import com.example.siren.dto.MemberRequestDTO;
-import com.example.siren.dto.TokenDTO;
 import com.example.siren.dto.TokenResponseDTO;
 import com.example.siren.entity.Member;
-import com.example.siren.jwt.TokenProvider;
 import com.example.siren.repository.MemberRepository;
-import com.example.siren.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -30,13 +26,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class KaKaoService {
-    private final AuthenticationManagerBuilder managerBuilder;
     private final MemberRepository memberRepository;
     private final RestTemplate restTemplate;
-    private final TokenProvider tokenProvider;
-    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
+    private final ChatService chatService;
 
     public TokenResponseDTO kakaoUserInfo(String kakaoToken) {
         Map<String, Object> kakaoInfo = new HashMap<>();
@@ -76,6 +70,7 @@ public class KaKaoService {
 
             // 카카오 계정은 kakao 필드 true로 저장.
             memberRepository.save(memberDTO.toEntity(passwordEncoder, true));
+            chatService.createRoom(memberDTO.toEntity(passwordEncoder, true));
             log.info(memberDTO.toString());
 
             // 바로 들어온 값으로 로그인
