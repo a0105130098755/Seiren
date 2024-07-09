@@ -32,7 +32,8 @@ public class ChatService {
         chatRooms = new LinkedHashMap<>(); // 채팅 방 정보 담을 맵.
         List<ChatRoom> chatRoomList = chatroomRepository.findAll();
         for(ChatRoom c : chatRoomList){
-            ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder().roomId(c.getRoomId()).build();
+            ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder().roomId(c.getRoomId()).
+            profile(c.getProfile()).build();
             chatRooms.put(chatRoomDTO.getRoomId(),chatRoomDTO);
         }
     }
