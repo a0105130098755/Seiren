@@ -149,7 +149,6 @@ const ChatMain = () => {
 
   const onChangeHandler = (e) => {
     inputRef.current.value = e.target.value;
-    console.log(inputRef.current.value);
   };
 
   const handleSearch = () => {

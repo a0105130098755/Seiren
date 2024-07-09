@@ -28,11 +28,11 @@ public class ChatRoomDTO {
         return this.sessions.isEmpty(); // 현재 연결된 세션이 0인지 확인
     }
     @Builder
-    public ChatRoomDTO(String roomId, String profile){
+    public ChatRoomDTO(String roomId, String profile, boolean live, int audience){
         this.roomId = roomId;
         this.profile = profile;
-        this.live = false;
-        this.audience = 0;
+        this.live = live;
+        this.audience = audience;
         this.sessions = Collections.newSetFromMap(new ConcurrentHashMap<>());
     }
 }

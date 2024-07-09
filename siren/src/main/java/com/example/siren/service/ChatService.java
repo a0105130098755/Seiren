@@ -32,13 +32,26 @@ public class ChatService {
         chatRooms = new LinkedHashMap<>(); // 채팅 방 정보 담을 맵.
         List<ChatRoom> chatRoomList = chatroomRepository.findAll();
         for(ChatRoom c : chatRoomList){
-            ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder().roomId(c.getRoomId()).
-            profile(c.getProfile()).build();
+            ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder().roomId(c.getRoomId())
+                    .profile(c.getProfile())
+                    .live(c.isLive())
+                    .audience(c.getAudience()).build();
             chatRooms.put(chatRoomDTO.getRoomId(),chatRoomDTO);
         }
     }
     public List<ChatRoomDTO> findAllRoom(){ // 채팅방 전체 리스트 반환
-        return new ArrayList<>(chatRooms.values());
+        List<ChatRoom> chatRoomList = chatroomRepository.findAll();
+        List<ChatRoomDTO> chatRoomDTOS = new ArrayList<>();
+        for(ChatRoom c : chatRoomList){
+            ChatRoomDTO crd = ChatRoomDTO.builder()
+                    .roomId(c.getRoomId())
+                    .profile(c.getProfile())
+                    .live(c.isLive())
+                    .audience(c.getAudience())
+                    .build();
+            chatRoomDTOS.add(crd);
+        }
+        return  chatRoomDTOS;
     }
     public ChatRoomDTO findRoomById(String roomId){
         return chatRooms.get(roomId);
