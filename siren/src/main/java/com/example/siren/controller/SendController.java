@@ -1,5 +1,6 @@
 package com.example.siren.controller;
 
+import com.example.siren.dto.HiringDTO;
 import com.example.siren.dto.SendDTO;
 import com.example.siren.service.SendService;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,13 @@ public class SendController {
 
     @GetMapping("/send")
     public ResponseEntity<List<SendDTO>> sendList(){
-        return ResponseEntity.ok(sendService.sendList(0));
+        return ResponseEntity.ok(sendService.sendList());
     }
 
-    @GetMapping("/receive")
-    public ResponseEntity<List<SendDTO>> receiveList(){
-        return ResponseEntity.ok(sendService.sendList(1));
+    @PostMapping("/receive")
+    public ResponseEntity<List<SendDTO>> receiveList(@RequestBody HiringDTO hiringDTO){
+
+        return ResponseEntity.ok(sendService.sendList(hiringDTO));
     }
 
     @PostMapping("/save")

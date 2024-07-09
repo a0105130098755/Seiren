@@ -1,5 +1,6 @@
 package com.example.siren.service;
 
+import com.example.siren.dto.HiringDTO;
 import com.example.siren.dto.SendDTO;
 import com.example.siren.entity.Hiring;
 import com.example.siren.entity.Send;
@@ -46,24 +47,32 @@ public class SendService {
     }
     
     // 구직 신청한 내역 조회
-    public List<SendDTO> sendList(int i){
+    public List<SendDTO> sendList(){
         String nickname = authGetInfo.getMember().getNickname();
         List<Send> sendList;
-        // i = 0 은 구직 입장에서 조회
-        // else( i != 0 ) 은 구인 입장에서 조회
-        if(i == 0) sendList = sendRepository.findByNickname(nickname);
-        else sendList = sendRepository.findByHiringNickname(nickname);
+        sendList = sendRepository.findByNickname(nickname);
         List<SendDTO> sendDTOS = new ArrayList<>();
         if(!sendList.isEmpty()){
             for(Send s : sendList){
                 SendDTO sendDTO = SendDTO.of(s);
-                // i 가 0 일 때에는 구직 입장. status 0, 1, 2 모든 상태 출력해야한다
-                // 하지만 i 가 != 은 구인 입장. 즉 자신이 수락, 거절한 건 볼 필요 없고
-                // status 가 0 인 내역만 조회하면 된다.
-                if(i != 0) {
-                    if (s.getStatus() == 0) sendDTOS.add(sendDTO);
-                }
-                else sendDTOS.add(sendDTO);
+                sendDTOS.add(sendDTO);
+            }
+            return sendDTOS;
+        }
+        return null;
+    }
+
+    //구인 내역 조회
+    public List<SendDTO> sendList(HiringDTO hiringDTO){
+        String nickname = authGetInfo.getMember().getNickname();
+        List<Send> sendList;
+        sendList = sendRepository.findByHiringNickname(nickname);
+        List<SendDTO> sendDTOS = new ArrayList<>();
+        if(!sendList.isEmpty()){
+            for(Send s : sendList){
+                SendDTO sendDTO = SendDTO.of(s);
+                if(sendDTO.getHiringDTO().getId() == hiringDTO.getId())
+                    sendDTOS.add(sendDTO);
             }
             return sendDTOS;
         }
