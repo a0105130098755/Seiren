@@ -56,7 +56,6 @@ public class KaKaoService {
             KakaoDTO kakaoDto = responseEntity.getBody();
             Optional<Member> optionalMember = memberRepository.findByEmail(kakaoDto.getKakaoAccount().getEmail());
 
-            // 가입되지 않은 이메일이면 저장 후
             MemberRequestDTO memberDTO = MemberRequestDTO.builder()
                     .email(kakaoDto.getKakaoAccount().getEmail())
                     .name(kakaoDto.getKakaoAccount().getProfile().getNickname())
@@ -65,10 +64,16 @@ public class KaKaoService {
                     .password(String.valueOf(kakaoDto.getId()))
                     .nickname(kakaoDto.getKakaoAccount().getProfile().getNickname())
                     .build();
+            // 이미 가입된 이메일이 있다면
             if(optionalMember.isPresent()){
-                log.info("바로 카카오 로그인 합니다.");
-                return authService.login(memberDTO);
+                // 가입된 이메일이 내 카카오 아이디와 맞다면
+                if(optionalMember.get().getPassword().matches(String.valueOf(kakaoDto.getId()))) {
+                    log.info("바로 카카오 로그인 합니다.");
+                    return authService.login(memberDTO);
+                } else return null;
+
             }
+
             // 카카오 계정은 kakao 필드 true로 저장.
             memberRepository.save(memberDTO.toEntity(passwordEncoder, true));
             log.info(memberDTO.toString());

@@ -52,9 +52,11 @@ public class ChatService {
         log.info("회원가입한 {} 님의 방이 만들어집니다. ",roomId);
         ChatRoomDTO chatRoomDTO = ChatRoomDTO.builder()
                 .roomId(roomId)
+                .profile(member.getProfile())
                 .build();
         ChatRoom chatRoom = ChatRoom.builder()
                 .roomId(chatRoomDTO.getRoomId())
+                .profile(member.getProfile())
                 .live(chatRoomDTO.isLive())
                 .audience(chatRoomDTO.getAudience())
                 .build();

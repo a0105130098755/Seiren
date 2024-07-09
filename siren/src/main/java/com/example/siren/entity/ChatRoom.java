@@ -17,12 +17,14 @@ import javax.persistence.Table;
 public class ChatRoom {
     @Id
     private String roomId;
+    private String profile;
     private boolean live;
     private int audience;
 
     @Builder
-    public ChatRoom (String roomId, boolean live, int audience){
+    public ChatRoom (String roomId,String profile, boolean live, int audience){
         this.roomId = roomId;
+        this.profile = profile;
         this.live = live;
         this.audience = audience;
     }

@@ -20,6 +20,7 @@ import BackButton from "./components/BackButton";
 import HiringList from "./components/Job/HiringList";
 import CreateHiring from "./components/Job/CreateHiring";
 import HiringDetail from "./components/Job/HiringDetail.";
+import ChatMain from "./components/Chat/ChatMain";
 
 interface HiringDTO {
   id: number;
@@ -61,6 +62,7 @@ function App() {
           />
           <Route path="/charge" element={<Charge />} />
           <Route path="/mypage" element={<Mypage />} />
+          <Route path="/chat" element={<ChatMain />} />
           <Route path="/" element={<MainPage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

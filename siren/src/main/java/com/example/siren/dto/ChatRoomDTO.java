@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Setter
 public class ChatRoomDTO {
     private String roomId; // 현 채팅방 ID = userNickname
+    private String profile;
     private boolean live;
     private int audience;
     private LocalDateTime regDate; // 시작 시간
@@ -27,8 +28,9 @@ public class ChatRoomDTO {
         return this.sessions.isEmpty(); // 현재 연결된 세션이 0인지 확인
     }
     @Builder
-    public ChatRoomDTO(String roomId){
+    public ChatRoomDTO(String roomId, String profile){
         this.roomId = roomId;
+        this.profile = profile;
         this.live = false;
         this.audience = 0;
         this.sessions = Collections.newSetFromMap(new ConcurrentHashMap<>());
