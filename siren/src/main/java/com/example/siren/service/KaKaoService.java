@@ -61,7 +61,8 @@ public class KaKaoService {
             // 이미 가입된 이메일이 있다면
             if(optionalMember.isPresent()){
                 // 가입된 이메일이 내 카카오 아이디와 맞다면
-                if(optionalMember.get().getPassword().matches(String.valueOf(kakaoDto.getId()))) {
+                if(passwordEncoder.matches(String.valueOf(kakaoDto.getId()),
+                        optionalMember.get().getPassword())) {
                     log.info("바로 카카오 로그인 합니다.");
                     return authService.login(memberDTO);
                 } else return null;
