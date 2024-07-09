@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import ChatApi from "../../api/ChatApi";
 import audienceLogo from "./audience.png";
@@ -6,8 +6,9 @@ import audienceLogo from "./audience.png";
 const ListContainer = styled.div`
   position: relative;
   width: 80vw;
-  height: 80vh;
-  border: 3px solid black;
+  height: 76vh;
+  border: 1px solid #d8dce2;
+  border-radius: 10px;
   display: flex;
 `;
 
@@ -71,8 +72,68 @@ const AudienceLogo = styled.img`
   height: 20px;
 `;
 
+const SearchContainer = styled.div`
+  position: relative;
+  display: flex;
+  width: 80vw;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SerachBar = styled.input`
+  position: relative;
+  width: 300px;
+  height: 24px;
+  border: 1px solid #d8dce2;
+  border-radius: 4px;
+  padding-left: 8px;
+  &::placeholder {
+    color: #d8dce2;
+  }
+`;
+const SearchBtn = styled.div`
+  position: relative;
+  width: 50px;
+  height: 24px;
+  font-size: 12px;
+  margin-left: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: #0075ff;
+  color: white;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  &:hover {
+    transition: all 0.2s ease;
+    background-color: #2caeff;
+  }
+`;
+const SearchBtn2 = styled.div`
+  position: relative;
+  width: 54px;
+  height: 24px;
+  font-size: 12px;
+  margin-left: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background-color: #0075ff;
+  color: white;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  &:hover {
+    transition: all 0.2s ease;
+    background-color: #2caeff;
+  }
+`;
 const ChatMain = () => {
   const [chatList, setChatList] = useState([]);
+  const [viewList, setViewList] = useState([]);
+  const inputRef = useRef(null);
   const [hoverIndex, setHoverIndex] = useState(null); // hover 상태를 개별적으로 관리하기 위한 상태
 
   const handleChatList = async () => {
@@ -80,22 +141,44 @@ const ChatMain = () => {
       const response = await ChatApi.roomList();
       console.log("chat List ", response);
       setChatList(response.data);
+      setViewList(response.data);
     } catch (e) {
       console.log("채팅방 불러오는 데 오류 발생", e);
     }
   };
+
+  const onChangeHandler = (e) => {
+    inputRef.current.value = e.target.value;
+    console.log(inputRef.current.value);
+  };
+
+  const handleSearch = () => {
+    const filteredList = chatList.filter((item) =>
+      item.roomId.toLowerCase().includes(inputRef.current.value.toLowerCase())
+    );
+    setViewList(filteredList);
+    inputRef.current.value = "";
+  };
+
+  const handleShowAll = () => {
+    setViewList(chatList);
+    inputRef.current.value = "";
+  };
+
   useEffect(() => {
     handleChatList();
   }, []);
+
   return (
     <>
       <ListContainer>
-        {chatList &&
-          chatList.map((value, index) => (
+        {viewList &&
+          viewList.map((value, index) => (
             <ListBox
               key={index}
               onMouseEnter={() => setHoverIndex(index)}
               onMouseLeave={() => setHoverIndex(null)}
+              onClick={() => console.log(value.roomId)}
             >
               <Title>
                 <Profile src={value.profile} />
@@ -128,6 +211,15 @@ const ChatMain = () => {
             </ListBox>
           ))}
       </ListContainer>
+      <SearchContainer>
+        <SerachBar
+          placeholder="닉네임을 검색하여 찾을 수 있습니다."
+          onChange={onChangeHandler}
+          ref={inputRef}
+        />
+        <SearchBtn onClick={handleSearch}>검색</SearchBtn>
+        <SearchBtn2 onClick={handleShowAll}>전체 보기</SearchBtn2>
+      </SearchContainer>
     </>
   );
 };
