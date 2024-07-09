@@ -6,10 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 @Slf4j
 @Component
-public class WebSocketTextHandler extends TextWebSocketHandler {
+public class WebSocketTextHandler extends AbstractWebSocketHandler {
     private final ObjectMapper objectMapper;
     private final ChatService chatService;
     private final Map<WebSocketSession, String> sessionRoomIdMap = new ConcurrentHashMap<>();
@@ -44,6 +45,12 @@ public class WebSocketTextHandler extends TextWebSocketHandler {
             chatService.sendMessageToAll(roomId, chatMessageDTO);
         }
     }
+
+    @Override
+    protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message){
+        
+    }
+
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception{
         // 세션과 매핑된 채팅방 ID 가져옴
