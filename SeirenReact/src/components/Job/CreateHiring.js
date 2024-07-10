@@ -47,29 +47,36 @@ const Button = styled.button`
 `;
 
 function CreateHiring() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [max, setMax] = useState(1);
-  const [location, setLocation] = useState("");
+  const [hiringData, setHiringData] = useState({
+    title: "",
+    content: "",
+    max: 1,
+    location: "",
+  });
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setHiringData((prev) => ({
+      ...prev,
+      [name]: name === "max" ? parseInt(value) : value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const hiringData = {
-        title,
-        content,
+      const response = await createHiring({
+        ...hiringData,
         current: 1,
-        max,
-        location,
-      };
-      const response = await createHiring(hiringData);
+      });
       if (response) {
         alert("구인구직 글이 성공적으로 등록되었습니다.");
         navigate("/job");
       }
     } catch (error) {
       console.error("구인구직 글 등록에 실패했습니다.", error);
+      alert(error.message || "구인구직 글 등록에 실패했습니다.");
     }
   };
 
@@ -78,30 +85,32 @@ function CreateHiring() {
       <h2>구인구직 글 작성</h2>
       <Form onSubmit={handleSubmit}>
         <Input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          name="title"
+          value={hiringData.title}
+          onChange={handleChange}
           placeholder="제목"
           required
         />
         <TextArea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+          name="content"
+          value={hiringData.content}
+          onChange={handleChange}
           placeholder="내용"
           required
         />
         <Input
           type="number"
-          value={max}
-          onChange={(e) => setMax(parseInt(e.target.value))}
+          name="max"
+          value={hiringData.max}
+          onChange={handleChange}
           placeholder="최대 인원"
           min="1"
           required
         />
         <Input
-          type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
+          name="location"
+          value={hiringData.location}
+          onChange={handleChange}
           placeholder="지역"
           required
         />

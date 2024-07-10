@@ -22,7 +22,7 @@ function BoardList({ board, setBoard }) {
         const response = await fetchBoardList(page, size, searchKeyword);
         if (response.boardDTOS) {
           setBbsList(response.boardDTOS);
-          setTotalPages(response.size); // 총 페이지 수 설정
+          setTotalPages(response.size);
         } else {
           setBbsList([]);
           setTotalPages(0);

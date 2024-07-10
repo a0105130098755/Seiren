@@ -4,7 +4,7 @@ import styled from "styled-components";
 const MainContainer = styled.div`
   font-family: "Helvetica Neue", Arial, sans-serif;
   padding: 20px;
-  margin: 80px auto 20px;
+  margin: 400px;
   max-width: 1000px;
   background: #ffffff;
   border-radius: 8px;
