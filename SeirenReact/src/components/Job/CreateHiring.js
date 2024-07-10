@@ -4,7 +4,7 @@ import { createHiring } from "../../api/Api";
 import styled from "styled-components";
 
 const CreateHiringContainer = styled.div`
-  max-width: 600px;
+  max-width: 800px;
   margin: 80px auto 20px auto;
   padding: 20px;
   background-color: #ffffff;

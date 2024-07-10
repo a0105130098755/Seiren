@@ -7,7 +7,7 @@ import {
   updateApplicationStatus,
   fetchReceivedApplications,
   teamList,
-  teamKick, // 새로 추가된 함수
+  teamKick,
 } from "../../api/Api";
 import CryptoJS from "crypto-js";
 import axios from "axios";
@@ -20,21 +20,39 @@ const api = axios.create({
 });
 
 const PageWrapper = styled.div`
-  max-width: 800px;
-  margin: 80px auto 20px;
+  display: flex;
+  justify-content: center;
   padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 80px; // 네비게이션 바에 대한 상단 여백
+  box-sizing: border-box;
+  min-height: calc(100vh - 80px); // 네비게이션 바 높이를 고려한 조정
 `;
 
-const Title = styled.h1`
-  font-size: 28px;
-  margin-bottom: 20px;
-  color: #333;
+const ContentWrapper = styled.div`
+  max-width: 800px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+`;
+
+const Header = styled.div`
+  width: 100%;
+  text-align: center;
+  margin-bottom: 40px;
 `;
 
 const InfoSection = styled.div`
+  width: 100%;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   p {
     margin: 10px 0;
@@ -44,18 +62,18 @@ const InfoSection = styled.div`
 
 const ButtonGroup = styled.div`
   display: flex;
+  justify-content: center;
   gap: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
 const Button = styled.button`
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
-
   &:hover {
     opacity: 0.9;
   }
@@ -72,11 +90,16 @@ const DeleteButton = styled(Button)`
 `;
 
 const ApplicationsSection = styled.div`
-  margin-top: 30px;
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const ApplicationCard = styled.div`
-  background-color: #f9f9f9;
+  background-color: #e9ecef;
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 15px;
@@ -86,7 +109,7 @@ const ApplicationCard = styled.div`
 const StatusButton = styled(Button)`
   background-color: ${(props) => (props.accept ? "#4caf50" : "#f44336")};
   color: white;
-  padding: 5px 10px;
+  padding: 8px 16px;
   font-size: 14px;
 `;
 
@@ -103,9 +126,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
 
   const fetchApplications = async () => {
     try {
-      console.log("Fetching applications for hiring id:", detail.id);
       const response = await fetchReceivedApplications({ id: detail.id });
-      console.log("Applications fetched:", response);
       setApplications(response || []);
     } catch (error) {
       console.error("Error fetching received applications:", error);
@@ -115,7 +136,6 @@ const HiringDetail = ({ hiring, setHiring }) => {
   const teamListFunc = async () => {
     try {
       const response = await teamList(hiring);
-      console.log(" team :", response.data);
       setTeam(response);
     } catch (error) {
       console.error("Error fetching received applications:", error);
@@ -225,69 +245,73 @@ const HiringDetail = ({ hiring, setHiring }) => {
 
   return (
     <PageWrapper>
-      <Title>{detail.title}</Title>
-      <InfoSection>
-        <p>작성자: {detail.nickname}</p>
-        <p>
-          모집 인원: {detail.current}/{detail.max}
-        </p>
-        <p>지역: {detail.location || "미지정"}</p>
-        <p>{detail.content}</p>
-      </InfoSection>
-      <ButtonGroup>
-        {detail.nickname !== localStorage.getItem("nickname") ? (
-          <ApplyButton onClick={handleApply}>지원하기</ApplyButton>
-        ) : (
-          <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
-        )}
-      </ButtonGroup>
-      {detail.nickname === currentNickname && (
-        <ApplicationsSection>
-          <h2>지원자 목록</h2>
-          {applications.length === 0 ? (
-            <p>아직 지원자가 없습니다.</p>
+      <ContentWrapper>
+        <Header>
+          <h1>{detail.title}</h1>
+        </Header>
+        <InfoSection>
+          <p>작성자: {detail.nickname}</p>
+          <p>
+            모집 인원: {detail.current}/{detail.max}
+          </p>
+          <p>지역: {detail.location || "미지정"}</p>
+          <p>{detail.content}</p>
+        </InfoSection>
+        <ButtonGroup>
+          {detail.nickname !== currentNickname ? (
+            <ApplyButton onClick={handleApply}>지원하기</ApplyButton>
           ) : (
-            applications.map((app) => (
-              <ApplicationCard key={app.id}>
-                <p>지원자: {app.nickname}</p>
-                <p>
-                  상태:{" "}
-                  {app.status === 0
-                    ? "대기 중"
-                    : app.status === 1
-                    ? "수락됨"
-                    : "거절됨"}
-                </p>
-                {app.status === 0 && (
-                  <ButtonGroup>
-                    <StatusButton
-                      accept
-                      onClick={() => handleStatusChange(app, 1)}
-                    >
-                      수락
-                    </StatusButton>
-                    <StatusButton onClick={() => handleStatusChange(app, 2)}>
-                      거절
-                    </StatusButton>
-                  </ButtonGroup>
-                )}
-              </ApplicationCard>
-            ))
+            <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
           )}
+        </ButtonGroup>
+        {detail.nickname === currentNickname && (
+          <ApplicationsSection>
+            <h2>지원자 목록</h2>
+            {applications.length === 0 ? (
+              <p>아직 지원자가 없습니다.</p>
+            ) : (
+              applications.map((app) => (
+                <ApplicationCard key={app.id}>
+                  <p>지원자: {app.nickname}</p>
+                  <p>
+                    상태:{" "}
+                    {app.status === 0
+                      ? "대기 중"
+                      : app.status === 1
+                      ? "수락됨"
+                      : "거절됨"}
+                  </p>
+                  {app.status === 0 && (
+                    <ButtonGroup>
+                      <StatusButton
+                        accept
+                        onClick={() => handleStatusChange(app, 1)}
+                      >
+                        수락
+                      </StatusButton>
+                      <StatusButton onClick={() => handleStatusChange(app, 2)}>
+                        거절
+                      </StatusButton>
+                    </ButtonGroup>
+                  )}
+                </ApplicationCard>
+              ))
+            )}
+          </ApplicationsSection>
+        )}
+        <ApplicationsSection>
+          <h2>팀 목록</h2>
+          {team &&
+            team.map((teamMember, index) => (
+              <ApplicationCard key={index}>
+                <p> 팀원 : {teamMember.nickname}</p>
+                <Button onClick={() => handleRemoveTeamMember(teamMember)}>
+                  추방
+                </Button>
+              </ApplicationCard>
+            ))}
         </ApplicationsSection>
-      )}
-      <ApplicationsSection>
-        <h2>팀 목록</h2>
-        {team &&
-          team.map((teamMember, index) => (
-            <ApplicationCard key={index}>
-              <p> 팀원 : {teamMember.nickname}</p>
-              <Button onClick={() => handleRemoveTeamMember(teamMember)}>
-                추방
-              </Button>
-            </ApplicationCard>
-          ))}
-      </ApplicationsSection>
+      </ContentWrapper>
     </PageWrapper>
   );
 };
