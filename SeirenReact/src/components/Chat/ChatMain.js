@@ -7,9 +7,11 @@ const ListContainer = styled.div`
   position: relative;
   width: 80vw;
   height: 76vh;
+  overflow-y: auto;
   border: 1px solid #d8dce2;
   border-radius: 10px;
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const ListBox = styled.div`
@@ -20,6 +22,8 @@ const ListBox = styled.div`
   height: 20%;
   border: 1px solid #d8dce2;
   margin: auto;
+  margin-top: 14px;
+  margin-bottom: 14px;
   align-items: center;
   border-radius: 20px;
   transition: all 0.3s ease; // 애니메이션 효과를 위한 트랜지션 추가
@@ -133,8 +137,10 @@ const SearchBtn2 = styled.div`
 const ChatMain = () => {
   const [chatList, setChatList] = useState([]);
   const [viewList, setViewList] = useState([]);
+  const [sortList, setSortList] = useState([]);
   const inputRef = useRef(null);
   const [hoverIndex, setHoverIndex] = useState(null); // hover 상태를 개별적으로 관리하기 위한 상태
+  const chatContainerRef = useRef(null);
 
   const handleChatList = async () => {
     try {
@@ -168,11 +174,16 @@ const ChatMain = () => {
     handleChatList();
   }, []);
 
+  useEffect(() => {
+    const sortedList = [...viewList].sort((a, b) => b.audience - a.audience);
+    setSortList(sortedList);
+  }, [viewList]);
+
   return (
     <>
-      <ListContainer>
-        {viewList &&
-          viewList.map((value, index) => (
+      <ListContainer ref={chatContainerRef}>
+        {sortList &&
+          sortList.map((value, index) => (
             <ListBox
               key={index}
               onMouseEnter={() => setHoverIndex(index)}
