@@ -1,94 +1,116 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { fetchMyHiring, deleteHiring } from "../../api/Api";
+import { fetchMyHiring } from "../../api/Api";
+import ReceivedApplications from "./ReceivedApplications";
+import SentApplications from "./SentApplications";
+
+const MyHiringContainer = styled.div`
+  margin-bottom: 40px;
+`;
 
 const MyHiringGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 `;
 
-const MyHiringCard = styled.div`
+const TabContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+`;
+
+const Tab = styled.button`
+  padding: 10px 20px;
+  background-color: ${(props) => (props.active ? "#007bff" : "#f8f9fa")};
+  color: ${(props) => (props.active ? "#fff" : "#333")};
   border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 5px;
-  color: inherit;
-  transition: all 0.3s ease;
   cursor: pointer;
-  flex: 1 1 calc(25% - 40px); /* 4개씩 표시되도록 */
-  min-width: 200px;
-  box-sizing: border-box;
+`;
+
+const TabContent = styled.div`
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0 0 4px 4px;
+  padding: 20px;
+`;
+
+const HiringCard = styled.div`
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 
   &:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  h3 {
+    margin-top: 0;
+    color: #333;
+  }
+
+  p {
+    color: #666;
+    margin: 5px 0;
   }
 `;
 
-const DeleteButton = styled.button`
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-`;
-
-function MyHiring({ setMyHiringList, handleHiringClick }) {
-  const [myHiringList, setMyHiringListState] = useState([]);
+const MyHiring = ({ onHiringClick }) => {
+  const [myHiringList, setMyHiringList] = useState([]);
+  const [activeTab, setActiveTab] = useState("received");
 
   useEffect(() => {
-    fetchMyHiringList();
+    const fetchMyHirings = async () => {
+      try {
+        const response = await fetchMyHiring();
+        setMyHiringList(response);
+      } catch (error) {
+        console.error("Error fetching my hiring list:", error);
+      }
+    };
+
+    fetchMyHirings();
   }, []);
 
-  const fetchMyHiringList = async () => {
-    try {
-      const response = await fetchMyHiring();
-      setMyHiringListState(response);
-      setMyHiringList(response);
-    } catch (error) {
-      console.error("내 구인구직 글 목록을 가져오는데 실패했습니다.", error);
-    }
-  };
-
-  const handleDelete = async (hiring) => {
-    if (window.confirm("정말로 삭제하시겠습니까?")) {
-      try {
-        const response = await deleteHiring({
-          id: hiring.id,
-          nickname: hiring.nickname,
-        });
-        if (response) {
-          alert("구인 정보가 삭제되었습니다.");
-          fetchMyHiringList();
-        } else {
-          alert("니가 쓴 글만 지워라.");
-        }
-      } catch (error) {
-        console.error("구인 정보를 삭제하는데 실패했습니다.", error);
-      }
-    }
-  };
-
   return (
-    <MyHiringGrid>
-      {myHiringList.map((hiring) => (
-        <MyHiringCard key={hiring.id} onClick={() => handleHiringClick(hiring)}>
-          <h3>{hiring.title}</h3>
-          <p>{hiring.content}</p>
-          <DeleteButton
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(hiring);
-            }}
-          >
-            내 글 삭제
-          </DeleteButton>
-        </MyHiringCard>
-      ))}
-    </MyHiringGrid>
+    <MyHiringContainer>
+      <h2>내가 쓴 글</h2>
+      {myHiringList.length === 0 ? (
+        <p>아직 작성한 글이 없습니다.</p>
+      ) : (
+        <MyHiringGrid>
+          {myHiringList.map((hiring) => (
+            <HiringCard key={hiring.id} onClick={() => onHiringClick(hiring)}>
+              <h3>{hiring.title}</h3>
+              <p>
+                모집 인원: {hiring.current}/{hiring.max}
+              </p>
+              <p>지역: {hiring.location || "미지정"}</p>
+            </HiringCard>
+          ))}
+        </MyHiringGrid>
+      )}
+      <TabContainer>
+        <Tab
+          active={activeTab === "received"}
+          onClick={() => setActiveTab("received")}
+        >
+          받은 신청
+        </Tab>
+        <Tab active={activeTab === "sent"} onClick={() => setActiveTab("sent")}>
+          보낸 신청
+        </Tab>
+      </TabContainer>
+      <TabContent>
+        {activeTab === "received" && <ReceivedApplications />}
+        {activeTab === "sent" && <SentApplications />}
+      </TabContent>
+    </MyHiringContainer>
   );
-}
+};
 
 export default MyHiring;

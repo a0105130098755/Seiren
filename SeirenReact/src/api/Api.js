@@ -267,20 +267,7 @@ export const fetchHiringList = async (page, size) => {
     handleAxiosError(error, "구인구직 목록을 가져오는데 실패했습니다.");
   }
 };
-export const fetchHiringDetail = async (id) => {
-  try {
-    const response = await api.get(`/hiring/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    });
-    console.log("Fetched hiring detail:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching hiring detail:", error);
-    throw error;
-  }
-};
+
 export const searchHiringByTitle = async (title, page, size) => {
   try {
     const response = await api.get("/hiring/searchTitle", {
@@ -321,21 +308,23 @@ export const fetchMyHiring = async () => {
   }
 };
 
-export const deleteHiring = async (hiringDTO) => {
+export const fetchHiringDetail = async (id) => {
   try {
-    const response = await api.post("/hiring/delete", hiringDTO, {
+    const response = await api.get(`/hiring/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
-    console.log("hiring delete : ", response);
+    console.log("Fetched hiring detail response:", response);
     return response.data;
   } catch (error) {
-    handleAxiosError(error, "구인구직 글 삭제에 실패했습니다.");
+    handleAxiosError(error, "구인 글 상세 정보를 불러오는 데 실패했습니다.");
   }
 };
+
 export const createJobApplication = async (hiringDTO) => {
   try {
+    console.log(hiringDTO);
     const response = await api.post(
       "/send/save",
       { hiringDTO },
@@ -345,37 +334,62 @@ export const createJobApplication = async (hiringDTO) => {
         },
       }
     );
+    console.log("Job application response:", response);
     return response.data;
   } catch (error) {
     handleAxiosError(error, "구인 신청에 실패했습니다.");
   }
 };
 
-export const fetchMyApplications = async () => {
+export const fetchReceivedApplications = async (hiringDTO) => {
+  try {
+    const response = await api.post("/send/receive", hiringDTO, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching received applications:",
+      error.response?.data || error.message
+    );
+    throw new Error("받은 신청 목록을 불러오는데 실패했습니다.");
+  }
+};
+
+export const fetchSentApplications = async () => {
   try {
     const response = await api.get("/send/send", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
+    console.log("Sent applications response:", response);
     return response.data;
   } catch (error) {
-    handleAxiosError(error, "내 구인 신청 목록을 불러오는 데 실패했습니다.");
+    handleAxiosError(error, "보낸 신청 목록을 불러오는 데 실패했습니다.");
   }
 };
 
-export const fetchReceivedApplications = async () => {
+export const deleteHiring = async (hiringDTO) => {
   try {
-    const response = await api.get("/send/receive", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-    });
+    const response = await api.post(
+      "/hiring/delete",
+      { id: hiringDTO.id, nickname: hiringDTO.nickname },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    console.log("Delete hiring response:", response);
     return response.data;
   } catch (error) {
-    handleAxiosError(error, "받은 구인 신청 목록을 불러오는 데 실패했습니다.");
+    handleAxiosError(error, "구인 글 삭제에 실패했습니다.");
   }
 };
+
 export const updateApplicationStatus = async (sendDTO) => {
   try {
     const response = await api.post("/send/status", sendDTO, {
@@ -383,24 +397,16 @@ export const updateApplicationStatus = async (sendDTO) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
+    console.log("Update application status response:", response);
     return response.data;
   } catch (error) {
-    handleAxiosError(error, "구인 신청 상태 변경에 실패했습니다.");
+    console.error("API Error:", error.response?.data || error.message);
+    throw new Error(
+      error.response?.data?.message || "구인 신청 상태 변경에 실패했습니다."
+    );
   }
 };
 
-// export const deleteHiring = async (hiringDTO) => {
-//   try {
-//     const response = await api.post("/hiring/delete", { id: hiringDTO.id, nickname: hiringDTO.nickname }, {
-//       headers: {
-//         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-//       },
-//     });
-//     return response.data;
-//   } catch (error) {
-//     handleAxiosError(error, "구인 글 삭제에 실패했습니다.");
-//   }
-// };
 const handleAxiosError = (error, defaultMessage) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);

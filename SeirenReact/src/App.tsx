@@ -19,7 +19,7 @@ import Mypage from "./components/MyPage/MyPage";
 import BackButton from "./components/BackButton";
 import HiringList from "./components/Job/HiringList";
 import CreateHiring from "./components/Job/CreateHiring";
-import HiringDetail from "./components/Job/HiringDetail.";
+import HiringDetail from "./components/Job/HiringDetail";
 import ChatMain from "./components/Chat/ChatMain";
 
 interface HiringDTO {
