@@ -7,6 +7,7 @@ import {
   updateApplicationStatus,
   fetchReceivedApplications,
 } from "../../api/Api";
+import CryptoJS from "crypto-js";
 
 const PageWrapper = styled.div`
   max-width: 800px;
@@ -83,14 +84,33 @@ const HiringDetail = ({ hiring, setHiring }) => {
   const [detail, setDetail] = useState(hiring);
   const [applications, setApplications] = useState([]);
   const navigate = useNavigate();
+  const bytes = CryptoJS.AES.decrypt(
+    localStorage.getItem("nickname"),
+    process.env.REACT_APP_SECRET_KEY
+  );
+  const currentNickname = bytes.toString(CryptoJS.enc.Utf8);
+
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        console.log("Fetching applications for hiring id:", detail.id);
+        const response = await fetchReceivedApplications({ id: detail.id });
+        console.log("Applications fetched:", response);
+        setApplications(response || []);
+      } catch (error) {
+        console.error("Error fetching received applications:", error);
+      }
+    };
+
+    fetchApplications();
+  }, []);
 
   const handleApply = async () => {
     if (detail.current >= detail.max) {
       alert("모집 인원이 마감되었습니다.");
       return;
     }
-
-    if (detail.nickname === localStorage.getItem("nickname")) {
+    if (detail.nickname === currentNickname) {
       alert("자신의 글에는 지원할 수 없습니다.");
       return;
     }
@@ -101,6 +121,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
       setDetail((prev) => ({ ...prev, current: prev.current + 1 }));
       setHiring((prev) => ({ ...prev, current: prev.current + 1 }));
     } catch (error) {
+      console.error("Error applying for job:", error);
       alert("지원 중 오류가 발생했습니다.");
     }
   };
@@ -114,43 +135,45 @@ const HiringDetail = ({ hiring, setHiring }) => {
           navigate("/job");
         }
       } catch (error) {
+        console.error("Error deleting hiring:", error);
         alert("삭제 중 오류가 발생했습니다.");
       }
     }
   };
 
-  const handleStatusChange = async (applicationId, newStatus) => {
-    try {
-      await updateApplicationStatus({
-        id: applicationId,
-        status: newStatus,
-        hiringDTO: detail,
-      });
-      alert(newStatus === 1 ? "신청을 수락했습니다." : "신청을 거절했습니다.");
-      fetchApplications();
-      if (newStatus === 1) {
-        setDetail((prev) => ({ ...prev, current: prev.current + 1 }));
-        setHiring((prev) => ({ ...prev, current: prev.current + 1 }));
+  const handleStatusChange = async (application, newStatus) => {
+    if (newStatus === 1) {
+      try {
+        await updateApplicationStatus({
+          id: application.id,
+          status: 1,
+          nickname: application.nickname,
+          hiringDTO: application.hiringDTO,
+        });
+        alert("신청을 수락했습니다.");
+        const response = await fetchReceivedApplications({ id: detail.id });
+        setApplications(response || []);
+      } catch (error) {
+        console.error("Error changing application status:", error);
+        alert("상태 변경 중 오류가 발생했습니다.");
       }
-    } catch (error) {
-      alert("상태 변경 중 오류가 발생했습니다.");
+    } else {
+      try {
+        await updateApplicationStatus({
+          id: application.id,
+          status: 2,
+          nickname: application.nickname,
+          hiringDTO: application.hiringDTO,
+        });
+        alert("신청을 거절했습니다.");
+        const response = await fetchReceivedApplications({ id: detail.id });
+        setApplications(response || []);
+      } catch (error) {
+        console.error("Error changing application status:", error);
+        alert("상태 변경 중 오류가 발생했습니다.");
+      }
     }
   };
-
-  const fetchApplications = async () => {
-    try {
-      const response = await fetchReceivedApplications({ id: detail.id });
-      setApplications(response);
-    } catch (error) {
-      console.error("Error fetching applications:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (detail) {
-      fetchApplications();
-    }
-  }, [detail]);
 
   if (!detail) return <div>로딩 중...</div>;
 
@@ -172,7 +195,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
           <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
         )}
       </ButtonGroup>
-      {detail.nickname === localStorage.getItem("nickname") && (
+      {detail.nickname === currentNickname && (
         <ApplicationsSection>
           <h2>지원자 목록</h2>
           {applications.length === 0 ? (
@@ -193,11 +216,11 @@ const HiringDetail = ({ hiring, setHiring }) => {
                   <ButtonGroup>
                     <StatusButton
                       accept
-                      onClick={() => handleStatusChange(app.id, 1)}
+                      onClick={() => handleStatusChange(app, 1)}
                     >
                       수락
                     </StatusButton>
-                    <StatusButton onClick={() => handleStatusChange(app.id, 2)}>
+                    <StatusButton onClick={() => handleStatusChange(app, 2)}>
                       거절
                     </StatusButton>
                   </ButtonGroup>

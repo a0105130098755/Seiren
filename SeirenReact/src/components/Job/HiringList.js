@@ -18,8 +18,7 @@ const PageContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 80px 20px 20px;
-  overflow-y: auto;
-  height: calc(100vh - 80px);
+  font-family: "Noto Sans", sans-serif;
 `;
 
 const HiringPageContainer = styled.div`
@@ -35,20 +34,49 @@ const ApplicationsContainer = styled.div`
 
 const PageTitle = styled.h1`
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-size: 32px;
   color: #333;
 `;
 
 const SearchContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 `;
 
 const SearchBox = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
+`;
+
+const SearchInput = styled.input`
+  width: 300px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: "Noto Sans", sans-serif;
+  font-size: 16px;
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+`;
+
+const SearchButton = styled.button`
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Noto Sans", sans-serif;
+  font-size: 16px;
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
 
 const CreateButton = styled(Link)`
@@ -57,6 +85,10 @@ const CreateButton = styled(Link)`
   color: #fff;
   text-decoration: none;
   border-radius: 4px;
+
+  &:hover {
+    background-color: #218838;
+  }
 `;
 
 const HiringGrid = styled.div`
@@ -69,9 +101,28 @@ const HiringGrid = styled.div`
 const HiringCard = styled.div`
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 15px;
+  padding: 20px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  h3 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #333;
+  }
+
+  p {
+    color: #666;
+    font-size: 16px;
+    margin: 5px 0;
+  }
 `;
 
 const SectionTitle = styled.h2`
@@ -141,7 +192,7 @@ function HiringList({ setHiring }) {
               <option value="title">제목</option>
               <option value="nickname">작성자</option>
             </select>
-            <input
+            <SearchInput
               type="text"
               value={searchParams.keyword}
               onChange={(e) =>
@@ -149,7 +200,7 @@ function HiringList({ setHiring }) {
               }
               placeholder="검색어를 입력하세요"
             />
-            <button onClick={handleSearch}>검색</button>
+            <SearchButton onClick={handleSearch}>검색</SearchButton>
           </SearchBox>
           <CreateButton to="/job/create">구인 글 작성</CreateButton>
         </SearchContainer>

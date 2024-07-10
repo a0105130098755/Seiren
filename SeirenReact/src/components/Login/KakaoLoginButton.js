@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import KakaoApi from "../../api/kakaoApi";
+import CryptoJS from "crypto-js";
 
 const KakaoLoginButton = () => {
   const [actoken, setActoken] = useState("");
@@ -41,7 +42,13 @@ const KakaoLoginButton = () => {
       console.log(response.data.accessToken);
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
-      localStorage.setItem("nickname", response.data.nickname);
+      localStorage.setItem(
+        "nickname",
+        CryptoJS.AES.encrypt(
+          response.data.nickname,
+          process.env.REACT_APP_SECRET_KEY
+        ).toString()
+      );
       localStorage.setItem("profile", response.data.profile);
     } catch (error) {
       console.error("토큰발행실패:", error);

@@ -36,13 +36,15 @@ const LoginForm = () => {
     if (validateForm()) {
       try {
         const data = await login(email, password);
-        const secretKey = process.env.REACT_APP_SECRET_KEY;
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("tokenExpiresIn", data.tokenExpiresIn);
         localStorage.setItem(
           "nickname",
-          CryptoJS.AES.encrypt(data.nickname, secretKey).toString()
+          CryptoJS.AES.encrypt(
+            data.nickname,
+            process.env.REACT_APP_SECRET_KEY
+          ).toString()
         );
         localStorage.setItem("profile", data.profile);
         alert("환영합니다!");

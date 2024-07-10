@@ -322,12 +322,11 @@ export const fetchHiringDetail = async (id) => {
   }
 };
 
-export const createJobApplication = async (hiringDTO) => {
+export const createJobApplication = async (hiringDTO, changeCurrent = true) => {
   try {
-    console.log(hiringDTO);
     const response = await api.post(
       "/send/save",
-      { hiringDTO },
+      { hiringDTO, changeCurrent },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -348,6 +347,7 @@ export const fetchReceivedApplications = async (hiringDTO) => {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
+    console.log("Fetched received applications:", response.data); // 로그 추가
     return response.data;
   } catch (error) {
     console.error(
@@ -386,6 +386,7 @@ export const deleteHiring = async (hiringDTO) => {
     console.log("Delete hiring response:", response);
     return response.data;
   } catch (error) {
+    console.error("Error deleting hiring:", error.response.data);
     handleAxiosError(error, "구인 글 삭제에 실패했습니다.");
   }
 };

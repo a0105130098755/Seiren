@@ -5,11 +5,12 @@ import styled from "styled-components";
 
 const CreateHiringContainer = styled.div`
   max-width: 600px;
-  margin: 80px auto 20px auto; /* Adjusted for navbar */
+  margin: 80px auto 20px auto;
   padding: 20px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Noto Sans", sans-serif;
 `;
 
 const Form = styled.form`
@@ -22,6 +23,12 @@ const Input = styled.input`
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  font-family: "Noto Sans", sans-serif;
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+  }
 `;
 
 const TextArea = styled.textarea`
@@ -30,6 +37,12 @@ const TextArea = styled.textarea`
   border: 1px solid #ddd;
   border-radius: 5px;
   height: 150px;
+  font-family: "Noto Sans", sans-serif;
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+  }
 `;
 
 const Button = styled.button`

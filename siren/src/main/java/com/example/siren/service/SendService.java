@@ -77,11 +77,14 @@ public class SendService {
         String nickname = authGetInfo.getMember().getNickname();
         List<Send> sendList;
         sendList = sendRepository.findByHiringNickname(nickname);
+        log.warn("내 닉네임으로 작성된 글의 신청 목록 : {}", sendList.get(0).getId());
         List<SendDTO> sendDTOS = new ArrayList<>();
         if(!sendList.isEmpty()){
+            log.warn("!sendList.isEmpty 통과");
             for(Send s : sendList){
                 SendDTO sendDTO = SendDTO.of(s);
                 if(sendDTO.getHiringDTO().getId() == hiringDTO.getId())
+                    log.warn("getHiringDTO().getId() 통과");
                     sendDTOS.add(sendDTO);
             }
             return sendDTOS;
