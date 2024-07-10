@@ -96,6 +96,8 @@ public class SendService {
         if(nickname.equals(sendDTO.getHiringDTO().getNickname())){
             // status 1 은 수락. 따라서 send 한 hiring 과 nickname 을 Team 에 저장
             if(sendDTO.getStatus() == 1){
+                // 수락 할 때 이미 인원이 다 찼다면
+                if(sendDTO.getHiringDTO().getCurrent() == sendDTO.getHiringDTO().getMax()) return false;
                 teamRepository.save(
                         Team.builder()
                                 .hiring(hiring.get())
@@ -122,11 +124,6 @@ public class SendService {
     public boolean sendDel(SendDTO sendDTO){
         String nickname = authGetInfo.getMember().getNickname();
         if(nickname.equals(sendDTO.getNickname())){
-            if(sendDTO.getStatus() == 1){
-                Hiring hiring = hiringRepository.findById(sendDTO.getHiringDTO().getId()).get();
-                hiring.setCurrent(hiring.getCurrent()-1);
-                hiringRepository.save(hiring);
-            }
             sendRepository.deleteById(sendDTO.getId());
             // 삭제 성공
             return true;
