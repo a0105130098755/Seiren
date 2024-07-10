@@ -44,7 +44,8 @@ const SentApplications = () => {
   }, []);
 
   const handleDelete = async (application) => {
-    if (window.confirm("정말로 신청을 취소하시겠습니까?")) {
+    if (application.status === 1) {
+      alert("신청 내역이 확인되었습니다.");
       try {
         await deleteApplication({
           id: application.id,
@@ -53,10 +54,25 @@ const SentApplications = () => {
         setSentApplications((prev) =>
           prev.filter((app) => app.id !== application.id)
         );
-        alert("신청이 취소되었습니다.");
       } catch (error) {
-        console.error("신청 취소 중 오류 발생:", error);
-        alert("신청 취소 중 오류가 발생했습니다.");
+        console.error("확인 중 오류 발생:", error);
+        alert("오류가 발생했습니다.");
+      }
+    } else {
+      if (window.confirm("정말로 신청을 취소하시겠습니까?")) {
+        try {
+          await deleteApplication({
+            id: application.id,
+            nickname: application.nickname,
+          });
+          setSentApplications((prev) =>
+            prev.filter((app) => app.id !== application.id)
+          );
+          alert("신청이 취소되었습니다.");
+        } catch (error) {
+          console.error("신청 취소 중 오류 발생:", error);
+          alert("신청 취소 중 오류가 발생했습니다.");
+        }
       }
     }
   };

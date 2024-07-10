@@ -6,8 +6,17 @@ import {
   createJobApplication,
   updateApplicationStatus,
   fetchReceivedApplications,
+  teamList,
 } from "../../api/Api";
 import CryptoJS from "crypto-js";
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "http://localhost:8111/",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 const PageWrapper = styled.div`
   max-width: 800px;
@@ -83,6 +92,7 @@ const StatusButton = styled(Button)`
 const HiringDetail = ({ hiring, setHiring }) => {
   const [detail, setDetail] = useState(hiring);
   const [applications, setApplications] = useState([]);
+  const [team, setTeam] = useState([]);
   const navigate = useNavigate();
   const bytes = CryptoJS.AES.decrypt(
     localStorage.getItem("nickname"),
@@ -90,19 +100,31 @@ const HiringDetail = ({ hiring, setHiring }) => {
   );
   const currentNickname = bytes.toString(CryptoJS.enc.Utf8);
 
-  useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        console.log("Fetching applications for hiring id:", detail.id);
-        const response = await fetchReceivedApplications({ id: detail.id });
-        console.log("Applications fetched:", response);
-        setApplications(response || []);
-      } catch (error) {
-        console.error("Error fetching received applications:", error);
-      }
-    };
+  const fetchApplications = async () => {
+    try {
+      console.log("Fetching applications for hiring id:", detail.id);
+      const response = await fetchReceivedApplications({ id: detail.id });
+      console.log("Applications fetched:", response);
+      setApplications(response || []);
+    } catch (error) {
+      console.error("Error fetching received applications:", error);
+    }
+  };
 
+  const teamListFunc = async () => {
+    try {
+      const response = await teamList(hiring);
+      console.log(" team :", response.data);
+      console.l;
+      setTeam(response);
+    } catch (error) {
+      console.error("Error fetching received applications:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchApplications();
+    teamListFunc();
   }, []);
 
   const handleApply = async () => {
@@ -112,6 +134,11 @@ const HiringDetail = ({ hiring, setHiring }) => {
     }
     if (detail.nickname === currentNickname) {
       alert("자신의 글에는 지원할 수 없습니다.");
+      return;
+    }
+
+    if (team.some((member) => member.nickname === currentNickname)) {
+      alert("이미 팀에 속해 있습니다.");
       return;
     }
 
@@ -230,6 +257,15 @@ const HiringDetail = ({ hiring, setHiring }) => {
           )}
         </ApplicationsSection>
       )}
+      <ApplicationsSection>
+        <h2>팀 목록</h2>
+        {team &&
+          team.map((teamMember, index) => (
+            <ApplicationCard key={index}>
+              <p> 팀원 : {teamMember.nickname}</p>
+            </ApplicationCard>
+          ))}
+      </ApplicationsSection>
     </PageWrapper>
   );
 };

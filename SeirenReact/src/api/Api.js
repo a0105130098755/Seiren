@@ -358,6 +358,21 @@ export const fetchReceivedApplications = async (hiringDTO) => {
   }
 };
 
+export const teamList = async (hiring) => {
+  try {
+    console.log(hiring);
+    const response = await api.post("/hiring/teamList", hiring, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (e) {
+    console.log("팀원 가져오는 중 에러 발생 ", e);
+  }
+};
+
 export const fetchSentApplications = async () => {
   try {
     const response = await api.get("/send/send", {

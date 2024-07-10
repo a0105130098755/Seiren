@@ -106,6 +106,7 @@ public class HiringService {
     }
 
     public List<TeamDTO> teamList(HiringDTO hiringDTO){
+        log.warn("hiringDTO 가져온 값 : {}", hiringDTO.getId());
         List<Team> teamList = teamRepository.findByHiringId(hiringDTO.getId());
         List<TeamDTO> teamDTOS = new ArrayList<>();
         for(Team t : teamList){
