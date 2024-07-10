@@ -1,9 +1,6 @@
 package com.example.siren.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @ToString
 @NoArgsConstructor
+@Setter
 public class Hiring {
     @Id
     @Column(name = "hiring_id")

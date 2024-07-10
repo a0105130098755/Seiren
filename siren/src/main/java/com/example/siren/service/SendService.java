@@ -32,14 +32,21 @@ public class SendService {
     // 구직 신청
     public boolean sendHiring(SendDTO sendDTO){
         String nickname = authGetInfo.getMember().getNickname();
-        Optional<Send> sendOptional  = sendRepository.findByHiringId(sendDTO.getHiringDTO().getId());
-        log.warn("send 저장 시 nickname : {}", nickname);
-        if(sendOptional.isPresent()) return false;
+        List<Send> sends  = sendRepository.findByHiringId(sendDTO.getHiringDTO().getId());
+        for(Send send : sends){
+            // 같은 신청이 있을 때 처리할 로직
+            if(sendDTO.getHiringDTO().getId() == send.getHiring().getId()){
+                // 같은 구인 글에
+                // 지금 로그인한 사람이 신청한 게 있다면
+                if(send.getNickname().equals(nickname)) return false;
+            }
+        }
         if(!nickname.isEmpty()) {
             log.warn("!nickname.isEmpty 통과 ");
-            Optional<Hiring> hiring = hiringRepository.findById(sendDTO.getHiringDTO().getId());
-            log.warn("optional hiring data : {}" , hiring);
-            Send send = sendDTO.toEntity(nickname,hiring.get());
+            Optional<Hiring> hiringOptional = hiringRepository.findById(sendDTO.getHiringDTO().getId());
+            log.warn("optional hiring data : {}" , hiringOptional);
+            Hiring hiring = hiringOptional.get();
+            Send send = sendDTO.toEntity(nickname,hiring);
             sendRepository.save(send);
             // 제대로 신청이 들어감
             return true;
@@ -95,6 +102,9 @@ public class SendService {
                                 .nickname(sendDTO.getNickname())
                                 .build()
                 );
+                Hiring hiringUpdate = hiring.get();
+                hiringUpdate.setCurrent(hiringUpdate.getCurrent()+1);
+                hiringRepository.save(hiringUpdate);
             }
             // status 2 는 거절 상태. front 에서 로직 구현
             Optional<Send> sendOptional = sendRepository.findById(sendDTO.getId());
@@ -112,6 +122,11 @@ public class SendService {
     public boolean sendDel(SendDTO sendDTO){
         String nickname = authGetInfo.getMember().getNickname();
         if(nickname.equals(sendDTO.getNickname())){
+            if(sendDTO.getStatus() == 1){
+                Hiring hiring = hiringRepository.findById(sendDTO.getHiringDTO().getId()).get();
+                hiring.setCurrent(hiring.getCurrent()-1);
+                hiringRepository.save(hiring);
+            }
             sendRepository.deleteById(sendDTO.getId());
             // 삭제 성공
             return true;

@@ -171,7 +171,7 @@ const ChatMain = () => {
     inputRef.current.value = "";
   };
 
-  const enterClickHandler = (roomId, audience) => {
+  const enterClickHandler = (roomId, audience, live) => {
     console.log(roomId);
     console.log(audience);
     const bytes = CryptoJS.AES.decrypt(
@@ -180,6 +180,18 @@ const ChatMain = () => {
     );
     const currentNickname = bytes.toString(CryptoJS.enc.Utf8);
     console.log(currentNickname);
+    if (roomId === currentNickname) {
+      return alert("방송을 시작하려면 방송 시작을 눌러주세요.");
+    } else {
+      if (!live) {
+        return alert("방송중이 아닙니다.");
+      } else {
+        if (audience < 1) {
+          return alert("방송중이 아닙니다.");
+        }
+        navigator;
+      }
+    }
   };
 
   useEffect(() => {
@@ -200,7 +212,9 @@ const ChatMain = () => {
               key={index}
               onMouseEnter={() => setHoverIndex(index)}
               onMouseLeave={() => setHoverIndex(null)}
-              onClick={() => enterClickHandler(value.roomId, value.audience)}
+              onClick={() =>
+                enterClickHandler(value.roomId, value.audience, value.live)
+              }
             >
               <Title>
                 <Profile src={value.profile} />

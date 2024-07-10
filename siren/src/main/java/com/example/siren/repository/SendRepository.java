@@ -15,7 +15,7 @@ public interface SendRepository extends JpaRepository<Send,Long> {
     List<Send> findByNickname(String nickname);
 
     @Query("SELECT s FROM Send s where s.hiring.id = :id")
-    Optional<Send> findByHiringId(@Param("id")Long id);
+    List<Send> findByHiringId(@Param("id")Long id);
 
     @Query("SELECT s FROM Send s where s.hiring.nickname = :nickname")
     List<Send> findByHiringNickname(@Param("nickname")String nickname);
