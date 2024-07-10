@@ -8,9 +8,12 @@ import {
 } from "../../api/Api";
 import Pagination from "../Board/BoardPagination";
 import MyHiring from "./MyHiring";
+import SentApplications from "./SentApplications";
 import { Link } from "react-router-dom";
 
 const PageContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -20,7 +23,14 @@ const PageContainer = styled.div`
 `;
 
 const HiringPageContainer = styled.div`
-  width: 100%;
+  flex: 2;
+  margin-right: 20px;
+`;
+
+const ApplicationsContainer = styled.div`
+  flex: 1;
+  padding-left: 20px;
+  border-left: 1px solid #ddd;
 `;
 
 const PageTitle = styled.h1`
@@ -170,6 +180,9 @@ function HiringList({ setHiring }) {
           onChange={(pageNumber) => setPage(pageNumber - 1)}
         />
       </HiringPageContainer>
+      <ApplicationsContainer>
+        <SentApplications />
+      </ApplicationsContainer>
     </PageContainer>
   );
 }

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   deleteHiring,
   createJobApplication,
   updateApplicationStatus,
+  fetchReceivedApplications,
 } from "../../api/Api";
 
 const PageWrapper = styled.div`
@@ -95,7 +96,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
     }
 
     try {
-      await createJobApplication(hiring);
+      await createJobApplication({ id: detail.id });
       alert("지원이 완료되었습니다.");
       setDetail((prev) => ({ ...prev, current: prev.current + 1 }));
       setHiring((prev) => ({ ...prev, current: prev.current + 1 }));
@@ -135,6 +136,21 @@ const HiringDetail = ({ hiring, setHiring }) => {
       alert("상태 변경 중 오류가 발생했습니다.");
     }
   };
+
+  const fetchApplications = async () => {
+    try {
+      const response = await fetchReceivedApplications({ id: detail.id });
+      setApplications(response);
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (detail) {
+      fetchApplications();
+    }
+  }, [detail]);
 
   if (!detail) return <div>로딩 중...</div>;
 

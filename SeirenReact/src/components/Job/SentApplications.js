@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { fetchSentApplications } from "../../api/Api";
+import { fetchSentApplications, deleteApplication } from "../../api/Api";
 
 const ApplicationCard = styled.div`
   background-color: #f8f9fa;
@@ -8,6 +8,20 @@ const ApplicationCard = styled.div`
   border-radius: 4px;
   padding: 15px;
   margin-bottom: 10px;
+`;
+
+const Button = styled.button`
+  padding: 10px 20px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #d32f2f;
+  }
 `;
 
 const SentApplications = () => {
@@ -28,6 +42,24 @@ const SentApplications = () => {
 
     fetchApplications();
   }, []);
+
+  const handleDelete = async (application) => {
+    if (window.confirm("정말로 신청을 취소하시겠습니까?")) {
+      try {
+        await deleteApplication({
+          id: application.id,
+          nickname: application.nickname,
+        });
+        setSentApplications((prev) =>
+          prev.filter((app) => app.id !== application.id)
+        );
+        alert("신청이 취소되었습니다.");
+      } catch (error) {
+        console.error("신청 취소 중 오류 발생:", error);
+        alert("신청 취소 중 오류가 발생했습니다.");
+      }
+    }
+  };
 
   if (loading) {
     return <div>로딩 중...</div>;
@@ -51,6 +83,7 @@ const SentApplications = () => {
                 ? "수락됨"
                 : "거절됨"}
             </p>
+            <Button onClick={() => handleDelete(app)}>삭제</Button>
           </ApplicationCard>
         ))
       )}

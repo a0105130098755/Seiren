@@ -61,7 +61,6 @@ const HiringCard = styled.div`
 
 const MyHiring = ({ onHiringClick }) => {
   const [myHiringList, setMyHiringList] = useState([]);
-  const [activeTab, setActiveTab] = useState("received");
 
   useEffect(() => {
     const fetchMyHirings = async () => {
@@ -94,21 +93,6 @@ const MyHiring = ({ onHiringClick }) => {
           ))}
         </MyHiringGrid>
       )}
-      <TabContainer>
-        <Tab
-          active={activeTab === "received"}
-          onClick={() => setActiveTab("received")}
-        >
-          받은 신청
-        </Tab>
-        <Tab active={activeTab === "sent"} onClick={() => setActiveTab("sent")}>
-          보낸 신청
-        </Tab>
-      </TabContainer>
-      <TabContent>
-        {activeTab === "received" && <ReceivedApplications />}
-        {activeTab === "sent" && <SentApplications />}
-      </TabContent>
     </MyHiringContainer>
   );
 };

@@ -407,6 +407,20 @@ export const updateApplicationStatus = async (sendDTO) => {
   }
 };
 
+export const deleteApplication = async (sendDTO) => {
+  try {
+    const response = await api.post("/send/ok", sendDTO, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    console.log("Delete application response:", response);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error, "신청 글 삭제에 실패했습니다.");
+  }
+};
+
 const handleAxiosError = (error, defaultMessage) => {
   if (axios.isAxiosError(error)) {
     throw new Error(error.response?.data?.message || defaultMessage);
