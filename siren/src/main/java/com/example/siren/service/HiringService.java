@@ -2,9 +2,12 @@ package com.example.siren.service;
 
 import com.example.siren.dto.HiringDTO;
 import com.example.siren.dto.HiringResDTO;
+import com.example.siren.dto.TeamDTO;
 import com.example.siren.entity.Hiring;
 import com.example.siren.entity.Member;
+import com.example.siren.entity.Team;
 import com.example.siren.repository.HiringRepository;
+import com.example.siren.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +25,7 @@ import java.util.List;
 @Slf4j
 public class HiringService {
     private final HiringRepository hiringRepository;
+    private final TeamRepository teamRepository;
     private final AuthGetInfo authGetInfo;
 
     public boolean saveHiring(HiringDTO hiringDTO){
@@ -101,4 +105,31 @@ public class HiringService {
         return false;
     }
 
+    public List<TeamDTO> teamList(HiringDTO hiringDTO){
+        List<Team> teamList = teamRepository.findByHiringId(hiringDTO.getId());
+        List<TeamDTO> teamDTOS = new ArrayList<>();
+        for(Team t : teamList){
+            TeamDTO teamDTO = TeamDTO.builder()
+                    .id(t.getId())
+                    .hiringDTO(HiringDTO.of(t.getHiring()))
+                    .nickname(t.getNickname())
+                    .build();
+            teamDTOS.add(teamDTO);
+        }
+        return teamDTOS;
+    }
+
+    public boolean kickTeam(TeamDTO teamDTO){
+        String nickName = authGetInfo.getMember().getNickname();
+        // 만약 로그인한 유저가 글쓴이가 맞다면
+        if(nickName.equals(teamDTO.getHiringDTO().getNickname())) {
+            Hiring hiring = hiringRepository.findById(teamDTO.getHiringDTO().getId()).get();
+            hiring.setCurrent(hiring.getCurrent()-1);
+            hiringRepository.save(hiring);
+            teamRepository.deleteById(teamDTO.getId());
+            return true;
+        }
+        else return false;
+
+    }
 }

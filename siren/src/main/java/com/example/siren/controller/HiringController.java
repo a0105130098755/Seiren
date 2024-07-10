@@ -2,6 +2,7 @@ package com.example.siren.controller;
 
 import com.example.siren.dto.HiringDTO;
 import com.example.siren.dto.HiringResDTO;
+import com.example.siren.dto.TeamDTO;
 import com.example.siren.service.HiringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,5 +47,15 @@ public class HiringController {
     @PostMapping("/delete")
     public ResponseEntity<Boolean> delHiring(@RequestBody HiringDTO hiringDTO){
         return ResponseEntity.ok(hiringService.delHiring(hiringDTO));
+    }
+
+    @PostMapping("/teamList")
+    public ResponseEntity<List<TeamDTO>> teamList(@RequestBody HiringDTO hiringDTO){
+        return ResponseEntity.ok(hiringService.teamList(hiringDTO));
+    }
+
+    @PostMapping("/teamKick")
+    public ResponseEntity<Boolean> teamKick(@RequestBody TeamDTO teamDTO){
+        return ResponseEntity.ok(hiringService.kickTeam(teamDTO));
     }
 }
