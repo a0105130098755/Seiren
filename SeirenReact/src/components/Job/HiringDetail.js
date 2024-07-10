@@ -95,7 +95,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
     }
 
     try {
-      await createJobApplication({ id: detail.id });
+      await createJobApplication(hiring);
       alert("지원이 완료되었습니다.");
       setDetail((prev) => ({ ...prev, current: prev.current + 1 }));
       setHiring((prev) => ({ ...prev, current: prev.current + 1 }));

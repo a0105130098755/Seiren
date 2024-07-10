@@ -39,7 +39,9 @@ const LoginForm = () => {
         localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("tokenExpiresIn", data.tokenExpiresIn);
         localStorage.setItem("nickname", data.nickname);
+        sessionStorage.setItem("nickname", data.nickname);
         localStorage.setItem("profile", data.profile);
+        sessionStorage.setItem("profile", data.profile);
         alert("환영합니다!");
         navigate("/main");
       } catch (error) {

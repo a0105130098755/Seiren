@@ -12,6 +12,7 @@ const ApplicationCard = styled.div`
 
 const SentApplications = () => {
   const [sentApplications, setSentApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -20,11 +21,17 @@ const SentApplications = () => {
         setSentApplications(response);
       } catch (error) {
         console.error("Error fetching sent applications:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchApplications();
   }, []);
+
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <div>
