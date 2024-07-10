@@ -6,6 +6,7 @@ import { login } from "../../api/Api";
 import KakaoLoginButton from "./KakaoLoginButton";
 import "./LoginForm.css";
 import NavBar from "../Navbar/NavBar";
+import CryptoJS from "crypto-js";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -35,13 +36,15 @@ const LoginForm = () => {
     if (validateForm()) {
       try {
         const data = await login(email, password);
+        const secretKey = process.env.REACT_APP_SECRET_KEY;
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("tokenExpiresIn", data.tokenExpiresIn);
-        localStorage.setItem("nickname", data.nickname);
-        sessionStorage.setItem("nickname", data.nickname);
+        localStorage.setItem(
+          "nickname",
+          CryptoJS.AES.encrypt(data.nickname, secretKey).toString()
+        );
         localStorage.setItem("profile", data.profile);
-        sessionStorage.setItem("profile", data.profile);
         alert("환영합니다!");
         navigate("/main");
       } catch (error) {

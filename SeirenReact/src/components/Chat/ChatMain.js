@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import ChatApi from "../../api/ChatApi";
 import audienceLogo from "./audience.png";
+import CryptoJS from "crypto-js";
 
 const ListContainer = styled.div`
   position: relative;
@@ -170,6 +171,17 @@ const ChatMain = () => {
     inputRef.current.value = "";
   };
 
+  const enterClickHandler = (roomId, audience) => {
+    console.log(roomId);
+    console.log(audience);
+    const bytes = CryptoJS.AES.decrypt(
+      localStorage.getItem("nickname"),
+      process.env.REACT_APP_SECRET_KEY
+    );
+    const currentNickname = bytes.toString(CryptoJS.enc.Utf8);
+    console.log(currentNickname);
+  };
+
   useEffect(() => {
     handleChatList();
   }, []);
@@ -188,7 +200,7 @@ const ChatMain = () => {
               key={index}
               onMouseEnter={() => setHoverIndex(index)}
               onMouseLeave={() => setHoverIndex(null)}
-              onClick={() => console.log(value.roomId)}
+              onClick={() => enterClickHandler(value.roomId, value.audience)}
             >
               <Title>
                 <Profile src={value.profile} />
