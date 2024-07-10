@@ -33,9 +33,12 @@ public class SendService {
     public boolean sendHiring(SendDTO sendDTO){
         String nickname = authGetInfo.getMember().getNickname();
         Optional<Send> sendOptional  = sendRepository.findByHiringId(sendDTO.getHiringDTO().getId());
+        log.warn("send 저장 시 nickname : {}", nickname);
         if(sendOptional.isPresent()) return false;
         if(!nickname.isEmpty()) {
+            log.warn("!nickname.isEmpty 통과 ");
             Optional<Hiring> hiring = hiringRepository.findById(sendDTO.getHiringDTO().getId());
+            log.warn("optional hiring data : {}" , hiring);
             Send send = sendDTO.toEntity(nickname,hiring.get());
             sendRepository.save(send);
             // 제대로 신청이 들어감
