@@ -39,9 +39,8 @@ function App() {
   const [hiring, setHiring] = useState<HiringDTO | null>(null);
   return (
     <Router>
+      <NavBar />
       <div className="App">
-        <NavBar />
-        <BackButton />
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignUpForm />} />
@@ -69,6 +68,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
+      <BackButton />
     </Router>
   );
 }

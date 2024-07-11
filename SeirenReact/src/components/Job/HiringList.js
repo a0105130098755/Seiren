@@ -17,19 +17,37 @@ const PageContainer = styled.div`
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 20px 20px;
+  padding: 20px;
+  padding-top: 80px;
   font-family: "Noto Sans", sans-serif;
+  min-height: 100vh;
+  box-sizing: border-box;
+`;
+const MyHiringContainer = styled.div`
+  margin-bottom: 40px;
+  overflow-y: auto;
+`;
+
+const MyHiringGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  overflow-y: auto;
+  max-height: 60vh;
 `;
 
 const HiringPageContainer = styled.div`
   flex: 2;
   margin-right: 20px;
+  margin-top: 20px;
+  overflow-y: auto;
 `;
 
 const ApplicationsContainer = styled.div`
   flex: 1;
   padding-left: 20px;
   border-left: 1px solid #ddd;
+  margin-top: 20px;
 `;
 
 const PageTitle = styled.h1`
