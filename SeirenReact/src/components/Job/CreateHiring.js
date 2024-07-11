@@ -4,13 +4,19 @@ import { createHiring } from "../../api/Api";
 import styled from "styled-components";
 
 const CreateHiringContainer = styled.div`
+  flex: 1;
   max-width: 800px;
   margin: 80px auto 20px auto;
-  padding: 20px;
+  padding: 60px 40px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: "Noto Sans", sans-serif;
+
+  @media (max-width: 768px) {
+    margin: 40px 20px;
+    padding: 40px 20px;
+  }
 `;
 
 const Form = styled.form`
@@ -19,11 +25,12 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  margin-bottom: 10px;
-  padding: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-family: "Noto Sans", sans-serif;
+  font-size: 18px;
 
   &:focus {
     outline: none;
@@ -32,12 +39,13 @@ const Input = styled.input`
 `;
 
 const TextArea = styled.textarea`
-  margin-bottom: 10px;
-  padding: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  height: 150px;
+  height: 200px;
   font-family: "Noto Sans", sans-serif;
+  font-size: 18px;
 
   &:focus {
     outline: none;
@@ -46,13 +54,14 @@ const TextArea = styled.textarea`
 `;
 
 const Button = styled.button`
-  padding: 10px;
+  padding: 15px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
+  font-size: 18px;
 
   &:hover {
     background-color: #0056b3;

@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import {
+  PageContainer,
+  MyHiringContainer,
+  MyHiringGrid,
+  HiringPageContainer,
+  ApplicationsContainer,
+  PageTitle,
+  SearchContainer,
+  SearchBox,
+  SearchSelect,
+  SearchInput,
+  SearchButton,
+  CreateButton,
+  HiringGrid,
+  HiringCard,
+  SectionTitle,
+} from "./HirListstyled";
 import {
   fetchHiringList,
   searchHiringByTitle,
@@ -9,145 +25,7 @@ import {
 import Pagination from "../Board/BoardPagination";
 import MyHiring from "./MyHiring";
 import SentApplications from "./SentApplications";
-import { Link } from "react-router-dom";
-
-const PageContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  padding-top: 80px;
-  font-family: "Noto Sans", sans-serif;
-  min-height: 100vh;
-  box-sizing: border-box;
-`;
-const MyHiringContainer = styled.div`
-  margin-bottom: 40px;
-  overflow-y: auto;
-`;
-
-const MyHiringGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  overflow-y: auto;
-  max-height: 60vh;
-`;
-
-const HiringPageContainer = styled.div`
-  flex: 2;
-  margin-right: 20px;
-  margin-top: 20px;
-  overflow-y: auto;
-`;
-
-const ApplicationsContainer = styled.div`
-  flex: 1;
-  padding-left: 20px;
-  border-left: 1px solid #ddd;
-  margin-top: 20px;
-`;
-
-const PageTitle = styled.h1`
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 32px;
-  color: #333;
-`;
-
-const SearchContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
-`;
-
-const SearchBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-`;
-
-const SearchInput = styled.input`
-  width: 300px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-family: "Noto Sans", sans-serif;
-  font-size: 16px;
-  &:focus {
-    outline: none;
-    border-color: #007bff;
-  }
-`;
-
-const SearchButton = styled.button`
-  padding: 12px 24px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: "Noto Sans", sans-serif;
-  font-size: 16px;
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
-const CreateButton = styled(Link)`
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 4px;
-
-  &:hover {
-    background-color: #218838;
-  }
-`;
-
-const HiringGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-top: 20px;
-`;
-
-const HiringCard = styled.div`
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  }
-
-  h3 {
-    margin-top: 0;
-    font-size: 20px;
-    color: #333;
-  }
-
-  p {
-    color: #666;
-    font-size: 16px;
-    margin: 5px 0;
-  }
-`;
-
-const SectionTitle = styled.h2`
-  margin-top: 40px;
-  margin-bottom: 20px;
-  color: #333;
-`;
+import BackButton from "../BackButton";
 
 function HiringList({ setHiring }) {
   const [hiringList, setHiringList] = useState([]);
@@ -198,10 +76,11 @@ function HiringList({ setHiring }) {
   return (
     <PageContainer>
       <HiringPageContainer>
+        <BackButton />
         <PageTitle>구인 구직 페이지</PageTitle>
         <SearchContainer>
           <SearchBox>
-            <select
+            <SearchSelect
               value={searchParams.type}
               onChange={(e) =>
                 setSearchParams({ ...searchParams, type: e.target.value })
@@ -209,7 +88,7 @@ function HiringList({ setHiring }) {
             >
               <option value="title">제목</option>
               <option value="nickname">작성자</option>
-            </select>
+            </SearchSelect>
             <SearchInput
               type="text"
               value={searchParams.keyword}

@@ -16,7 +16,6 @@ import BoardDetail from "./components/Board/BoardDetail";
 import "./App.css";
 import Charge from "./components/Charge/Charge";
 import Mypage from "./components/MyPage/MyPage";
-import BackButton from "./components/BackButton";
 import HiringList from "./components/Job/HiringList";
 import CreateHiring from "./components/Job/CreateHiring";
 import HiringDetail from "./components/Job/HiringDetail";
@@ -68,7 +67,6 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
-      <BackButton />
     </Router>
   );
 }

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { fetchBoardList } from "../../api/Api";
 import Pagination from "./BoardPagination";
 import BoardCard from "./BoardCard";
+import BackButton from "../BackButton";
 import "./BoardList.css";
 
 function BoardList({ board, setBoard }) {
@@ -14,7 +15,7 @@ function BoardList({ board, setBoard }) {
     image: localStorage.getItem("profile"),
     nickname: localStorage.getItem("nickname"),
   });
-  const size = 9; // 페이지 사이즈를 변수로 정의
+  const size = 9;
 
   useEffect(() => {
     const fetchBoards = async (page = 0) => {
@@ -101,7 +102,7 @@ function BoardList({ board, setBoard }) {
               className="pagination"
               activePage={page + 1}
               itemsCountPerPage={size}
-              totalItemsCount={totalPages * size} // 총 게시물 수 계산
+              totalItemsCount={totalPages * size}
               pageRangeDisplayed={5}
               prevPageText={"‹"}
               nextPageText={"›"}
@@ -115,6 +116,7 @@ function BoardList({ board, setBoard }) {
             <i className="fas fa-pen"></i> &nbsp; 글쓰기
           </Link>
         </div>
+        <BackButton />
       </div>
     </div>
   );

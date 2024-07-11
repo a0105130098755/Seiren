@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import CryptoJS from "crypto-js";
 import {
   deleteHiring,
   createJobApplication,
@@ -9,8 +9,20 @@ import {
   teamList,
   teamKick,
 } from "../../api/Api";
-import CryptoJS from "crypto-js";
 import axios from "axios";
+import {
+  PageWrapper,
+  ContentWrapper,
+  Header,
+  InfoSection,
+  ButtonGroup,
+  Button,
+  ApplyButton,
+  DeleteButton,
+  ApplicationsSection,
+  ApplicationCard,
+  StatusButton,
+} from "./HireDetailStyled";
 
 const api = axios.create({
   baseURL: "http://localhost:8111/",
@@ -18,100 +30,6 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-const PageWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-  margin-top: 80px; // 네비게이션 바에 대한 상단 여백
-  box-sizing: border-box;
-  min-height: calc(100vh - 80px); // 네비게이션 바 높이를 고려한 조정
-`;
-
-const ContentWrapper = styled.div`
-  max-width: 800px;
-  width: 100%;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-`;
-
-const Header = styled.div`
-  width: 100%;
-  text-align: center;
-  margin-bottom: 40px;
-`;
-
-const InfoSection = styled.div`
-  width: 100%;
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  p {
-    margin: 10px 0;
-    color: #555;
-  }
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-`;
-
-const Button = styled.button`
-  padding: 12px 24px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  &:hover {
-    opacity: 0.9;
-  }
-`;
-
-const ApplyButton = styled(Button)`
-  background-color: #4caf50;
-  color: white;
-`;
-
-const DeleteButton = styled(Button)`
-  background-color: #f44336;
-  color: white;
-`;
-
-const ApplicationsSection = styled.div`
-  width: 100%;
-  margin-bottom: 20px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-`;
-
-const ApplicationCard = styled.div`
-  background-color: #e9ecef;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 15px;
-`;
-
-const StatusButton = styled(Button)`
-  background-color: ${(props) => (props.accept ? "#4caf50" : "#f44336")};
-  color: white;
-  padding: 8px 16px;
-  font-size: 14px;
-`;
 
 const HiringDetail = ({ hiring, setHiring }) => {
   const [detail, setDetail] = useState(hiring);
@@ -232,7 +150,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
             prev.filter((member) => member.nickname !== teamMember.nickname)
           );
         } else {
-          alert("팀원 추방에 실패했습니다.");
+          alert("스스로는 추방할 수 없습니다.");
         }
       } catch (error) {
         console.error("Error removing team member:", error);
