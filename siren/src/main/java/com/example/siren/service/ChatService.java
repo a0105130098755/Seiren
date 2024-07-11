@@ -23,8 +23,8 @@ import java.util.*;
 @Service
 public class ChatService {
     private final ObjectMapper objectMapper;
-    private final AuthGetInfo authGetInfo;
     private final ChatRoomRepository chatroomRepository;
+    private final AuthGetInfo authGetInfo;
     private Map<String, ChatRoomDTO> chatRooms;
     // 채팅방 정보 담을 맵, roomId 에 해당 방 정보가 들어감 (key, value)
 
@@ -84,7 +84,6 @@ public class ChatService {
     public void addSessionAndHandleEnter(String roomId, WebSocketSession session, ChatMessageDTO chatMessage){
         // 현재 개설된 방 중 해당 roomId 의 방정보를 가져와서
         Optional<ChatRoom> chatRoomOptional = chatroomRepository.findById(roomId);
-        chatMessage.setSender(authGetInfo.getMember().getNickname());
         if(chatRoomOptional.isPresent()){ // 방이 있다면
             ChatRoomDTO chatRoomDTO = findRoomById(roomId); // 해당 방에 맞는 세션 관리하는 맵에서 가져오고
             ChatRoom chatroom = chatRoomOptional.get(); // entity 값도 가져온다.
@@ -92,11 +91,13 @@ public class ChatService {
                 // 맨 처음 입장 = 방 개설자 = 해당 방 주인
                 // 따라서 시작함을 설정
                 chatroom.setLive(true);
+                chatroom.setAudience(1);
                 chatRoomDTO.setRegDate(LocalDateTime.now());
             }
-            chatRoomDTO.setAudience(chatRoomDTO.getAudience()+1); // 청자 늘리고
+            else{
+                chatroom.setAudience(chatroom.getAudience()+1); // 엔티티에 저장할 audience 수도 바꿔주고
+            }
             chatRoomDTO.getSessions().add(session); // 채팅방에 입장한 세션을 추가하고
-            chatroom.setAudience(chatRoomDTO.getAudience()); // 엔티티에 저장할 audience 수도 바꿔주고
             if(chatMessage.getSender() != null) {
                 chatMessage.setMessage(chatMessage.getSender() + "님이 입장했습니다.");
                 sendMessageToAll(roomId, chatMessage);
@@ -112,16 +113,18 @@ public class ChatService {
         ChatRoomDTO room = findRoomById(roomId); // 채팅방 정보 가져옴
         Optional<ChatRoom> chatRoomOptional = chatroomRepository.findById(roomId);
         ChatRoom chatRoom = chatRoomOptional.get();
-        chatMessage.setSender(authGetInfo.getMember().getNickname());
         if(room != null) {
             room.getSessions().remove(session); // 방 정보에서 session 에 퇴장한거 삭제
-            chatRoom.setAudience(room.getSessions().size()); // 청중들 한명씩 제거
+            chatRoom.setAudience(chatRoom.getAudience()-1); // 청중들 한명씩 제거
             if(chatMessage.getSender() != null ){
                 chatMessage.setMessage(chatMessage.getSender() + "님이 퇴장했습니다.");
                 sendMessageToAll(roomId, chatMessage);
             }
-            if(room.getSessions().isEmpty()){
+            log.warn("chatMessage sender : {}" , chatMessage.getSender());
+            log.warn("roomId : {}", roomId);
+            if(chatMessage.getSender().equals(roomId)){
                 chatRoom.setLive(false);
+                chatRoom.setAudience(0);
                 room.setRegDate(null);
             }
             chatroomRepository.save(chatRoom); // 변경 내역 저장
