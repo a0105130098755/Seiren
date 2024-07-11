@@ -19,7 +19,7 @@ export const ContentWrapper = styled.div`
   display: flex;
   max-width: 1200px;
   width: 100%;
-  background-color: #f7f9fc; /* 밝고 세련된 배경색 */
+  background-color: #f7f9fc;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 40px;
@@ -36,19 +36,19 @@ export const Header = styled.div`
   width: 100%;
   text-align: center;
   margin-bottom: 40px;
-  color: #2c3e50; /* 세련된 텍스트 색상 */
+  color: #253745;
 `;
 
 export const InfoSection = styled.div`
   width: 100%;
-  background-color: #eef1f5; /* 차분한 배경색 */
+  background-color: #ccd0cf;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   p {
     margin: 10px 0;
-    color: #34495e; /* 세련된 텍스트 색상 */
+    color: #34495e;
   }
 `;
 
@@ -72,46 +72,66 @@ export const Button = styled.button`
 `;
 
 export const ApplyButton = styled(Button)`
-  background-color: #3498db; /* 세련된 파란색 */
+  background-color: #06141b;
   color: white;
   &:hover {
-    background-color: #2980b9; /* 호버 시 색상 */
+    background-color: #11212d;
   }
 `;
 
 export const DeleteButton = styled(Button)`
-  background-color: #e74c3c; /* 세련된 빨간색 */
+  background-color: #06141b;
   color: white;
   &:hover {
-    background-color: #c0392b; /* 호버 시 색상 */
+    background-color: #11212d;
   }
 `;
 
 export const ApplicationsSection = styled.div`
   width: 100%;
   margin-bottom: 20px;
-  background-color: #f7f9fc; /* 밝고 세련된 배경색 */
+  background-color: #eef1f5; /* 밝고 세련된 배경색 */
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  h2 {
+    color: #253745; /* 제목 색상 */
+    margin-bottom: 20px;
+  }
 `;
 
 export const ApplicationCard = styled.div`
-  background-color: #ffffff; /* 카드 배경색 */
+  background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 15px;
   margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  p {
+    margin: 0;
+    color: #4a5c6a; /* 카드 텍스트 색상 */
+  }
 `;
 
 export const StatusButton = styled(Button)`
-  background-color: ${(props) =>
-    props.accept ? "#2ecc71" : "#e74c3c"}; /* 세련된 색상 */
+  background-color: ${(props) => (props.accept ? "#06141b" : "#e74c3c")};
   color: white;
   padding: 8px 16px;
   font-size: 14px;
   &:hover {
-    background-color: ${(props) =>
-      props.accept ? "#27ae60" : "#c0392b"}; /* 호버 시 색상 */
+    background-color: ${(props) => (props.accept ? "#11212d" : "#c0392b")};
+  }
+`;
+
+export const KickButton = styled(Button)`
+  background-color: #9ba8ab; /* 팀원 추방 버튼 색상 */
+  color: white;
+  padding: 8px 16px;
+  font-size: 14px;
+  &:hover {
+    background-color: #4a5c6a;
   }
 `;

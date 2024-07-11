@@ -5,7 +5,7 @@ const Card = styled.div`
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 15px;
-  background-color: #f5f5f5;
+  background-color: #d8dce2;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;

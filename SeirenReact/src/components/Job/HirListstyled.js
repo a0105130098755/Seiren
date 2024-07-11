@@ -12,6 +12,7 @@ export const PageContainer = styled.div`
   font-family: "Noto Sans", sans-serif;
   min-height: 100vh;
   box-sizing: border-box;
+  background-color: white;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -49,9 +50,9 @@ export const HiringPageContainer = styled.div`
 `;
 
 export const ApplicationsContainer = styled.div`
-  flex: 1.5;
+  flex: 1.3;
   padding-left: 20px;
-  border-left: 1px solid #ddd;
+  border-left: 1px solid #ccd0cf;
   margin-top: 20px;
 
   @media (max-width: 768px) {
@@ -65,7 +66,7 @@ export const PageTitle = styled.h1`
   text-align: center;
   margin-bottom: 30px;
   font-size: 32px;
-  color: #333;
+  color: black;
 
   @media (max-width: 768px) {
     font-size: 24px;
@@ -99,7 +100,7 @@ export const SearchBox = styled.div`
 
 export const SearchSelect = styled.select`
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccd0cf;
   border-radius: 5px;
   font-family: "Noto Sans", sans-serif;
   font-size: 16px;
@@ -112,13 +113,15 @@ export const SearchSelect = styled.select`
   margin-right: 10px;
   cursor: pointer;
   height: 50px;
-  line-height: 20px; /* 텍스트가 세로로 나오지 않도록 설정 */
+  line-height: 20px;
   flex-direction: row;
+  border: 1px solid #9ba8ab;
+  background-color: white;
 
   &:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    border-color: #253745;
+    box-shadow: 0 4px 8px rgba(37, 55, 69, 0.2);
   }
 
   @media (max-width: 768px) {
@@ -130,17 +133,18 @@ export const SearchSelect = styled.select`
 export const SearchInput = styled.input`
   width: 300px;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccd0cf;
   border-radius: 5px;
   font-family: "Noto Sans", sans-serif;
   font-size: 16px;
   transition: border-color 0.3s, box-shadow 0.3s;
   height: 50px;
+  border: 1px solid #9ba8ab;
 
   &:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    border-color: #4a5c6a;
+    box-shadow: 0 4px 8px rgba(37, 55, 69, 0.2);
   }
 
   @media (max-width: 768px) {
@@ -151,14 +155,14 @@ export const SearchInput = styled.input`
 
 export const SearchButton = styled.button`
   padding: 10px 24px;
-  background: linear-gradient(135deg, #007bff, #0056b3);
-  color: white;
+  background: linear-gradient(135deg, #253745, #11212d);
+  color: #ccd0cf;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-family: "Noto Sans", sans-serif;
   font-size: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(17, 33, 45, 0.1);
   transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
   margin-right: 10px;
   display: flex;
@@ -169,9 +173,9 @@ export const SearchButton = styled.button`
   flex-direction: row;
 
   &:hover {
-    background: linear-gradient(135deg, #0056b3, #003f7f);
+    background: linear-gradient(135deg, #11212d, #253745);
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px rgba(17, 33, 45, 0.15);
   }
 
   &:active {
@@ -186,12 +190,12 @@ export const SearchButton = styled.button`
 `;
 
 export const CreateButton = styled(Link)`
-  padding: 10px 24px; /* 검색 입력창 높이에 맞추기 위해 패딩 조정 */
-  background: linear-gradient(135deg, #28a745, #218838);
-  color: #fff;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #4a5c6a, #253745);
+  color: #ccd0cf;
   text-decoration: none;
   border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(17, 33, 45, 0.1);
   transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
   white-space: nowrap;
   display: flex;
@@ -202,9 +206,9 @@ export const CreateButton = styled(Link)`
   flex-direction: row; /* 텍스트를 가로로 정렬 */
 
   &:hover {
-    background: linear-gradient(135deg, #218838, #1c7430);
+    background: linear-gradient(135deg, #253745, #11212d);
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px rgba(17, 33, 45, 0.15);
   }
 
   &:active {
@@ -229,41 +233,39 @@ export const HiringGrid = styled.div`
 `;
 
 export const HiringCard = styled.div`
-  border: 1px solid #ddd;
+  border: 1px solid #9ba8ab;
   border-radius: 8px;
   padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #253745;
+  box-shadow: 0 2px 4px rgba(17, 33, 45, 0.1);
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: background-color 0.5s, transform 0.5s, box-shadow 0.5s;
 
   &:hover {
     transform: translateY(-5px);
+    background-color: #4a5c6a;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
 
   h3 {
-    margin-top: 0;
-    font-size: 20px;
-    color: #333;
-    transition: color 0.3s;
+    color: white;
+    transition: color 0.5s;
   }
 
   p {
-    color: #666;
-    font-size: 16px;
-    margin: 5px 0;
+    color: #ccd0cf;
   }
 
-  &:hover h3 {
-    color: #007bff;
-  }
+  /* &:hover h3 {
+    background-color: #4a5c6a;
+    box-shadow: 0 5px 15px rgba(17, 33, 45, 0.2);
+  } */
 `;
 
 export const SectionTitle = styled.h2`
   margin-top: 40px;
   margin-bottom: 20px;
-  color: #333;
+  color: #11212d;
 
   @media (max-width: 768px) {
     margin-top: 30px;

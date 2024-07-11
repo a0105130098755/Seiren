@@ -88,11 +88,11 @@ html {
 }
 
 .btn-search {
-  background-color: #007bff;
+  background-color: #11212d;
   color: white;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.4s ease-in-out;
 }
 
 .btn-search:hover {
@@ -133,12 +133,12 @@ html {
 }
 
 .btn-write {
-  background-color: #007bff;
+  background-color: #4a5c6a;
   color: white;
   padding: 10px 20px;
   text-decoration: none;
   border-radius: 5px;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.5s ease, box-shadow 0.5s ease;
   display: flex;
   align-items: center;
   justify-content: center;

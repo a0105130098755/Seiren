@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  margin-top: 70px; /* 네비게이션 바 높이에 따라 적절히 설정 */
+  margin-top: 70px;
 }
 
 .board-detail-container {
@@ -15,7 +15,7 @@
   max-width: 800px;
   width: 800px;
   margin: 20px 0;
-  position: relative; /* position 속성 추가 */
+  position: relative;
 }
 
 .board-detail {

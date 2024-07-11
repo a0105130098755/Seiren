@@ -20,7 +20,7 @@ const Button = styled.button`
   transition: background-color 0.3s ease-in-out;
 
   &:hover {
-    background-color: #d32f2f;
+    background-color: #4a5c6a;
   }
 `;
 
