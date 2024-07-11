@@ -1,10 +1,7 @@
 package com.example.siren.entity;
 
 import com.example.siren.constant.Authority;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @Table
 @ToString
 @NoArgsConstructor
+@Setter
 public class Member {
     @Id
     @Column(name="member_id")

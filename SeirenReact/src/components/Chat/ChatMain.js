@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ChatApi from "../../api/ChatApi";
 import audienceLogo from "./audience.png";
 import CryptoJS from "crypto-js";
+import { useNavigate } from "react-router-dom";
 
 const ListContainer = styled.div`
   position: relative;
@@ -116,25 +117,6 @@ const SearchBtn = styled.div`
     background-color: #2caeff;
   }
 `;
-const SearchBtn2 = styled.div`
-  position: relative;
-  width: 54px;
-  height: 24px;
-  font-size: 12px;
-  margin-left: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 4px;
-  background-color: #0075ff;
-  color: white;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  &:hover {
-    transition: all 0.2s ease;
-    background-color: #2caeff;
-  }
-`;
 const ChatMain = () => {
   const [chatList, setChatList] = useState([]);
   const [viewList, setViewList] = useState([]);
@@ -142,6 +124,12 @@ const ChatMain = () => {
   const inputRef = useRef(null);
   const [hoverIndex, setHoverIndex] = useState(null); // hover 상태를 개별적으로 관리하기 위한 상태
   const chatContainerRef = useRef(null);
+  const navigate = useNavigate();
+  const bytes = CryptoJS.AES.decrypt(
+    localStorage.getItem("nickname"),
+    process.env.REACT_APP_SECRET_KEY
+  );
+  const currentNickname = bytes.toString(CryptoJS.enc.Utf8);
 
   const handleChatList = async () => {
     try {
@@ -174,11 +162,6 @@ const ChatMain = () => {
   const enterClickHandler = (roomId, audience, live) => {
     console.log(roomId);
     console.log(audience);
-    const bytes = CryptoJS.AES.decrypt(
-      localStorage.getItem("nickname"),
-      process.env.REACT_APP_SECRET_KEY
-    );
-    const currentNickname = bytes.toString(CryptoJS.enc.Utf8);
     console.log(currentNickname);
     if (roomId === currentNickname) {
       return alert("방송을 시작하려면 방송 시작을 눌러주세요.");
@@ -188,10 +171,15 @@ const ChatMain = () => {
       } else {
         if (audience < 1) {
           return alert("방송중이 아닙니다.");
+        } else {
+          navigate(`/chatting/${roomId}`);
         }
-        navigator;
       }
     }
+  };
+
+  const liveOnClick = () => {
+    navigate(`/chatting/${currentNickname}`);
   };
 
   useEffect(() => {
@@ -254,7 +242,12 @@ const ChatMain = () => {
           ref={inputRef}
         />
         <SearchBtn onClick={handleSearch}>검색</SearchBtn>
-        <SearchBtn2 onClick={handleShowAll}>전체 보기</SearchBtn2>
+        <SearchBtn style={{ width: "54px" }} onClick={handleShowAll}>
+          전체 보기
+        </SearchBtn>
+        <SearchBtn style={{ width: "54px" }} onClick={liveOnClick}>
+          방송 하기
+        </SearchBtn>
       </SearchContainer>
     </>
   );

@@ -2,6 +2,7 @@ package com.example.siren.service;
 
 import com.example.siren.dto.ChatMessageDTO;
 import com.example.siren.dto.ChatRoomDTO;
+import com.example.siren.dto.MemberResponseDTO;
 import com.example.siren.entity.ChatRoom;
 import com.example.siren.entity.Member;
 import com.example.siren.repository.ChatRoomRepository;
@@ -146,5 +147,11 @@ public class ChatService {
             log.error("웹소켓 텍스트 send 에러 : {}" , e.getMessage());
         }
     }
+
+    public MemberResponseDTO getMemberInfo(){
+        Member member = authGetInfo.getMember();
+        return MemberResponseDTO.of(member);
+    }
+
 
 }

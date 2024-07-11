@@ -1,6 +1,8 @@
 package com.example.siren.controller;
 
 import com.example.siren.dto.ChatRoomDTO;
+import com.example.siren.dto.MemberDTO;
+import com.example.siren.dto.MemberResponseDTO;
 import com.example.siren.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,5 +22,10 @@ public class ChatController {
     @GetMapping("/list")
     public List<ChatRoomDTO> findAllRoom(){
         return chatService.findAllRoom();
+    }
+
+    @GetMapping("/memberInfo")
+    public MemberResponseDTO memberDTO (){
+        return chatService.getMemberInfo();
     }
 }

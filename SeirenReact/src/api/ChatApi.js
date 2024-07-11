@@ -8,6 +8,12 @@ const ChatApi = {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
   },
+
+  memberInfo: async () => {
+    return await axios.get(Domain + "/chat/memberInfo", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+  },
 };
 
 export default ChatApi;

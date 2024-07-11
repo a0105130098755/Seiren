@@ -21,6 +21,7 @@ import HiringList from "./components/Job/HiringList";
 import CreateHiring from "./components/Job/CreateHiring";
 import HiringDetail from "./components/Job/HiringDetail";
 import ChatMain from "./components/Chat/ChatMain";
+import Chatting from "./components/Chat/Chatting";
 
 interface HiringDTO {
   id: number;
@@ -63,6 +64,7 @@ function App() {
           <Route path="/charge" element={<Charge />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/chat" element={<ChatMain />} />
+          <Route path="/chatting/:roomId" element={<Chatting />} />
           <Route path="/" element={<MainPage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
