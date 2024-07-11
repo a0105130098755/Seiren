@@ -17,6 +17,7 @@ export const PageContainer = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     padding: 10px;
+    margin-top: 500px;
   }
 `;
 
@@ -46,6 +47,7 @@ export const HiringPageContainer = styled.div`
   @media (max-width: 768px) {
     margin-right: 0;
     margin-top: 10px;
+    order: 1;
   }
 `;
 
@@ -59,6 +61,7 @@ export const ApplicationsContainer = styled.div`
     padding-left: 0;
     border-left: none;
     margin-top: 10px;
+    order: 2;
   }
 `;
 
@@ -81,9 +84,11 @@ export const SearchContainer = styled.div`
   width: 100%;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 5px;
   }
 `;
 
@@ -94,7 +99,9 @@ export const SearchBox = styled.div`
   width: 100%;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    flex-direction: row;
+    flex: 1;
+    gap: 5px;
   }
 `;
 
@@ -125,8 +132,12 @@ export const SearchSelect = styled.select`
   }
 
   @media (max-width: 768px) {
-    width: 100%;
-    margin-bottom: 10px;
+    width: auto;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 5px;
+    font-size: 14px;
+    height: 40px;
   }
 `;
 
@@ -148,8 +159,12 @@ export const SearchInput = styled.input`
   }
 
   @media (max-width: 768px) {
-    width: 100%;
-    margin-bottom: 10px;
+    width: auto;
+    flex: 1;
+    margin: 0;
+    padding: 5px;
+    font-size: 14px;
+    height: 40px;
   }
 `;
 
@@ -184,8 +199,12 @@ export const SearchButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    width: 100%;
-    margin-bottom: 10px;
+    width: auto;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 5px 10px;
+    font-size: 14px;
+    height: 40px;
   }
 `;
 
@@ -217,7 +236,12 @@ export const CreateButton = styled(Link)`
   }
 
   @media (max-width: 768px) {
-    width: 100%;
+    width: auto;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 5px 10px;
+    font-size: 14px;
+    height: 40px;
   }
 `;
 
@@ -229,6 +253,7 @@ export const HiringGrid = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    order: 3;
   }
 `;
 

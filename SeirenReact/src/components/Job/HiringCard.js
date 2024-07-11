@@ -24,6 +24,29 @@ const Card = styled.div`
     color: #666;
     margin: 5px 0;
   }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+
+    padding: 10px;
+    h3 {
+      font-size: 1.2em;
+    }
+    p {
+      font-size: 0.9em;
+    }
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    padding: 8px;
+    h3 {
+      font-size: 1em;
+    }
+    p {
+      font-size: 0.8em;
+    }
+  }
 `;
 
 const HiringCard = ({ hiring, onClick }) => (

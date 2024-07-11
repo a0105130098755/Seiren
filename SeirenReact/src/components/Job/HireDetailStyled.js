@@ -8,6 +8,7 @@ export const PageWrapper = styled.div`
   min-height: 80px;
   max-width: 1400px;
   width: 800px;
+  position: relative;
 
   @media (max-width: 768px) {
     padding: 20px;
@@ -133,5 +134,16 @@ export const KickButton = styled(Button)`
   font-size: 14px;
   &:hover {
     background-color: #4a5c6a;
+  }
+`;
+export const BackButtonWrapper = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+
+  @media (max-width: 768px) {
+    top: 10px;
+    left: 10px;
   }
 `;

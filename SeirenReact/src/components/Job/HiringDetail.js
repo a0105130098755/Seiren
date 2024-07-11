@@ -22,7 +22,9 @@ import {
   ApplicationsSection,
   ApplicationCard,
   StatusButton,
+  BackButtonWrapper,
 } from "./HireDetailStyled";
+import BackButton from "../BackButton";
 
 const api = axios.create({
   baseURL: "http://localhost:8111/",
@@ -150,7 +152,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
             prev.filter((member) => member.nickname !== teamMember.nickname)
           );
         } else {
-          alert("스스로는 추방할 수 없습니다.");
+          alert("추방은 이 글의 작성자만 가능합니다.");
         }
       } catch (error) {
         console.error("Error removing team member:", error);
@@ -163,6 +165,9 @@ const HiringDetail = ({ hiring, setHiring }) => {
 
   return (
     <PageWrapper>
+      <BackButtonWrapper>
+        <BackButton />
+      </BackButtonWrapper>
       <ContentWrapper>
         <Header>
           <h1>{detail.title}</h1>
