@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ChatApi from "../../api/ChatApi";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import CryptoJS from "crypto-js";
 
 const ChatContainer = styled.div`
@@ -26,7 +26,6 @@ const ChatContainerLeft = styled.div`
   position: relative;
   width: 16%;
   height: 50%;
-  border: 1px solid green;
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -82,19 +81,49 @@ const SendContainer = styled.div`
   width: 100%;
   min-height: 40px;
   height: auto;
-  border: 1px solid black;
   display: flex;
+  align-items: center;
 `;
 
 const SendInput = styled.input`
   border: 1px solid #d8dce2;
   width: 90%;
   height: 100%;
+  padding: 4px;
 `;
 
+const SendButton = styled.div`
+  width: 30px;
+  height: 30px;
+  background-color: #0075ff;
+  color: white;
+  border-radius: 100%;
+  margin-left: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+
+  ${(props) =>
+    props.clicked &&
+    css`
+      transform: translateY(2px);
+      opacity: 0.7;
+    `}
+`;
 const ChatContainerRight = styled.div`
   width: 26%;
   height: 60%;
+  display: flex;
+  flex-flow: column;
+  align-items: start;
+`;
+const ChatContainerRightContent = styled.div`
+  width: 100%;
+  height: 90%;
   border: 1px solid black;
   display: flex;
   flex-flow: column;
@@ -130,8 +159,8 @@ const Chatting = () => {
   const [chatList, setChatList] = useState(""); // 채팅 리스트
   const [pointList, setPointList] = useState(""); // 포인트 리스트
   const [sender, setSender] = useState(""); // 보낸 사람
-  const [roomName, setRoomName] = useState(""); // 채팅방 이름
   const [myPoint, setMyPoint] = useState(null);
+  const [clicked, setClicked] = useState(false);
   const ws = useRef(null);
   const navigate = useNavigate();
   const [inputPoint, setInputPoint] = useState("");
@@ -145,12 +174,18 @@ const Chatting = () => {
     try {
       const response = await ChatApi.memberInfo();
       console.log("내 정보", response);
+      console.log("내 닉네임", response.data.nickname);
+      setSender(response.data.nickname);
       setMyPoint(response.data.point);
       console.log(response.data.point);
     } catch (e) {
       console.log("멤버 정보 불러오는 데 오류 발생", e);
     }
   };
+
+  useEffect(() => {
+    handleMemberInfo();
+  });
 
   const handleChange = (e) => {
     const { value } = e.target;
@@ -160,10 +195,6 @@ const Chatting = () => {
       console.log(inputPoint);
     }
   };
-
-  useEffect(() => {
-    handleMemberInfo();
-  }, []);
 
   useEffect(() => {
     console.log("방이름 : " + roomId);
@@ -183,17 +214,77 @@ const Chatting = () => {
           type: "ENTER",
           roomId: roomId,
           sender: sender,
-          message: "처음으로 접속 합니다.",
+          message: "접속 메세지",
         })
       );
     }
     ws.current.onmessage = (evt) => {
       // 서버에서 메시지가 오면
       const data = JSON.parse(evt.data); // 받은 메시지를 JSON 객체로 변환
-      console.log(data.message);
-      setChatList((prevItems) => [...prevItems, data]); // 채팅 리스트에 추가
+      console.log("메세지 타입 : ", data.type);
+      console.log("받은 메세지 : ", data.message);
+      if (data.type === "TALK") {
+        setChatList((prevItems) => [...prevItems, data]); // 채팅 리스트에 추가
+      } else if (data.type === "POINT") {
+        setPointList((prevItems) => [...prevItems, data]); // 포인트 리스트에 추가
+      }
     };
   }, [socketConnected]); // socketConnected 값이 변경되면 useEffect 실행
+
+  const onClickMsgSend = (e) => {
+    // 메시지 전송 (소켓 통신), useRef에 값을 저장하기 위해서는 current 메소드 사용해야 함
+    ws.current.send(
+      JSON.stringify({
+        // 자바스크립트 객체를 JSON으로 변환
+        type: "TALK",
+        roomId: roomId,
+        sender: sender,
+        message: inputMsg,
+      })
+    );
+    setInputMsg(""); // 전송 이후 초기화
+  };
+
+  const onChangeMsg = (e) => {
+    setInputMsg(e.target.value);
+  };
+
+  const onClickMsgSend2 = (e) => {
+    // 메시지 전송 (소켓 통신), useRef에 값을 저장하기 위해서는 current 메소드 사용해야 함
+    ws.current.send(
+      JSON.stringify({
+        // 자바스크립트 객체를 JSON으로 변환
+        type: "POINT",
+        roomId: roomId,
+        sender: sender,
+        message: inputPoint,
+      })
+    );
+    setInputPoint(""); // 전송 이후 초기화
+  };
+
+  const onEnterKey = (e) => {
+    // 엔터키 입력 시, 공백 제거 후 비어있지 않으면
+    if (e.key === "Enter" && inputMsg.trim() !== "") {
+      e.preventDefault(); // 기존 이벤트 무시
+      onClickMsgSend(e); // 입력 메시지를 전송하는 함수
+    }
+  };
+
+  // 채팅 종료
+  const onClickMsgClose = () => {
+    ws.current.send(
+      JSON.stringify({
+        // 자바스크립트 객체를 JSON으로 변환
+        type: "CLOSE",
+        roomId: roomId,
+        sender: sender,
+        message: "퇴장했습니다.",
+      })
+    );
+    ws.current.close(); // 생성된 소켓을 닫음
+    navigate("/chat");
+  };
 
   // 화면 하단으로 자동 스크롤
   const chatContainerRef = useRef(null);
@@ -223,7 +314,7 @@ const Chatting = () => {
             value={inputPoint}
             onChange={handleChange}
           ></ChatContainerLeftInput>
-          <ButtonDiv>포인트 선물하기</ButtonDiv>
+          <ButtonDiv onClick={onClickMsgSend2}>포인트 선물하기</ButtonDiv>
         </ChatContainerLeft>
         <ChatContainerMiddle>
           <MessageContainer>
@@ -234,15 +325,42 @@ const Chatting = () => {
                   isSender={chat.sender === currentNickname}
                   isMaster={chat.sender === roomId}
                 >
-                  {`${chat.sender}` > `${chat.message}`}
+                  <p>{`${chat.sender}`}</p>
+                  <p>{`${chat.message}`}</p>
                 </Message>
               ))}
           </MessageContainer>
           <SendContainer>
-            <SendInput></SendInput>
+            <SendInput
+              placeholder="보낼 메세지를 입력하세요"
+              onChange={onChangeMsg}
+              onKeyUp={onEnterKey}
+            ></SendInput>
+            <SendButton
+              clicked={clicked}
+              onMouseDown={() => setClicked(true)}
+              onMouseUp={() => setClicked(false)}
+              onMouseLeave={() => setClicked(false)}
+              onClick={onClickMsgSend}
+            >
+              &gt;
+            </SendButton>
           </SendContainer>
         </ChatContainerMiddle>
-        <ChatContainerRight ref={pointRef}></ChatContainerRight>
+        <ChatContainerRight>
+          <ChatContainerRightContent ref={pointRef}>
+            {pointList &&
+              pointList.map((point, index) => (
+                <Message key={index} isSender={true}>
+                  <p>{`${point.sender}`}</p>
+                  <p>{`${point.message}`}</p>
+                </Message>
+              ))}
+          </ChatContainerRightContent>
+          <ButtonDiv style={{ width: "80px" }} onClick={onClickMsgClose}>
+            나가기
+          </ButtonDiv>
+        </ChatContainerRight>
       </ChatContainerContent>
     </ChatContainer>
   );

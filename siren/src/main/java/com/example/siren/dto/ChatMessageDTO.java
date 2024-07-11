@@ -8,7 +8,7 @@ import org.springframework.web.socket.BinaryMessage;
 @Setter
 public class ChatMessageDTO {
     public enum MessageType{
-        ENTER, TALK, VOICE, CLOSE
+        ENTER, TALK, VOICE, CLOSE, POINT
     }
     private MessageType type;
     private String roomId;

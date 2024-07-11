@@ -43,6 +43,8 @@ public class WebSocketTextHandler extends AbstractWebSocketHandler {
         }else if(chatMessageDTO.getType() == ChatMessageDTO.MessageType.TALK){
             //일반 채팅 로직
             chatService.sendMessageToAll(roomId, chatMessageDTO);
+        }else if(chatMessageDTO.getType() == ChatMessageDTO.MessageType.POINT){
+            chatService.sendMessageToAll(roomId, chatMessageDTO);
         }
     }
 
@@ -51,17 +53,17 @@ public class WebSocketTextHandler extends AbstractWebSocketHandler {
         
     }
 
-    @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception{
-        // 세션과 매핑된 채팅방 ID 가져옴
-        log.warn("afterConnectionClosed 메소드 실행 세션 : {}", session);
-
-        // sessionRoomIdMap 에서 등록된 세션을 지우고
-        String roomId = sessionRoomIdMap.remove(session);
-        if(roomId != null){
-            ChatMessageDTO chatMessageDTO = new ChatMessageDTO();
-            chatMessageDTO.setType(ChatMessageDTO.MessageType.CLOSE);
-            chatService.removeSessionAndHandleExit(roomId,session, chatMessageDTO);
-        }
-    }
+//    @Override
+//    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception{
+//        // 세션과 매핑된 채팅방 ID 가져옴
+//        log.warn("afterConnectionClosed 메소드 실행 세션 : {}", session);
+//
+//        // sessionRoomIdMap 에서 등록된 세션을 지우고
+//        String roomId = sessionRoomIdMap.remove(session);
+//        if(roomId != null){
+//            ChatMessageDTO chatMessageDTO = new ChatMessageDTO();
+//            chatMessageDTO.setType(ChatMessageDTO.MessageType.CLOSE);
+//            chatService.removeSessionAndHandleExit(roomId,session, chatMessageDTO);
+//        }
+//    }
 }
