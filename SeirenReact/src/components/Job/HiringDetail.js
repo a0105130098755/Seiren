@@ -23,6 +23,7 @@ import {
   ApplicationCard,
   StatusButton,
   BackButtonWrapper,
+  KickButton,
 } from "./HireDetailStyled";
 import BackButton from "../BackButton";
 
@@ -228,9 +229,9 @@ const HiringDetail = ({ hiring, setHiring }) => {
             team.map((teamMember, index) => (
               <ApplicationCard key={index}>
                 <p> 팀원 : {teamMember.nickname}</p>
-                <Button onClick={() => handleRemoveTeamMember(teamMember)}>
+                <KickButton onClick={() => handleRemoveTeamMember(teamMember)}>
                   추방
-                </Button>
+                </KickButton>
               </ApplicationCard>
             ))}
         </ApplicationsSection>

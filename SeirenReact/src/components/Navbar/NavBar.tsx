@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 import "./NavBar.css";
 
@@ -8,6 +8,7 @@ const NavBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showProfileOptions, setShowProfileOptions] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState("/default-profile.png");
 
   useEffect(() => {
@@ -28,13 +29,18 @@ const NavBar = () => {
       setIsLoggedIn(false);
       setShowProfileOptions(false);
       setSidebarOpen(false);
+      navigate("/");
     } else {
       alert("로그인을 먼저 하셔야 합니다.");
     }
   };
 
   const toggleProfileOptions = () => {
-    setShowProfileOptions(!showProfileOptions);
+    if (isLoggedIn) {
+      setShowProfileOptions(!showProfileOptions);
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -76,16 +82,19 @@ const NavBar = () => {
 
       <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
         <FaTimes className="close-icon" onClick={toggleSidebar} />
-        <div className="profile">
+        <div className="sidebar-profile">
           {isLoggedIn ? (
             <img src={profile} alt="Profile" className="profile-pic" />
           ) : (
-            <Link to="/login">
+            <Link to="/login" onClick={toggleSidebar}>
               <FaUserCircle className="profile-icon" />
             </Link>
           )}
         </div>
         <nav className="sidebar-links">
+          <Link to="/" onClick={toggleSidebar}>
+            메인 페이지
+          </Link>
           <Link to="/board" onClick={toggleSidebar}>
             게시글
           </Link>
@@ -95,17 +104,27 @@ const NavBar = () => {
           <Link to="/charge" onClick={toggleSidebar}>
             충전
           </Link>
-          {isLoggedIn && (
-            <Link to="/mypage" onClick={toggleSidebar}>
-              마이페이지
+          {isLoggedIn ? (
+            <>
+              <Link to="/mypage" onClick={toggleSidebar}>
+                마이페이지
+              </Link>
+              <button
+                className="logout-button sidebar-logout"
+                onClick={handleLogout}
+              >
+                로그 아웃
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              className="mobile-login-link"
+              onClick={toggleSidebar}
+            >
+              로그인
             </Link>
           )}
-          <button
-            className="logout-button sidebar-logout"
-            onClick={handleLogout}
-          >
-            로그 아웃
-          </button>
         </nav>
       </div>
     </>

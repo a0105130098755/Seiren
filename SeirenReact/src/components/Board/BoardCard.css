@@ -15,12 +15,13 @@
 
 .board-card-writer {
   font-size: 1em;
-  color: #555;
+  color: #ffffff;
 }
 
 @media (max-width: 768px) {
   .board-card {
     max-width: 100%;
     margin: 10px 0;
+    width: 100%;
   }
 }

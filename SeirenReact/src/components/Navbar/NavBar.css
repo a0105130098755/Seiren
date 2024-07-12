@@ -1,11 +1,3 @@
-body,
-html {
-  margin: 0;
-  padding: 0;
-  font-family: "Noto-sans", Arial, sans-serif;
-  background-color: #f4f4f9;
-}
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -184,6 +176,12 @@ html {
   align-self: flex-end;
 }
 
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .sidebar-links {
   display: flex;
   flex-direction: column;
@@ -222,6 +220,10 @@ html {
   color: #007bff;
 }
 
+.mobile-login-link {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .nav-links,
   .profile {
@@ -250,5 +252,9 @@ html {
   .sidebar .profile-icon {
     height: 40px;
     width: 40px;
+  }
+
+  .mobile-login-link {
+    display: block;
   }
 }

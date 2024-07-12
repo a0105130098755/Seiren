@@ -16,6 +16,7 @@
   width: 800px;
   margin: 20px 0;
   position: relative;
+  overflow: visible;
 }
 
 .board-detail {

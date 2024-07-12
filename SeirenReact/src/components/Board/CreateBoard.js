@@ -2,14 +2,17 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createBoard } from "../../api/Api";
 import "./CreateBoard.css";
+import CryptoJS from "crypto-js";
 
 function CreateBoard() {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [nickname, setNickname] = useState(
-    localStorage.getItem("nickname") || ""
+  const bytes = CryptoJS.AES.decrypt(
+    localStorage.getItem("nickname"),
+    process.env.REACT_APP_SECRET_KEY
   );
+  const currentNickname = bytes.toString(CryptoJS.enc.Utf8);
   const [profile, setProfile] = useState(localStorage.getItem("profile") || "");
 
   const handleChange = (setter, maxLen) => (event) => {
@@ -53,7 +56,8 @@ function CreateBoard() {
             {profile && (
               <img src={profile} alt="Profile" className="profile-image" />
             )}
-            <span className="nickname">{nickname}</span>
+            <span className="nickname">{currentNickname}</span>{" "}
+            {/* 닉네임 표시 */}
           </div>
           <div className="form-group">
             <label>제목</label>

@@ -3,7 +3,8 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
+  padding: 10px;
 }
 
 .create-board {
@@ -11,8 +12,8 @@
   border-radius: 10px;
   padding: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  width: 100%;
+  max-width: 600px;
+  width: 600px;
 }
 
 .form-title {
@@ -66,19 +67,43 @@
 }
 
 @media (max-width: 768px) {
+  .create-board-container {
+    padding: 20px; /* 모바일에서 여유 공간을 위해 패딩 증가 */
+  }
+
   .create-board {
-    padding: 20px;
+    padding: 20px; /* 모바일에서 패딩 감소 */
   }
 
   .form-title {
-    font-size: 1.5em;
+    font-size: 1.2em; /* 모바일에서 폰트 크기 감소 */
+  }
+
+  .profile-section {
+    flex-direction: column; /* 모바일에서 프로필 섹션을 세로로 정렬 */
+    align-items: flex-start; /* 모바일에서 정렬 조정 */
+  }
+
+  .profile-image {
+    margin-right: 0; /* 모바일에서 마진 제거 */
+    margin-bottom: 10px; /* 모바일에서 아래쪽 마진 추가 */
+  }
+
+  .nickname {
+    font-size: 1em; /* 모바일에서 폰트 크기 감소 */
+  }
+
+  .form-group {
+    margin-bottom: 15px; /* 모바일에서 마진 감소 */
   }
 
   .form-control {
-    font-size: 1em;
+    font-size: 0.9em; /* 모바일에서 폰트 크기 감소 */
+    padding: 8px; /* 모바일에서 패딩 감소 */
   }
 
   .btn-primary {
-    font-size: 1em;
+    font-size: 0.9em; /* 모바일에서 폰트 크기 감소 */
+    padding: 8px; /* 모바일에서 패딩 감소 */
   }
 }

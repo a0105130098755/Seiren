@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const Button = styled.button`
   padding: 10px 20px;
-  background-color: #f44336;
+  background-color: #d32f2f;
   color: white;
   border: none;
   border-radius: 5px;
@@ -14,7 +14,7 @@ const Button = styled.button`
   display: block;
 
   &:hover {
-    background-color: #d32f2f;
+    background-color: #67191f;
   }
 
   @media (max-width: 768px) {
