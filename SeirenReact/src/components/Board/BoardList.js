@@ -113,7 +113,7 @@ function BoardList({ board, setBoard }) {
 
         <div className="write-button-container">
           <Link className="btn btn-write" to="/board/create">
-            <i className="fas fa-pen"></i> &nbsp; 글쓰기
+            <i className="fas fa-pen"></i> &nbsp;글쓰기
           </Link>
         </div>
         <BackButton />

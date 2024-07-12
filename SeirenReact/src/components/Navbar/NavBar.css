@@ -26,7 +26,7 @@
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  gap: 20px; /* Adjusted the gap */
+  gap: 20px;
 }
 
 .nav-links a {
@@ -102,45 +102,11 @@
   width: 100%;
   border-radius: 5px;
   transition: background-color 0.3s ease-in-out;
-  white-space: nowrap; /* Ensure text does not wrap */
+  white-space: nowrap;
 }
 
 .logout-button:hover {
   background-color: #0056b3;
-}
-
-.sidebar-logout {
-  font-size: 18px;
-  padding: 10px 0;
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  transition: color 0.3s ease-in-out;
-}
-
-.sidebar-logout::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 1px;
-  background-color: #333;
-  left: 0;
-  bottom: 0;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.3s ease-in-out;
-}
-
-.sidebar-logout:hover {
-  color: #007bff;
-}
-
-.sidebar-logout:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
 }
 
 .hamburger-icon {
@@ -189,16 +155,22 @@
   margin-top: 20px;
 }
 
-.sidebar-links a {
+.sidebar-links a,
+.sidebar-links button {
   text-decoration: none;
   color: #333;
   font-size: 18px;
   padding: 10px 0;
   transition: color 0.3s ease-in-out;
   position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
 }
 
-.sidebar-links a::after {
+.sidebar-links a::after,
+.sidebar-links button::after {
   content: "";
   position: absolute;
   width: 100%;
@@ -211,17 +183,15 @@
   transition: transform 0.3s ease-in-out;
 }
 
-.sidebar-links a:hover::after {
+.sidebar-links a:hover::after,
+.sidebar-links button:hover::after {
   transform: scaleX(1);
   transform-origin: left;
 }
 
-.sidebar-links a:hover {
+.sidebar-links a:hover,
+.sidebar-links button:hover {
   color: #007bff;
-}
-
-.mobile-login-link {
-  display: none;
 }
 
 @media (max-width: 768px) {

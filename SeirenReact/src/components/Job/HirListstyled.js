@@ -12,12 +12,14 @@ export const PageContainer = styled.div`
   font-family: "Noto Sans", sans-serif;
   min-height: 100vh;
   box-sizing: border-box;
+  border-radius: 20px;
   background-color: white;
 
   @media (max-width: 768px) {
     flex-direction: column;
     padding: 10px;
     margin-top: 500px;
+    border-radius: 15px;
   }
 `;
 
@@ -187,11 +189,11 @@ export const SearchButton = styled.button`
   line-height: 20px;
   flex-direction: row;
 
-  &:hover {
+  /* &:hover {
     background: linear-gradient(135deg, #11212d, #253745);
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(17, 33, 45, 0.15);
-  }
+  } */
 
   &:active {
     transform: translateY(0);
@@ -213,7 +215,7 @@ export const CreateButton = styled(Link)`
   background: linear-gradient(135deg, #4a5c6a, #253745);
   color: #ccd0cf;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 12px;
   box-shadow: 0 4px 8px rgba(17, 33, 45, 0.1);
   transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
   white-space: nowrap;
@@ -228,6 +230,7 @@ export const CreateButton = styled(Link)`
     background: linear-gradient(135deg, #253745, #11212d);
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(17, 33, 45, 0.15);
+    border-radius: 15px;
   }
 
   &:active {
@@ -259,7 +262,7 @@ export const HiringGrid = styled.div`
 
 export const HiringCard = styled.div`
   border: 1px solid #9ba8ab;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 20px;
   background-color: #253745;
   box-shadow: 0 2px 4px rgba(17, 33, 45, 0.1);
@@ -270,6 +273,7 @@ export const HiringCard = styled.div`
     transform: translateY(-5px);
     background-color: #4a5c6a;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
   }
 
   h3 {

@@ -3,9 +3,11 @@
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  margin: 0 15px 15px 15px;
+  width: 100%;
+  max-width: 400px;
+  margin: 15px auto;
   color: #ffffff;
+  box-sizing: border-box;
 }
 
 .board-card-title {
@@ -18,10 +20,15 @@
   color: #ffffff;
 }
 
+@media (max-width: 1200px) {
+  .board-card {
+    max-width: 350px;
+  }
+}
+
 @media (max-width: 768px) {
   .board-card {
     max-width: 100%;
     margin: 10px 0;
-    width: 100%;
   }
 }

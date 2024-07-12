@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createBoard } from "../../api/Api";
 import "./CreateBoard.css";
 import CryptoJS from "crypto-js";
+import BackButton from "../BackButton";
 
 function CreateBoard() {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ function CreateBoard() {
 
   return (
     <div className="create-board-container">
+      <BackButton className="back-button" />
       <div className="create-board">
         <h2 className="form-title">게시글 작성</h2>
         <form onSubmit={handleSubmit}>
