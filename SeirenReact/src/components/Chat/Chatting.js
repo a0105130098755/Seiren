@@ -268,6 +268,7 @@ const Chatting = () => {
     if (e.key === "Enter" && inputMsg.trim() !== "") {
       e.preventDefault(); // 기존 이벤트 무시
       onClickMsgSend(e); // 입력 메시지를 전송하는 함수
+      setInputMsg("");
     }
   };
 
@@ -333,6 +334,7 @@ const Chatting = () => {
           <SendContainer>
             <SendInput
               placeholder="보낼 메세지를 입력하세요"
+              value={inputMsg}
               onChange={onChangeMsg}
               onKeyUp={onEnterKey}
             ></SendInput>
