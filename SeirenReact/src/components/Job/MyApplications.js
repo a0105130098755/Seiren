@@ -9,6 +9,17 @@ const Container = styled.div`
   padding: 80px 20px 20px 20px;
   max-width: 1200px;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 60px 10px 10px 10px;
+  }
+`;
+
+const TabContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
 `;
 
 const Tab = styled.button`
@@ -24,10 +35,20 @@ const Tab = styled.button`
   &:hover {
     background-color: ${(props) => (props.active ? "#0056b3" : "#ccc")};
   }
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    margin-right: 5px;
+    font-size: 14px;
+  }
 `;
 
 const TabContent = styled.div`
   margin-top: 20px;
+
+  @media (max-width: 768px) {
+    margin-top: 10px;
+  }
 `;
 
 const ApplicationCard = styled.div`
@@ -36,6 +57,11 @@ const ApplicationCard = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    margin-bottom: 8px;
+  }
 `;
 
 const MyApplications = () => {
@@ -68,7 +94,7 @@ const MyApplications = () => {
 
   return (
     <Container>
-      <div>
+      <TabContainer>
         <Tab active={activeTab === "sent"} onClick={() => setActiveTab("sent")}>
           내가 신청한 글
         </Tab>
@@ -78,7 +104,7 @@ const MyApplications = () => {
         >
           받은 신청
         </Tab>
-      </div>
+      </TabContainer>
       <TabContent>
         {activeTab === "sent" && (
           <div>

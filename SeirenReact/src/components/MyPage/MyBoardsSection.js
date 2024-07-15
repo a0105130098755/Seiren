@@ -7,11 +7,12 @@ import {
   ListItemTitle,
   ListItemContent,
   ListItemDate,
+  ProfileImage,
 } from "./MyPageStyles";
 
 const MyBoardsSection = () => {
-  const [boards, setBoards] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [boards, setBoards] = useState([]);
+  const [loading, setLoading] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -34,10 +35,19 @@ const MyBoardsSection = () => {
           throw new Error("닉네임을 복호화할 수 없습니다.");
         }
 
-        const response = await fetchBoardList(0, 1000, nickname);
+        console.log("Decrypted nickname:", nickname); // 디버깅용
 
-        setBoards(response.boardDTOS || []);
+        const response = await fetchBoardList(0, 1000, nickname);
+        console.log("API response:", response); // 디버깅용
+
+        if (response && response.boardDTOS) {
+          setBoards(response.boardDTOS);
+        } else {
+          setBoards([]);
+          console.log("No boards found or unexpected response structure");
+        }
       } catch (err) {
+        console.error("Error in loadBoards:", err);
         setError(err.message || "내 게시글을 불러오는 데 실패했습니다.");
       } finally {
         setLoading(false);
@@ -58,13 +68,18 @@ const MyBoardsSection = () => {
         <List>
           {boards.map((board) => (
             <ListItem key={board.id}>
-              <ListItemTitle>{board.title}</ListItemTitle>
-              <ListItemDate>
-                {new Date(board.regDate).toLocaleDateString()}
-              </ListItemDate>
-              <ListItemContent>
-                {board.content?.substring(0, 100)}...
-              </ListItemContent>
+              <ProfileImage src={board.profile} alt="프로필" />
+              <div>
+                <ListItemTitle>{board.title}</ListItemTitle>
+                <ListItemDate>
+                  {new Date(board.regDate).toLocaleDateString()}
+                </ListItemDate>
+                <ListItemContent>
+                  {board.content
+                    ? board.content.substring(0, 100) + "..."
+                    : "내용 없음"}
+                </ListItemContent>
+              </div>
             </ListItem>
           ))}
         </List>

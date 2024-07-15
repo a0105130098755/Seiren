@@ -59,7 +59,6 @@ function CreateBoard() {
               <img src={profile} alt="Profile" className="profile-image" />
             )}
             <span className="nickname">{currentNickname}</span>{" "}
-            {/* 닉네임 표시 */}
           </div>
           <div className="form-group">
             <label>제목</label>

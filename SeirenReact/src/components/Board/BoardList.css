@@ -3,9 +3,9 @@ html {
   height: 100%;
   margin: 0;
   font-family: "Noto Sans KR", sans-serif;
-  background-color: #f8f9fa; /* 세련된 흰색 계열 */
+  background-color: #f8f9fa;
   color: #11212d;
-  overflow-y: auto; /* 세로 스크롤 허용 */
+  overflow-y: auto;
 }
 
 .board-page {

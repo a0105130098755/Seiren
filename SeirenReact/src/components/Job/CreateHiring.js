@@ -4,18 +4,25 @@ import { createHiring } from "../../api/Api";
 import styled from "styled-components";
 
 const CreateHiringContainer = styled.div`
-  flex: 1;
+  width: 100%;
   max-width: 800px;
-  margin: 80px auto 20px auto;
+  margin: 150px auto 20px auto;
   padding: 60px 40px;
   background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   font-family: "Noto Sans", sans-serif;
 
   @media (max-width: 768px) {
-    margin: 40px 20px;
+    margin: 100px 20px;
     padding: 40px 20px;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 480px) {
+    margin: 80px 10px;
+    padding: 20px 10px;
+    border-radius: 12px;
   }
 `;
 
@@ -25,46 +32,83 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
+  width: 100%;
   margin-bottom: 20px;
   padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 1px solid #ccd0cf;
+  border-radius: 10px;
   font-family: "Noto Sans", sans-serif;
   font-size: 18px;
+  transition: border-color 0.3s, box-shadow 0.3s;
 
   &:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #4a5c6a;
+    box-shadow: 0 0 0 2px rgba(74, 92, 106, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    font-size: 14px;
   }
 `;
 
 const TextArea = styled.textarea`
+  width: 100%;
   margin-bottom: 20px;
   padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 1px solid #ccd0cf;
+  border-radius: 10px;
   height: 200px;
   font-family: "Noto Sans", sans-serif;
   font-size: 18px;
+  transition: border-color 0.3s, box-shadow 0.3s;
 
   &:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #4a5c6a;
+    box-shadow: 0 0 0 2px rgba(74, 92, 106, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    font-size: 14px;
   }
 `;
 
 const Button = styled.button`
+  width: 100%;
   padding: 15px;
   background-color: #253745;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out, transform 0.3s;
   font-size: 18px;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #253745;
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    font-size: 14px;
   }
 `;
 
