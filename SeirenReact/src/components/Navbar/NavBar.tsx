@@ -26,6 +26,9 @@ const NavBar = () => {
     if (isLoggedIn) {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("tokenExpiresIn");
+      localStorage.removeItem("nickname");
+      localStorage.removeItem("profile");
       setIsLoggedIn(false);
       setShowProfileOptions(false);
       setSidebarOpen(false);

@@ -8,12 +8,14 @@ const MyHiringsSection = () => {
 
   useEffect(() => {
     const loadHirings = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await fetchMyHiring();
-        setHirings(response);
+        setHirings(response || []);
       } catch (err) {
-        setError("so 구인 글을 불러오는 데 실패했습니다.");
-        console.error(err);
+        console.error("Error loading hirings:", err);
+        setError("내 구인글을 불러오는 데 실패했습니다.");
       } finally {
         setLoading(false);
       }

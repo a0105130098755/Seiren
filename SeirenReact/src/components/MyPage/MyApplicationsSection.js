@@ -8,12 +8,15 @@ const MyApplicationsSection = () => {
 
   useEffect(() => {
     const loadApplications = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await fetchSentApplications();
-        setApplications(response);
+        console.log("Fetched applications:", response); // 디버깅용 로그
+        setApplications(response || []);
       } catch (err) {
+        console.error("Error loading applications:", err);
         setError("내 지원 현황을 불러오는 데 실패했습니다.");
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -33,7 +36,7 @@ const MyApplicationsSection = () => {
       ) : (
         applications.map((app) => (
           <div key={app.id}>
-            <h3>{app.hiringDTO.title}</h3>
+            <h3>{app.hiringDTO?.title || "제목 없음"}</h3>
             <p>
               상태:{" "}
               {app.status === 0

@@ -22,20 +22,14 @@ import HiringDetail from "./components/Job/HiringDetail";
 import ChatMain from "./components/Chat/ChatMain";
 import Chatting from "./components/Chat/Chatting";
 
-interface HiringDTO {
-  id: number;
-  title: string;
-  nickname: string;
-  content: string;
-  current: number;
-  max: number;
-  location: string | null;
-  profile: string;
-}
-
 function App() {
   const [board, setBoard] = useState([]);
-  const [hiring, setHiring] = useState<HiringDTO | null>(null);
+  const [hiring, setHiring] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+  const [userBoards, setUserBoards] = useState([]);
+  const [userHirings, setUserHirings] = useState([]);
+  const [userApplications, setUserApplications] = useState([]);
+
   return (
     <Router>
       <NavBar />
@@ -60,7 +54,18 @@ function App() {
             element={<HiringDetail hiring={hiring} setHiring={setHiring} />}
           />
           <Route path="/charge" element={<Charge />} />
-          <Route path="/mypage" element={<Mypage />} />
+          <Route
+            path="/mypage"
+            element={
+              <Mypage
+                userInfo={userInfo}
+                setUserInfo={setUserInfo}
+                boards={userBoards}
+                hirings={userHirings}
+                applications={userApplications}
+              />
+            }
+          />
           <Route path="/chat" element={<ChatMain />} />
           <Route path="/chatting/:roomId" element={<Chatting />} />
           <Route path="/" element={<MainPage />} />

@@ -4,8 +4,12 @@ import CryptoJS from "crypto-js";
 
 const UserInfoSection = ({ userInfo, setUserInfo }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedInfo, setEditedInfo] = useState(userInfo);
+  const [editedInfo, setEditedInfo] = useState(userInfo || {});
   const [error, setError] = useState(null);
+
+  if (!userInfo) {
+    return <div>로딩 중...</div>;
+  }
 
   const handleSave = async () => {
     try {
