@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { fetchComments, saveComment, deleteComment } from "../../api/Api";
 import "./Comments.css";
+import CryptoJS from "crypto-js";
 
 const Comments = ({ boardId, onCommentCountUpdate }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState(null);
-  const userNickname = localStorage.getItem("nickname");
+  const userNickname = CryptoJS.AES.decrypt(
+    localStorage.getItem("nickname"),
+    process.env.REACT_APP_SECRET_KEY
+  ).toString(CryptoJS.enc.Utf8);
 
   useEffect(() => {
     loadComments();
