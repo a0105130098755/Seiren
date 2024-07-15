@@ -1,0 +1,368 @@
+body {
+  margin: 0;
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #ffffff;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.navbar {
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  height: 64px;
+}
+
+.fullscreen-container {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.container {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  max-width: 800px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.form-container {
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form h1 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.input.box {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input.box input {
+  flex: 1;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  height: 40px;
+  background: #fff;
+  color: #333;
+}
+
+.icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.email-input-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.email-input {
+  flex: 1;
+  padding-right: 110px;
+}
+
+.email-button,
+.email-confirm-button {
+  position: absolute;
+  right: 0;
+  padding: 0 15px;
+  border: none;
+  background-color: #0075ff;
+  color: #f4f9ff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  height: 40px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.email-button:hover,
+.email-confirm-button:hover {
+  background-color: #2caeff;
+}
+
+.check-button {
+  background-color: #0075ff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  color: #f4f9ff;
+}
+
+.check-button:hover {
+  background-color: #2caeff;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
+}
+
+.file-upload-label {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #0075ff;
+  color: white;
+  margin-right: 10px;
+}
+
+.file-upload-label:hover {
+  background-color: #0075ff;
+}
+
+.file-upload-input {
+  display: none;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.preview-button {
+  background-color: #0075ff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.preview-button:hover {
+  background-color: #2caeff;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #c82333;
+}
+
+.button {
+  background-color: #0075ff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.button:hover {
+  background-color: #2caeff;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.success {
+  color: green;
+  margin-top: 10px;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  outline: none;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.register {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.register a {
+  color: #0075ff;
+  text-decoration: none;
+}
+
+.register a:hover {
+  text-decoration: underline;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-button {
+  background-color: #0075ff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-button:hover {
+  background-color: #2caeff;
+}
+
+.modal-content {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.modal-content h3 {
+  font-size: 18px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  margin-bottom: 10px;
+}
+
+.modal-content ul {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.modal-content ul li {
+  list-style-type: disc;
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-height: none;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .form-container {
+    margin-top: 80px;
+  }
+
+  .form-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .input.box {
+    flex: 1 1 100%;
+  }
+
+  .input.box.full-width input {
+    padding-right: 110px;
+  }
+
+  .email-button,
+  .email-confirm-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: auto;
+    border-radius: 0 5px 5px 0;
+    white-space: nowrap;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .modal {
+    max-width: 90%;
+  }
+
+  .topbar {
+    padding: 10px;
+    flex-direction: column;
+  }
+
+  .modal-content {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}

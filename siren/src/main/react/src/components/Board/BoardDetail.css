@@ -1,0 +1,83 @@
+.board-detail-page {
+  padding: 20px;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 70px;
+}
+
+.board-detail-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 800px;
+  width: 800px;
+  margin: 20px 0;
+  position: relative;
+  overflow: visible;
+}
+
+.board-detail {
+  margin-bottom: 20px;
+}
+
+.board-title {
+  font-size: 2em;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.board-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-image {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.board-nickname,
+.board-date {
+  font-size: 1em;
+  color: #555555;
+}
+
+.board-content {
+  font-size: 1.2em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.comments-section {
+  margin-top: 20px;
+  min-height: 200px;
+}
+
+.no-comments {
+  text-align: left;
+  font-size: 1.2em;
+  color: #888888;
+}
+
+@media (max-width: 768px) {
+  .board-detail-container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .board-title {
+    font-size: 1.5em;
+  }
+
+  .board-content {
+    font-size: 1em;
+  }
+}

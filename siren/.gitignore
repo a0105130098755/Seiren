@@ -39,3 +39,33 @@ out/
 # Ignore application.properties
 /src/main/resources/application.properties
 /src/main/resources/application-test.properties
+
+
+### react ###
+# dependencies
+src/main/react/node_modules
+src/main/node_modules
+src/main/react/.pnp
+src/main/react/pnp.js
+src/main/react/.env
+
+# testing
+src/main/react/coverage
+
+# production
+src/main/react/build
+
+# misc
+src/main/react/.DS_Store
+src/main/react/.env
+src/main/react/.env.local
+src/main/react/.env.development.local
+src/main/react/.env.test.local
+src/main/react/.env.production.local
+
+src/main/react/npm-debug.log*
+src/main/react/yarn-debug.log*
+src/main/react/yarn-error.log*
+
+# Resources
+src/main/resources/static/static

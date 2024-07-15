@@ -1,0 +1,147 @@
+body {
+  margin: 0;
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-width: 100vw;
+  background: #f0f2f5; /* Slightly lighter background for better contrast */
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff; /* Solid white background */
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  margin-top: 100px; /* Center vertically */
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 24px;
+}
+
+.input.box {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.input.box input {
+  width: 100%;
+  padding: 10px 40px 10px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.input.box input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+.remember-forgot,
+.register {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.remember-forgot a,
+.register a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.remember-forgot a:hover,
+.register a:hover {
+  color: #0056b3;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.kakao-login-button {
+  width: 100%; /* Make the Kakao button same width as the submit button */
+  margin-top: 10px;
+  background-color: #fee500; /* Kakao's signature yellow color */
+  border: none;
+  border-radius: 5px;
+  color: #000000; /* Black text for contrast */
+  font-size: 16px;
+  font-weight: bold;
+  padding: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.kakao-login-button:hover {
+  background-color: #ffd700; /* Slightly darker yellow for hover effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for hover effect */
+}
+
+.kakao-login-button:active {
+  background-color: #fccb00; /* Even darker yellow for active effect */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow for active effect */
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .input.box input {
+    padding: 10px 35px 10px 10px;
+  }
+
+  button[type="submit"],
+  .kakao-login-button {
+    padding: 12px;
+    font-size: 16px;
+  }
+}

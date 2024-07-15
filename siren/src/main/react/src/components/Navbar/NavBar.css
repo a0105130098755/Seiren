@@ -1,0 +1,251 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .logo img {
+  height: 40px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  gap: 20px;
+}
+
+.nav-links a {
+  position: relative;
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  transition: color 0.3s ease-in-out;
+  padding: 10px 15px;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #000000;
+  left: 0;
+  bottom: -5px;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease-in-out;
+}
+
+.nav-links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-pic {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.profile-icon {
+  height: 40px;
+  width: 40px;
+  color: #999;
+  transition: color 0.3s ease-in-out;
+}
+
+.profile-icon:hover {
+  color: #007bff;
+}
+
+.profile-options {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-button {
+  background: #11212d;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 10px 20px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out;
+  white-space: nowrap;
+}
+
+.profile-button:hover {
+  background-color: #253745;
+}
+
+.logout-button {
+  background: #11212d;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 10px 20px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out;
+  white-space: nowrap;
+}
+
+.logout-button:hover {
+  background-color: #253745;
+}
+
+.hamburger-icon {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #ffffff;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: right 0.4s ease;
+}
+
+.sidebar.open {
+  right: 0;
+}
+
+.close-icon {
+  font-size: 24px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.sidebar-links a,
+.sidebar-links button {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+  padding: 10px 0;
+  transition: color 0.3s ease-in-out;
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sidebar-links a::after,
+.sidebar-links button::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #333;
+  left: 0;
+  bottom: 0;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-links a:hover::after,
+.sidebar-links button:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.sidebar-links a:hover,
+.sidebar-links button:hover {
+  color: #007bff;
+}
+
+@media (max-width: 768px) {
+  .nav-links,
+  .profile {
+    display: none !important;
+  }
+
+  .hamburger-icon {
+    display: block;
+  }
+
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar-links {
+    display: flex;
+  }
+
+  .sidebar .profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .sidebar .profile-pic,
+  .sidebar .profile-icon {
+    height: 40px;
+    width: 40px;
+  }
+
+  .mobile-login-link {
+    display: block;
+  }
+}
