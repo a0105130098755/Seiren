@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 import "./NavBar.css";
+import logo from './Logo.png';
 
 const NavBar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -51,7 +52,7 @@ const NavBar = () => {
       <div className="navbar">
         <div className="logo">
           <Link to="/">
-            <img src="./Logo.png" alt="Logo" />
+            <img src={logo} alt="Logo" />
           </Link>
         </div>
         <nav className="nav-links">
