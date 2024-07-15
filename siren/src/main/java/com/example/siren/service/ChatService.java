@@ -173,7 +173,10 @@ public class ChatService {
     public void updatePoint(ChatMessageDTO message){
         Optional<Member> memberOptional = memberRepository.findByNickname(message.getSender());
         Member member = memberOptional.get();
-        member.updatePoint(Integer.parseInt(message.getMessage()));
+        Optional<Member> memberOptional2 = memberRepository.findByNickname(message.getRoomId());
+        Member member2 = memberOptional2.get();
+        member.updatePoint(member.getPoint() - Integer.parseInt(message.getMessage()));
+        member2.updatePoint(member2.getPoint() + Integer.parseInt(message.getMessage()));
         log.warn("updatePoint 실행");
     }
 
