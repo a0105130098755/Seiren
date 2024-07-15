@@ -17,9 +17,8 @@ import org.springframework.web.client.RestTemplate;
 
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -50,10 +49,18 @@ public class KaKaoService {
             KakaoDTO kakaoDto = responseEntity.getBody();
             Optional<Member> optionalMember = memberRepository.findByEmail(kakaoDto.getKakaoAccount().getEmail());
 
+            String kakaoNickname = kakaoDto.getKakaoAccount().getProfile().getNickname();
+            Optional<Member> optionalMember2 = memberRepository.findByNickname(kakaoNickname);
+
+            List<Member> memberList = memberRepository.findAll();
+            Set<String> existingNickname = memberList.stream().map(Member::getNickname).collect(Collectors.toSet());
+            Random random = new Random();
+
+
             MemberRequestDTO memberDTO = MemberRequestDTO.builder()
                     .email(kakaoDto.getKakaoAccount().getEmail())
                     .name(kakaoDto.getKakaoAccount().getProfile().getNickname())
-                    .nickname(kakaoDto.getKakaoAccount().getProfile().getNickname())
+                    .nickname(kakaoNickname)
                     .profile(kakaoDto.getKakaoAccount().getProfile().getProfile())
                     .password(String.valueOf(kakaoDto.getId()))
                     .nickname(kakaoDto.getKakaoAccount().getProfile().getNickname())
@@ -67,6 +74,14 @@ public class KaKaoService {
                     return authService.login(memberDTO);
                 } else return null;
 
+            }
+            // 해당 닉네임이 사용중이라면
+            if(optionalMember2.isPresent()){
+                while(existingNickname.contains(kakaoNickname)){
+                    int randomNum = random.nextInt(10000);
+                    kakaoNickname = kakaoNickname + randomNum;
+                }
+                memberDTO.ChangeNickname(kakaoNickname);
             }
 
             // 카카오 계정은 kakao 필드 true로 저장.

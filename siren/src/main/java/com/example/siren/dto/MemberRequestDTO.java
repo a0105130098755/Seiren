@@ -2,10 +2,7 @@ package com.example.siren.dto;
 
 import com.example.siren.constant.Authority;
 import com.example.siren.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -36,5 +33,9 @@ public class MemberRequestDTO {
 
     public UsernamePasswordAuthenticationToken toAuthentication(){
         return new UsernamePasswordAuthenticationToken(email,password);
+    }
+
+    public void ChangeNickname(String newNickName){
+        this.nickname = newNickName;
     }
 }
