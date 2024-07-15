@@ -33,7 +33,7 @@ export const ContentWrapper = styled.div`
 
   @media (max-width: 768px) {
     padding: 20px;
-    width: 90%; /* 모바일에서 너비 90%로 설정 */
+    width: 90%;
   }
 `;
 
@@ -171,7 +171,7 @@ export const StatusButton = styled(Button)`
   @media (max-width: 768px) {
     padding: 6px 12px;
     font-size: 12px;
-    width: 100%; /* 모바일에서 너비 100%로 설정 */
+    width: 100%;
   }
 `;
 
@@ -187,7 +187,7 @@ export const KickButton = styled(Button)`
   @media (max-width: 768px) {
     padding: 6px 12px;
     font-size: 12px;
-    width: 100%; /* 모바일에서 너비 100%로 설정 */
+    width: 100%;
   }
 `;
 
@@ -200,7 +200,7 @@ export const BackButtonWrapper = styled.div`
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  margin-top: 10px; /* 네비게이션 바와 겹치지 않도록 마진 추가 */
+  margin-top: 10px;
 
   @media (max-width: 768px) {
     display: none;
