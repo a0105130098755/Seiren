@@ -153,22 +153,22 @@ const ButtonDiv = styled.div`
 `;
 
 const Chatting = () => {
-  const { roomId } = useParams();
-  const [socketConnected, setSocketConnected] = useState(false);
-  const [inputMsg, setInputMsg] = useState(""); // 입력 메세지
-  const [chatList, setChatList] = useState(""); // 채팅 리스트
-  const [pointList, setPointList] = useState(""); // 포인트 리스트
-  const [sender, setSender] = useState(""); // 보낸 사람
-  const [myPoint, setMyPoint] = useState(null);
-  const [clicked, setClicked] = useState(false);
-  const ws = useRef(null);
-  const navigate = useNavigate();
-  const [inputPoint, setInputPoint] = useState("");
   const bytes = CryptoJS.AES.decrypt(
     localStorage.getItem("nickname"),
     process.env.REACT_APP_SECRET_KEY
   );
   const currentNickname = bytes.toString(CryptoJS.enc.Utf8);
+  const { roomId } = useParams();
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [inputMsg, setInputMsg] = useState(""); // 입력 메세지
+  const [chatList, setChatList] = useState(""); // 채팅 리스트
+  const [pointList, setPointList] = useState(""); // 포인트 리스트
+  const [sender, setSender] = useState(currentNickname); // 보낸 사람
+  const [myPoint, setMyPoint] = useState(null);
+  const [clicked, setClicked] = useState(false);
+  const ws = useRef(null);
+  const navigate = useNavigate();
+  const [inputPoint, setInputPoint] = useState("");
 
   const handleMemberInfo = async () => {
     try {
@@ -185,7 +185,7 @@ const Chatting = () => {
 
   useEffect(() => {
     handleMemberInfo();
-  });
+  }, []);
 
   const handleChange = (e) => {
     const { value } = e.target;

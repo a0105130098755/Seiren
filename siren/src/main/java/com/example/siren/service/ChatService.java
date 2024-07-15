@@ -99,8 +99,10 @@ public class ChatService {
             }
             chatRoomDTO.getSessions().add(session); // 채팅방에 입장한 세션을 추가하고
             if(chatMessage.getSender() != null) {
-                chatMessage.setMessage(chatMessage.getSender() + "님이 입장했습니다.");
-                sendMessageToAll(roomId, chatMessage);
+                log.warn("chatMessage.getSender if문 통과, chatMessage : {}", chatMessage.toString());
+//                chatMessage.setType(ChatMessageDTO.MessageType.TALK);
+//                chatMessage.setMessage(chatMessage.getSender() + "님이 입장했습니다.");
+//                sendMessageToAll(roomId, chatMessage);
             }
             chatroomRepository.save(chatroom); // 디비에 저장하도록 한다.
             log.warn("새 사용자 입장함! : {} ", chatMessage.getSender());
@@ -114,15 +116,19 @@ public class ChatService {
         Optional<ChatRoom> chatRoomOptional = chatroomRepository.findById(roomId);
         ChatRoom chatRoom = chatRoomOptional.get();
         if(room != null) {
+
+            if(chatRoom.getAudience()>0) chatRoom.setAudience(chatRoom.getAudience()-1); // 청중들 한명씩 제거
+            if(chatMessage.getSender() != null ){
+                if(chatMessage.getSender().equals(chatRoom.getRoomId())) {
+                    chatMessage.setType(ChatMessageDTO.MessageType.TALK);
+                    chatMessage.setMessage("방송이 종료되었습니다.");
+                    sendMessageToAll(roomId, chatMessage);
+                }
+            }
             if(room.getRoomId().equals(chatMessage.getSender())){
                 room.getSessions().clear();
             }else {
                 room.getSessions().remove(session); // 방 정보에서 session 에 퇴장한거 삭제
-            }
-            if(chatRoom.getAudience()>0) chatRoom.setAudience(chatRoom.getAudience()-1); // 청중들 한명씩 제거
-            if(chatMessage.getSender() != null ){
-                chatMessage.setMessage(chatMessage.getSender() + "님이 퇴장했습니다.");
-                sendMessageToAll(roomId, chatMessage);
             }
             log.warn("chatMessage sender : {}" , chatMessage.getSender());
             log.warn("roomId : {}", roomId);
