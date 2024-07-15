@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchSentApplications } from "../../api/Api";
+import { fetchSentApplications } from "../../api/hiringApi";
 import {
   ContentSection,
   SectionTitle,

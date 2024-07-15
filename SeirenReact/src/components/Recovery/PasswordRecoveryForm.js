@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MdAlternateEmail } from "react-icons/md";
-import { forgotPassword } from "../../api/Api";
+import { forgotPassword } from "../../api/AuthApi";
 import "./PasswordRecoveryEmailLookup.css"; // 필요한 스타일을 가져오기 위해 임포트
 
 const PasswordRecoveryForm = () => {

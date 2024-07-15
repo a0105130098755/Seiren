@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {
   fetchSentApplications,
   fetchReceivedApplications,
-} from "../../api/Api";
+} from "../../api/hiringApi";
 
 const Container = styled.div`
   padding: 80px 20px 20px 20px;

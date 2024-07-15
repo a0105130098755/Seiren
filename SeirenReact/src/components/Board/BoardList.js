@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchBoardList } from "../../api/Api";
+import { fetchBoardList } from "../../api/boardApi";
 import Pagination from "./BoardPagination";
 import BoardCard from "./BoardCard";
 import BackButton from "../BackButton";

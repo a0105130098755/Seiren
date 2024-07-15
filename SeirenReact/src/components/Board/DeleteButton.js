@@ -1,6 +1,6 @@
 // DeleteButton.js
 import React from "react";
-import { deleteBoard } from "../../api/Api";
+import { deleteBoard } from "../../api/boardApi";
 import { useNavigate } from "react-router-dom";
 
 function DeleteButton({ boardId, nickname }) {

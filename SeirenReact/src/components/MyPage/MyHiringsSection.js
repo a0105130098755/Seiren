@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchMyHiring } from "../../api/Api";
+import { fetchMyHiring } from "../../api/hiringApi";
 import { List, ListItem, ListItemTitle, ListItemContent } from "./MyPageStyles";
 
 const MyHiringsSection = () => {

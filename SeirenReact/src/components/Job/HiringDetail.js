@@ -8,7 +8,7 @@ import {
   fetchReceivedApplications,
   teamList,
   teamKick,
-} from "../../api/Api";
+} from "../../api/hiringApi";
 import axios from "axios";
 import {
   PageWrapper,

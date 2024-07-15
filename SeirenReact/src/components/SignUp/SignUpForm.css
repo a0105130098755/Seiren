@@ -9,21 +9,6 @@ body {
   overflow: hidden;
 }
 
-.navbar {
-  width: 100%;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  height: 64px;
-}
-
 .fullscreen-container {
   position: fixed;
   top: 64px;
@@ -79,7 +64,7 @@ body {
   flex: 1;
   padding: 10px 10px 10px 40px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px; /* Adjusted for better curves */
   height: 40px;
   background: #fff;
   color: #333;
@@ -113,7 +98,7 @@ body {
   border: none;
   background-color: #0075ff;
   color: #f4f9ff;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 8px 8px 0; /* Adjusted for better curves */
   cursor: pointer;
   height: 40px;
   white-space: nowrap;
@@ -131,7 +116,7 @@ body {
   background-color: #0075ff;
   border: none;
   padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 8px; /* Adjusted for better curves */
   cursor: pointer;
   height: 40px;
   display: flex;
@@ -159,7 +144,7 @@ body {
   display: inline-block;
   padding: 10px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 8px; /* Adjusted for better curves */
   background-color: #0075ff;
   color: white;
   margin-right: 10px;
@@ -183,7 +168,7 @@ body {
   color: white;
   border: none;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 8px; /* Adjusted for better curves */
   cursor: pointer;
 }
 
@@ -196,7 +181,7 @@ body {
   color: white;
   border: none;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 8px; /* Adjusted for better curves */
   cursor: pointer;
 }
 
@@ -209,7 +194,7 @@ body {
   color: white;
   border: none;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 8px; /* Adjusted for better curves */
   cursor: pointer;
   width: 100%;
   margin-top: 10px;
@@ -281,7 +266,7 @@ body {
   color: white;
   border: none;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 8px; /* Adjusted for better curves */
   cursor: pointer;
 }
 
@@ -344,7 +329,7 @@ body {
     top: 0;
     height: 100%;
     width: auto;
-    border-radius: 0 5px 5px 0;
+    border-radius: 0 8px 8px 0; /* Adjusted for better curves */
     white-space: nowrap;
   }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { fetchMyHiring } from "../../api/Api";
-import HiringCard from "./HiringCard"; // HiringCard를 별도의 파일로 분리
+import { fetchMyHiring } from "../../api/hiringApi";
+import HiringCard from "./HiringCard";
 
 const MyHiringContainer = styled.div`
   margin-bottom: 40px;

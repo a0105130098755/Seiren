@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { findEmail } from "../../api/Api";
+import { findEmail } from "../../api/AuthApi";
 import "./PasswordRecoveryEmailLookup.css";
 
 const EmailLookupForm = () => {

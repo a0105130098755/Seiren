@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { updateUserInfo } from "../../api/Api"; // 프로필 업데이트 API 함수 임포트
+import { updateUserInfo } from "../../api/userApi"; // 프로필 업데이트 API 함수 임포트
 import CryptoJS from "crypto-js";
 import {
   Modal,

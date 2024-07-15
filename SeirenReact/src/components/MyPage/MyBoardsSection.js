@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchBoardList } from "../../api/Api";
+import { fetchBoardList } from "../../api/boardApi";
 import CryptoJS from "crypto-js";
 import {
   ContentSection,

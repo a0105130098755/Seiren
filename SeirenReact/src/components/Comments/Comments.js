@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchComments, saveComment, deleteComment } from "../../api/Api";
+import { fetchComments, saveComment, deleteComment } from "../../api/boardApi";
 import "./Comments.css";
 import CryptoJS from "crypto-js";
 

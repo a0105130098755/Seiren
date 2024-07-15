@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { fetchSentApplications, deleteApplication } from "../../api/Api";
+import { fetchSentApplications, deleteApplication } from "../../api/hiringApi";
 
 const ApplicationCard = styled.div`
   background-color: #f8f9fa;

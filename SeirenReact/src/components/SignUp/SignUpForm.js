@@ -8,13 +8,13 @@ import React, {
 import { FaLock, FaUser, FaEye, FaEyeSlash, FaPhone } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 import Modal from "react-modal";
-import { signUp, sendEmailCode, checkExist } from "../../api/Api";
+import { signUp, sendEmailCode, checkExist } from "../../api/AuthApi";
 import useTimer from "../../hooks/useTimer";
 import NavBar from "../Navbar/NavBar";
 import "./SignUpForm.css";
 import { Link } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../../firebase"; // Import Firebase storage
+import { storage } from "../../firebase";
 
 Modal.setAppElement("#root");
 

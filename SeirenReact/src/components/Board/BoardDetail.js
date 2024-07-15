@@ -1,4 +1,3 @@
-// BoardDetail.js
 import React, { useState, useEffect } from "react";
 import Comments from "../Comments/Comments";
 import DeleteButton from "./DeleteButton";

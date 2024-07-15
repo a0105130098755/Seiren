@@ -21,7 +21,7 @@ import {
   fetchHiringList,
   searchHiringByTitle,
   searchHiringByNickname,
-} from "../../api/Api";
+} from "../../api/hiringApi";
 import Pagination from "../Board/BoardPagination";
 import MyHiring from "./MyHiring";
 import SentApplications from "./SentApplications";

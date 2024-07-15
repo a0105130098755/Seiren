@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createHiring } from "../../api/Api";
+import { createHiring } from "../../api/hiringApi";
 import styled from "styled-components";
 
 const CreateHiringContainer = styled.div`

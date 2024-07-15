@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createBoard } from "../../api/Api";
+import { createBoard } from "../../api/boardApi";
 import "./CreateBoard.css";
 import CryptoJS from "crypto-js";
 import BackButton from "../BackButton";
