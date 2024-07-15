@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { updateUserInfo } from "../../api/Api";
+import { updateUserInfo } from "../../api/Api"; // 프로필 업데이트 API 함수 임포트
 import CryptoJS from "crypto-js";
 import {
   Modal,
@@ -37,6 +37,7 @@ const UserInfoSection = ({ userInfo, setUserInfo }) => {
         process.env.REACT_APP_SECRET_KEY
       ).toString();
 
+      // 프로필 업데이트 API 호출
       const response = await updateUserInfo({
         ...editedInfo,
         nickname: encryptedNickname,
