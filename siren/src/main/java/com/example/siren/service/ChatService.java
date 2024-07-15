@@ -114,8 +114,12 @@ public class ChatService {
         Optional<ChatRoom> chatRoomOptional = chatroomRepository.findById(roomId);
         ChatRoom chatRoom = chatRoomOptional.get();
         if(room != null) {
-            room.getSessions().remove(session); // 방 정보에서 session 에 퇴장한거 삭제
-            chatRoom.setAudience(chatRoom.getAudience()-1); // 청중들 한명씩 제거
+            if(room.getRoomId().equals(chatMessage.getSender())){
+                room.getSessions().clear();
+            }else {
+                room.getSessions().remove(session); // 방 정보에서 session 에 퇴장한거 삭제
+            }
+            if(chatRoom.getAudience()>0) chatRoom.setAudience(chatRoom.getAudience()-1); // 청중들 한명씩 제거
             if(chatMessage.getSender() != null ){
                 chatMessage.setMessage(chatMessage.getSender() + "님이 퇴장했습니다.");
                 sendMessageToAll(roomId, chatMessage);
