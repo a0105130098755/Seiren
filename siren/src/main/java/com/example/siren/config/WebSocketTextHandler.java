@@ -44,6 +44,7 @@ public class WebSocketTextHandler extends AbstractWebSocketHandler {
             //일반 채팅 로직
             chatService.sendMessageToAll(roomId, chatMessageDTO);
         }else if(chatMessageDTO.getType() == ChatMessageDTO.MessageType.POINT){
+            chatService.updatePoint(chatMessageDTO);
             chatService.sendMessageToAll(roomId, chatMessageDTO);
         }
     }

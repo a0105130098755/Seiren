@@ -250,6 +250,11 @@ const Chatting = () => {
   };
 
   const onClickMsgSend2 = (e) => {
+    if (myPoint < inputPoint) {
+      alert("보유 중인 포인트보다 많습니다.");
+      return;
+    }
+
     // 메시지 전송 (소켓 통신), useRef에 값을 저장하기 위해서는 current 메소드 사용해야 함
     ws.current.send(
       JSON.stringify({
@@ -261,6 +266,7 @@ const Chatting = () => {
       })
     );
     setInputPoint(""); // 전송 이후 초기화
+    setMyPoint(myPoint - inputPoint);
   };
 
   const onEnterKey = (e) => {
@@ -318,7 +324,7 @@ const Chatting = () => {
           <ButtonDiv onClick={onClickMsgSend2}>포인트 선물하기</ButtonDiv>
         </ChatContainerLeft>
         <ChatContainerMiddle>
-          <MessageContainer>
+          <MessageContainer ref={chatContainerRef}>
             {chatList &&
               chatList.map((chat, index) => (
                 <Message

@@ -48,4 +48,7 @@ public class Member {
         this.regDate = LocalDateTime.now();
     }
 
+    public void updatePoint (int point){
+        this.point = point;
+    }
 }

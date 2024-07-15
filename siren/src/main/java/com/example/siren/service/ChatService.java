@@ -6,6 +6,7 @@ import com.example.siren.dto.MemberResponseDTO;
 import com.example.siren.entity.ChatRoom;
 import com.example.siren.entity.Member;
 import com.example.siren.repository.ChatRoomRepository;
+import com.example.siren.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -24,6 +26,7 @@ import java.util.*;
 public class ChatService {
     private final ObjectMapper objectMapper;
     private final ChatRoomRepository chatroomRepository;
+    private final MemberRepository memberRepository;
     private final AuthGetInfo authGetInfo;
     private Map<String, ChatRoomDTO> chatRooms;
     // 채팅방 정보 담을 맵, roomId 에 해당 방 정보가 들어감 (key, value)
@@ -164,6 +167,14 @@ public class ChatService {
     public MemberResponseDTO getMemberInfo(){
         Member member = authGetInfo.getMember();
         return MemberResponseDTO.of(member);
+    }
+
+    @Transactional
+    public void updatePoint(ChatMessageDTO message){
+        Optional<Member> memberOptional = memberRepository.findByNickname(message.getSender());
+        Member member = memberOptional.get();
+        member.updatePoint(Integer.parseInt(message.getMessage()));
+        log.warn("updatePoint 실행");
     }
 
 
