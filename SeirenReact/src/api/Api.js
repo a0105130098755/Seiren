@@ -110,15 +110,17 @@ export const forgotPassword = async (email) => {
 };
 export const fetchBoardList = async (page, size, title) => {
   try {
-    console.log("axios title : ", title);
+    console.log("API 호출 파라미터:", { page, size, title });
     const response = await api.get("/board/list", {
       params: { page, size, title },
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
+    console.log("API 응답 데이터:", response.data);
     return response.data;
   } catch (error) {
+    console.error("fetchBoardList 에러:", error);
     throw new Error(
       "게시글 리스트를 가져오는데 실패했습니다. 다시 시도해주세요."
     );
