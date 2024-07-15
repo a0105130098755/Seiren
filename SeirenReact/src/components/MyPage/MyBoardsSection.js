@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { fetchBoardList, fetchBoardDetail } from "../../api/Api";
+import { fetchBoardList } from "../../api/Api";
+import CryptoJS from "crypto-js";
 import {
+  ContentSection,
+  SectionTitle,
   List,
   ListItem,
   ListItemTitle,
@@ -8,7 +11,6 @@ import {
   ListItemDate,
   ProfileImage,
 } from "./MyPageStyles";
-import CryptoJS from "crypto-js";
 
 const MyBoardsSection = () => {
   const [boards, setBoards] = useState([]);
@@ -65,7 +67,7 @@ const MyBoardsSection = () => {
   if (error) return <div>에러: {error}</div>;
 
   return (
-    <div>
+    <ContentSection>
       {filteredBoards.length === 0 ? (
         <p>작성한 게시글이 없습니다.</p>
       ) : (
@@ -76,11 +78,11 @@ const MyBoardsSection = () => {
               <div>
                 <ListItemTitle>{board.title}</ListItemTitle>
                 <ListItemDate>
-                  {new Date(board.regDate).toLocaleDateString()}
+                  작성일: {new Date(board.regDate).toLocaleDateString()}
                 </ListItemDate>
                 <ListItemContent>
                   {board.content
-                    ? board.content.substring(0, 100) + "..."
+                    ? board.content.substring(0, 20) + "..."
                     : "내용 없음"}
                 </ListItemContent>
               </div>
@@ -88,7 +90,7 @@ const MyBoardsSection = () => {
           ))}
         </List>
       )}
-    </div>
+    </ContentSection>
   );
 };
 

@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { fetchSentApplications } from "../../api/Api";
-import { List, ListItem, ListItemTitle, ListItemContent } from "./MyPageStyles";
+import {
+  ContentSection,
+  SectionTitle,
+  List,
+  ListItem,
+  ListItemTitle,
+  ListItemContent,
+} from "./MyPageStyles";
 
 const MyApplicationsSection = () => {
   const [applications, setApplications] = useState([]);
@@ -28,7 +35,7 @@ const MyApplicationsSection = () => {
   if (error) return <div>에러: {error}</div>;
 
   return (
-    <div>
+    <ContentSection>
       {applications.length === 0 ? (
         <p>지원한 구인글이 없습니다.</p>
       ) : (
@@ -50,7 +57,7 @@ const MyApplicationsSection = () => {
           ))}
         </List>
       )}
-    </div>
+    </ContentSection>
   );
 };
 
