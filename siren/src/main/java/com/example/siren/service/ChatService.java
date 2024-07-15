@@ -119,7 +119,6 @@ public class ChatService {
         Optional<ChatRoom> chatRoomOptional = chatroomRepository.findById(roomId);
         ChatRoom chatRoom = chatRoomOptional.get();
         if(room != null) {
-
             if(chatRoom.getAudience()>0) chatRoom.setAudience(chatRoom.getAudience()-1); // 청중들 한명씩 제거
             if(chatMessage.getSender() != null ){
                 if(chatMessage.getSender().equals(chatRoom.getRoomId())) {

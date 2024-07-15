@@ -59,6 +59,7 @@ const NavBar = () => {
           <Link to="/board">게시글</Link>
           <Link to="/job">구인 구직</Link>
           <Link to="/charge">충전</Link>
+          <Link to="/chat">채팅</Link>
           {isLoggedIn && <Link to="/mypage">마이페이지</Link>}
         </nav>
         <div className="profile" onClick={toggleProfileOptions}>
@@ -106,6 +107,9 @@ const NavBar = () => {
           </Link>
           <Link to="/charge" onClick={toggleSidebar}>
             충전
+          </Link>
+          <Link to="/chat" onClick={toggleSidebar}>
+            채팅
           </Link>
           {isLoggedIn ? (
             <>

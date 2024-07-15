@@ -7,7 +7,8 @@ import CryptoJS from "crypto-js";
 const ChatContainer = styled.div`
   width: 90vw;
   height: 80vh;
-  border: 1px solid black;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,7 +18,6 @@ const ChatContainerContent = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  border: 1px solid blue;
   justify-content: space-between;
   align-items: center;
 `;
@@ -50,10 +50,13 @@ const ChatContainerLeftInput = styled.input`
 const ChatContainerMiddle = styled.div`
   width: 48%;
   height: 80%;
-  border: 1px solid red;
+  border: 1px solid #d8dce2;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-flow: column;
   justify-content: space-between;
+  background-color: #d8dce2;
 `;
 
 const MessageContainer = styled.div`
@@ -62,7 +65,6 @@ const MessageContainer = styled.div`
   width: 100%;
   height: auto;
   max-height: 90%;
-  border: 1px solid blue;
   overflow-y: auto;
   padding: 10px;
 `;
@@ -72,9 +74,12 @@ const Message = styled.div`
   padding: 10px;
   margin: 6px;
   border-radius: 4px;
+  display: flex;
+  flex-flow: column;
   align-self: ${(props) => (props.isSender ? "flex-end" : "flex-start")};
   font-weight: ${(props) => (props.isMaster ? "bold" : "normal")};
-  border: 1px solid black;
+  border: 1px solid white;
+  background-color: white;
 `;
 
 const SendContainer = styled.div`
@@ -87,6 +92,7 @@ const SendContainer = styled.div`
 
 const SendInput = styled.input`
   border: 1px solid #d8dce2;
+  border-bottom-left-radius: 8px;
   width: 90%;
   height: 100%;
   padding: 4px;
@@ -124,7 +130,10 @@ const ChatContainerRight = styled.div`
 const ChatContainerRightContent = styled.div`
   width: 100%;
   height: 90%;
-  border: 1px solid black;
+  border: 1px solid #d8dce2;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -175,7 +184,6 @@ const Chatting = () => {
       const response = await ChatApi.memberInfo();
       console.log("내 정보", response);
       console.log("내 닉네임", response.data.nickname);
-      setSender(response.data.nickname);
       setMyPoint(response.data.point);
       console.log(response.data.point);
     } catch (e) {
@@ -250,8 +258,8 @@ const Chatting = () => {
   };
 
   const onClickMsgSend2 = (e) => {
-    if (myPoint < inputPoint) {
-      alert("보유 중인 포인트보다 많습니다.");
+    if (inputPoint < 1 || myPoint < inputPoint) {
+      alert("포인트를 확인해 주세요");
       return;
     }
 
@@ -332,7 +340,11 @@ const Chatting = () => {
                   isSender={chat.sender === currentNickname}
                   isMaster={chat.sender === roomId}
                 >
-                  <p>{`${chat.sender}`}</p>
+                  {sender && chat.sender === currentNickname ? (
+                    ""
+                  ) : (
+                    <p>{`${chat.sender}`}</p>
+                  )}
                   <p>{`${chat.message}`}</p>
                 </Message>
               ))}
@@ -360,8 +372,12 @@ const Chatting = () => {
             {pointList &&
               pointList.map((point, index) => (
                 <Message key={index} isSender={true}>
-                  <p>{`${point.sender}`}</p>
-                  <p>{`${point.message}`}</p>
+                  <p style={{ fontSize: "10px", fontWeight: "bold" }}>
+                    {`${point.sender}`} 님이{" "}
+                  </p>
+                  <p style={{ fontSize: "10px", fontWeight: "bold" }}>
+                    {`${point.message}`} 포인트 선물!
+                  </p>
                 </Message>
               ))}
           </ChatContainerRightContent>
