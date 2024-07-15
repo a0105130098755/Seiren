@@ -14,6 +14,7 @@ export const PageContainer = styled.div`
   box-sizing: border-box;
   border-radius: 20px;
   background-color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
     flex-direction: column;

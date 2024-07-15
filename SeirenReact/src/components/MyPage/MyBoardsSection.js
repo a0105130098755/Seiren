@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { fetchBoardList } from "../../api/Api";
 import CryptoJS from "crypto-js";
+import {
+  List,
+  ListItem,
+  ListItemTitle,
+  ListItemContent,
+  ListItemDate,
+} from "./MyPageStyles";
 
 const MyBoardsSection = () => {
-  const [boards, setBoards] = useState([]);
+  const [boards, setBoards] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -27,14 +34,10 @@ const MyBoardsSection = () => {
           throw new Error("닉네임을 복호화할 수 없습니다.");
         }
 
-        console.log("Fetching boards for nickname:", nickname); // 디버깅용 로그
-
         const response = await fetchBoardList(0, 1000, nickname);
-        console.log("Fetched board list:", response); // 디버깅용 로그
 
         setBoards(response.boardDTOS || []);
       } catch (err) {
-        console.error("Error loading boards:", err);
         setError(err.message || "내 게시글을 불러오는 데 실패했습니다.");
       } finally {
         setLoading(false);
@@ -49,17 +52,22 @@ const MyBoardsSection = () => {
 
   return (
     <div>
-      <h2>내 게시글</h2>
       {boards.length === 0 ? (
         <p>작성한 게시글이 없습니다.</p>
       ) : (
-        boards.map((board) => (
-          <div key={board.id}>
-            <h3>{board.title}</h3>
-            <p>작성일: {new Date(board.regDate).toLocaleDateString()}</p>
-            <p>{board.content?.substring(0, 100)}...</p>
-          </div>
-        ))
+        <List>
+          {boards.map((board) => (
+            <ListItem key={board.id}>
+              <ListItemTitle>{board.title}</ListItemTitle>
+              <ListItemDate>
+                {new Date(board.regDate).toLocaleDateString()}
+              </ListItemDate>
+              <ListItemContent>
+                {board.content?.substring(0, 100)}...
+              </ListItemContent>
+            </ListItem>
+          ))}
+        </List>
       )}
     </div>
   );

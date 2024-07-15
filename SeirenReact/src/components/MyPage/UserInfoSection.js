@@ -1,11 +1,30 @@
 import React, { useState } from "react";
 import { updateUserInfo } from "../../api/Api";
 import CryptoJS from "crypto-js";
+import {
+  Modal,
+  ModalContent,
+  Form,
+  Input,
+  SubmitButton,
+  CloseButton,
+  UserInfoContainer,
+  UserInfoItem,
+  UserInfoLabel,
+  UserInfoValue,
+  EditButton,
+  FileInputContainer,
+  CustomFileInputButton,
+  HiddenFileInput,
+  FileName,
+  ProfileImage,
+} from "./MyPageStyles";
 
 const UserInfoSection = ({ userInfo, setUserInfo }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedInfo, setEditedInfo] = useState(userInfo || {});
   const [error, setError] = useState(null);
+  const [fileName, setFileName] = useState("");
 
   if (!userInfo) {
     return <div>로딩 중...</div>;
@@ -37,31 +56,68 @@ const UserInfoSection = ({ userInfo, setUserInfo }) => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setEditedInfo({ ...editedInfo, profile: file });
+    setFileName(file ? file.name : "");
+  };
+
   return (
-    <div>
-      <h2>내 정보</h2>
+    <UserInfoContainer>
       {error && <div style={{ color: "red" }}>{error}</div>}
       {isEditing ? (
-        <div>
-          <input
-            value={editedInfo.nickname}
-            onChange={(e) =>
-              setEditedInfo({ ...editedInfo, nickname: e.target.value })
-            }
-          />
-          <button onClick={handleSave}>저장</button>
-          <button onClick={() => setIsEditing(false)}>취소</button>
-        </div>
+        <Modal>
+          <ModalContent>
+            <CloseButton onClick={() => setIsEditing(false)}>X</CloseButton>
+            <Form>
+              <Input
+                type="text"
+                placeholder="닉네임"
+                value={editedInfo.nickname}
+                onChange={(e) =>
+                  setEditedInfo({ ...editedInfo, nickname: e.target.value })
+                }
+              />
+              <Input
+                type="email"
+                placeholder="새 이메일"
+                value={editedInfo.email}
+                onChange={(e) =>
+                  setEditedInfo({ ...editedInfo, email: e.target.value })
+                }
+              />
+              <Input
+                type="password"
+                placeholder="새 비밀번호"
+                onChange={(e) =>
+                  setEditedInfo({ ...editedInfo, password: e.target.value })
+                }
+              />
+              <FileInputContainer>
+                <FileName>{fileName || "프로필 이미지 선택"}</FileName>
+                <CustomFileInputButton>
+                  선택
+                  <HiddenFileInput type="file" onChange={handleFileChange} />
+                </CustomFileInputButton>
+              </FileInputContainer>
+              <SubmitButton onClick={handleSave}>저장</SubmitButton>
+            </Form>
+          </ModalContent>
+        </Modal>
       ) : (
         <div>
-          <p>닉네임: {userInfo.nickname}</p>
-          <p>이메일: {userInfo.email}</p>
-          <p>포인트: {userInfo.point}</p>
-          <img src={userInfo.profile} alt="프로필" width="100" />
-          <button onClick={() => setIsEditing(true)}>수정</button>
+          <UserInfoItem>
+            <UserInfoLabel>닉네임:</UserInfoLabel>
+            <UserInfoValue>{userInfo.nickname}</UserInfoValue>
+          </UserInfoItem>
+          <UserInfoItem>
+            <UserInfoLabel>프로필:</UserInfoLabel>
+            <ProfileImage src={userInfo.profile} alt="프로필" />
+          </UserInfoItem>
+          <EditButton onClick={() => setIsEditing(true)}>수정</EditButton>
         </div>
       )}
-    </div>
+    </UserInfoContainer>
   );
 };
 

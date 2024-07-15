@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchMyHiring } from "../../api/Api";
+import { List, ListItem, ListItemTitle, ListItemContent } from "./MyPageStyles";
 
 const MyHiringsSection = () => {
   const [hirings, setHirings] = useState([]);
@@ -14,7 +15,6 @@ const MyHiringsSection = () => {
         const response = await fetchMyHiring();
         setHirings(response || []);
       } catch (err) {
-        console.error("Error loading hirings:", err);
         setError("내 구인글을 불러오는 데 실패했습니다.");
       } finally {
         setLoading(false);
@@ -29,19 +29,22 @@ const MyHiringsSection = () => {
 
   return (
     <div>
-      <h2>내 구인글</h2>
       {hirings.length === 0 ? (
         <p>작성한 구인글이 없습니다.</p>
       ) : (
-        hirings.map((hiring) => (
-          <div key={hiring.id}>
-            <h3>{hiring.title}</h3>
-            <p>
-              모집 인원: {hiring.current}/{hiring.max}
-            </p>
-            <p>지역: {hiring.location || "미지정"}</p>
-          </div>
-        ))
+        <List>
+          {hirings.map((hiring) => (
+            <ListItem key={hiring.id}>
+              <ListItemTitle>{hiring.title}</ListItemTitle>
+              <ListItemContent>
+                모집 인원: {hiring.current}/{hiring.max}
+              </ListItemContent>
+              <ListItemContent>
+                지역: {hiring.location || "미지정"}
+              </ListItemContent>
+            </ListItem>
+          ))}
+        </List>
       )}
     </div>
   );

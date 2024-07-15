@@ -72,7 +72,7 @@ const NavBar = () => {
           {isLoggedIn && showProfileOptions && (
             <div className="profile-options">
               <Link to="/mypage" className="mypage-link">
-                마이페이지
+                <button className="profile-button">마이페이지</button>
               </Link>
               <button className="logout-button" onClick={handleLogout}>
                 로그 아웃

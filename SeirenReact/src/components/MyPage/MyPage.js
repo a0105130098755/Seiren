@@ -5,6 +5,7 @@ import {
   Tab,
   ContentSection,
   SectionTitle,
+  PageTitle,
 } from "./MyPageStyles";
 import UserInfoSection from "./UserInfoSection";
 import MyBoardsSection from "./MyBoardsSection";
@@ -64,6 +65,7 @@ const MyPage = () => {
 
   return (
     <PageContainer>
+      <PageTitle>마이페이지</PageTitle>
       <TabContainer>
         <Tab active={activeTab === "info"} onClick={() => setActiveTab("info")}>
           내 정보
