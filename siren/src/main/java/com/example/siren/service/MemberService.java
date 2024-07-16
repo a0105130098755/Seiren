@@ -36,4 +36,15 @@ public class MemberService {
         }
         return true;
     }
+
+    public boolean memberDisabled(){
+        Member member = authGetInfo.getMember();
+        if(member.isStatus()){
+            member.updateStatus(false);
+            return true;
+        }
+        return false;
+        // 회원 비활성화가 성공적으로 됐으면 true 반환
+        // 비활성화가 제대로 되지 않으면 false 반환.
+    }
 }
