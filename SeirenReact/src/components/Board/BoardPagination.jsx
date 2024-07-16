@@ -5,7 +5,6 @@ const Pagination = ({
   activePage,
   itemsCountPerPage,
   totalItemsCount,
-  pageRangeDisplayed,
   onChange,
 }) => {
   const pages = [];

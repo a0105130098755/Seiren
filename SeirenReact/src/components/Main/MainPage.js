@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const MainContainer = styled.div`
+  margin-top: 80px;
   font-family: "Helvetica Neue", Arial, sans-serif;
   padding: 20px;
   max-width: 1000px;

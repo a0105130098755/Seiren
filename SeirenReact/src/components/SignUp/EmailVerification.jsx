@@ -3,25 +3,35 @@ import { MdAlternateEmail } from "react-icons/md";
 import { checkExist, sendEmailCode } from "../../api/AuthApi";
 import useTimer from "../../hooks/useTimer";
 
+// EmailVerification 컴포넌트: 이메일 인증 프로세스를 관리
 const EmailVerification = () => {
+  // 상태 관리
   const [email, setEmail] = useState("");
   const [emailCode, setEmailCode] = useState("");
   const [generatedCode, setGeneratedCode] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isEmailInputDisabled, setIsEmailInputDisabled] = useState(false);
-  const { timeLeft, isActive, start, stop } = useTimer(180);
-  const emailInputRef = useRef(null);
   const [errors, setErrors] = useState({});
 
+  // 커스텀 타이머 훅 사용
+  const { timeLeft, isActive, start, stop } = useTimer(180); // 3분 타이머
+
+  // 이메일 입력 필드 ref
+  const emailInputRef = useRef(null);
+
+  // 컴포넌트 마운트 시 이메일 입력 필드에 포커스
   useEffect(() => {
     if (emailInputRef.current) {
       emailInputRef.current.focus();
     }
   }, []);
 
+  // 이메일 유효성 검사 함수
   const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
+  // 인증번호 발송 핸들러
   const handleSendEmailCode = async () => {
+    // 이미 인증된 경우 처리
     if (isEmailVerified) {
       setErrors((prev) => ({
         ...prev,
@@ -30,11 +40,13 @@ const EmailVerification = () => {
       return;
     }
 
+    // 이메일 입력 확인
     if (!email) {
       setErrors((prev) => ({ ...prev, email: "이메일을 입력해 주세요." }));
       return;
     }
 
+    // 이메일 형식 확인
     if (!isValidEmail(email)) {
       setErrors((prev) => ({
         ...prev,
@@ -44,6 +56,7 @@ const EmailVerification = () => {
     }
 
     try {
+      // 이메일 중복 확인
       const emailExists = await checkExist({ type: "email", value: email });
       if (!emailExists) {
         setErrors((prev) => ({
@@ -53,9 +66,10 @@ const EmailVerification = () => {
         return;
       }
 
+      // 인증번호 발송 API 호출
       const response = await sendEmailCode(email);
       setGeneratedCode(response.data);
-      start();
+      start(); // 타이머 시작
       setIsEmailInputDisabled(true);
       alert("인증번호가 발송되었습니다. 이메일을 확인해 주세요.");
     } catch (error) {
@@ -67,7 +81,9 @@ const EmailVerification = () => {
     }
   };
 
+  // 인증번호 확인 핸들러
   const handleVerifyEmailCode = () => {
+    // 입력 검증
     if (!email) {
       setErrors((prev) => ({ ...prev, email: "이메일을 먼저 입력해 주세요." }));
       return;
@@ -81,14 +97,16 @@ const EmailVerification = () => {
       return;
     }
 
+    // 이미 인증된 경우 처리
     if (isEmailVerified) {
       alert("이미 이메일 인증이 완료되었습니다.");
       return;
     }
 
+    // 인증번호 확인
     if (emailCode === generatedCode) {
       setIsEmailVerified(true);
-      stop();
+      stop(); // 타이머 정지
       alert("이메일 인증이 완료되었습니다.");
       setErrors((prev) => ({
         ...prev,
@@ -104,6 +122,7 @@ const EmailVerification = () => {
 
   return (
     <>
+      {/* 이메일 입력 필드 */}
       <div className="input box full-width">
         <div className="email-input-container">
           <input
@@ -128,6 +147,8 @@ const EmailVerification = () => {
         </button>
       </div>
       {errors.email && <p className="error">{errors.email}</p>}
+
+      {/* 인증번호 입력 필드 */}
       <div className="input box full-width">
         <input
           type="text"
@@ -145,9 +166,12 @@ const EmailVerification = () => {
         </button>
       </div>
       {errors.emailCode && <p className="error">{errors.emailCode}</p>}
+
+      {/* 타이머 표시 */}
       {isActive && <p className="timer">인증번호 유효 시간: {timeLeft}초</p>}
     </>
   );
 };
 
 export default EmailVerification;
+s;

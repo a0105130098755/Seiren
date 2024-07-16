@@ -12,13 +12,16 @@ import {
   ProfileImage,
 } from "./MyPageStyles";
 
+// MyBoardsSection 컴포넌트: 사용자가 작성한 게시글 목록을 표시
 const MyBoardsSection = () => {
+  // 상태 관리
   const [boards, setBoards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [nickname, setNickname] = useState("");
 
   useEffect(() => {
+    // 사용자 닉네임 복호화 함수
     const loadUserNickname = async () => {
       try {
         const encryptedNickname = localStorage.getItem("nickname");
@@ -32,14 +35,16 @@ const MyBoardsSection = () => {
         }
       } catch (err) {
         console.error("사용자 닉네임을 불러오는 데 실패했습니다.", err);
+        // TODO: 사용자에게 오류 알림
       }
     };
 
+    // 게시글 목록 불러오기 함수
     const loadBoards = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetchBoardList(0, 10, ""); // 빈 문자열로 모든 게시글 가져오기
+        const response = await fetchBoardList(0, 10, ""); // 첫 페이지, 10개씩, 필터 없음
         console.log("API 호출 결과:", response);
 
         if (response && response.boardDTOS) {
@@ -59,11 +64,14 @@ const MyBoardsSection = () => {
 
     loadUserNickname();
     loadBoards();
-  }, []);
+  }, []); // 컴포넌트 마운트 시 한 번만 실행
 
+  // 현재 사용자의 게시글만 필터링
   const filteredBoards = boards.filter((board) => board.nickname === nickname);
 
+  // 로딩 중 UI
   if (loading) return <div>로딩 중...</div>;
+  // 에러 발생 시 UI
   if (error) return <div>에러: {error}</div>;
 
   return (

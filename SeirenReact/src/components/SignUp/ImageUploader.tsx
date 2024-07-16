@@ -11,28 +11,33 @@ interface ImageUploaderProps {
   setProfileImageUrl: (url: string | null) => void;
 }
 
+// ImageUploader 컴포넌트: 사용자 프로필 이미지 업로드 및 미리보기 기능 제공
 const ImageUploader: React.FC<ImageUploaderProps> = ({
   usernickname,
   uploadTrigger,
   setProfileImageUrl,
 }) => {
+  // 상태 관리
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string>("");
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
+  // uploadTrigger가 true이고 file이 있을 때 이미지 업로드
   useEffect(() => {
     if (uploadTrigger && file) {
       uploadImage();
     }
   }, [uploadTrigger]);
 
+  // 파일 선택 핸들러
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
     if (selectedFile) {
       const img = new Image();
       img.src = URL.createObjectURL(selectedFile);
       img.onload = () => {
+        // 이미지 리사이징
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         canvas.width = 100;
@@ -62,6 +67,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
     }
   };
 
+  // Firebase Storage에 이미지 업로드
   const uploadImage = () => {
     if (!file) return;
     const fileRef = ref(storage, `images/${usernickname}`);
@@ -80,6 +86,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       });
   };
 
+  // Firestore에 이미지 URL 저장
   const saveImageUrlToFirestore = async (url: string) => {
     try {
       const docRef = await addDoc(collection(db, "images"), {
@@ -96,10 +103,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
     }
   };
 
+  // 모달 열기
   const openModal = () => {
     setModalIsOpen(true);
   };
 
+  // 모달 닫기
   const closeModal = () => {
     setModalIsOpen(false);
   };

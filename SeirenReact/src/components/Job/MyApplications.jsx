@@ -5,86 +5,42 @@ import {
   fetchReceivedApplications,
 } from "../../api/hiringApi";
 
+// 스타일 컴포넌트 정의
 const Container = styled.div`
-  padding: 80px 20px 20px 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-
-  @media (max-width: 768px) {
-    padding: 60px 10px 10px 10px;
-  }
+  // ... (스타일 코드)
 `;
 
-const TabContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 20px;
-`;
+// ... (다른 스타일 컴포넌트들)
 
-const Tab = styled.button`
-  padding: 10px 20px;
-  margin-right: 10px;
-  background-color: ${(props) => (props.active ? "#007bff" : "#ddd")};
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-
-  &:hover {
-    background-color: ${(props) => (props.active ? "#0056b3" : "#ccc")};
-  }
-
-  @media (max-width: 768px) {
-    padding: 8px 16px;
-    margin-right: 5px;
-    font-size: 14px;
-  }
-`;
-
-const TabContent = styled.div`
-  margin-top: 20px;
-
-  @media (max-width: 768px) {
-    margin-top: 10px;
-  }
-`;
-
-const ApplicationCard = styled.div`
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
-
-  @media (max-width: 768px) {
-    padding: 15px;
-    margin-bottom: 8px;
-  }
-`;
-
+// MyApplications 컴포넌트: 사용자의 신청 및 받은 신청을 관리하고 표시
 const MyApplications = () => {
+  // 활성 탭 상태 (sent: 보낸 신청, received: 받은 신청)
   const [activeTab, setActiveTab] = useState("sent");
+  // 보낸 신청 목록 상태
   const [sentApplications, setSentApplications] = useState([]);
+  // 받은 신청 목록 상태
   const [receivedApplications, setReceivedApplications] = useState([]);
 
   useEffect(() => {
+    // 보낸 신청 목록을 가져오는 함수
     const fetchSent = async () => {
       try {
         const response = await fetchSentApplications();
         setSentApplications(response);
       } catch (error) {
         console.error("내가 신청한 글을 불러오는 데 실패했습니다.", error);
+        // TODO: 사용자에게 오류 메시지 표시
       }
     };
 
+    // 받은 신청 목록을 가져오는 함수
     const fetchReceived = async () => {
       try {
         const response = await fetchReceivedApplications();
         setReceivedApplications(response);
       } catch (error) {
         console.error("받은 신청을 불러오는 데 실패했습니다.", error);
+        // TODO: 사용자에게 오류 메시지 표시
       }
     };
 
@@ -92,8 +48,23 @@ const MyApplications = () => {
     fetchReceived();
   }, []);
 
+  // 신청 상태를 문자열로 변환하는 헬퍼 함수
+  const getStatusString = (status) => {
+    switch (status) {
+      case 0:
+        return "대기중";
+      case 1:
+        return "수락됨";
+      case 2:
+        return "거절됨";
+      default:
+        return "알 수 없음";
+    }
+  };
+
   return (
     <Container>
+      {/* 탭 네비게이션 */}
       <TabContainer>
         <Tab active={activeTab === "sent"} onClick={() => setActiveTab("sent")}>
           내가 신청한 글
@@ -105,6 +76,7 @@ const MyApplications = () => {
           받은 신청
         </Tab>
       </TabContainer>
+      {/* 탭 내용 */}
       <TabContent>
         {activeTab === "sent" && (
           <div>
@@ -113,14 +85,7 @@ const MyApplications = () => {
                 <h3>{app.hiringDTO.title}</h3>
                 <p>작성자: {app.hiringDTO.nickname}</p>
                 <p>내용: {app.hiringDTO.content}</p>
-                <p>
-                  상태:{" "}
-                  {app.status === 0
-                    ? "대기중"
-                    : app.status === 1
-                    ? "수락됨"
-                    : "거절됨"}
-                </p>
+                <p>상태: {getStatusString(app.status)}</p>
               </ApplicationCard>
             ))}
           </div>
@@ -132,14 +97,7 @@ const MyApplications = () => {
                 <h3>{app.hiringDTO.title}</h3>
                 <p>신청자: {app.nickname}</p>
                 <p>내용: {app.hiringDTO.content}</p>
-                <p>
-                  상태:{" "}
-                  {app.status === 0
-                    ? "대기중"
-                    : app.status === 1
-                    ? "수락됨"
-                    : "거절됨"}
-                </p>
+                <p>상태: {getStatusString(app.status)}</p>
               </ApplicationCard>
             ))}
           </div>

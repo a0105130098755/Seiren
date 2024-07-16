@@ -112,7 +112,11 @@ const Button = styled.button`
   }
 `;
 
+/**
+ * 구인구직 글 작성 컴포넌트
+ */
 function CreateHiring() {
+  // 구인구직 글 데이터 상태
   const [hiringData, setHiringData] = useState({
     title: "",
     content: "",
@@ -121,6 +125,10 @@ function CreateHiring() {
   });
   const navigate = useNavigate();
 
+  /**
+   * 입력 필드 변경 핸들러
+   * @param {Event} e - 이벤트 객체
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setHiringData((prev) => ({
@@ -129,12 +137,16 @@ function CreateHiring() {
     }));
   };
 
+  /**
+   * 폼 제출 핸들러
+   * @param {Event} e - 이벤트 객체
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await createHiring({
         ...hiringData,
-        current: 1,
+        current: 1, // 현재 인원 수 (글 작성자)
       });
       if (response) {
         alert("구인구직 글이 성공적으로 등록되었습니다.");
@@ -150,6 +162,7 @@ function CreateHiring() {
     <CreateHiringContainer>
       <h2>구인구직 글 작성</h2>
       <Form onSubmit={handleSubmit}>
+        {/* 제목 입력 필드 */}
         <Input
           name="title"
           value={hiringData.title}
@@ -157,6 +170,7 @@ function CreateHiring() {
           placeholder="제목"
           required
         />
+        {/* 내용 입력 필드 */}
         <TextArea
           name="content"
           value={hiringData.content}
@@ -164,6 +178,7 @@ function CreateHiring() {
           placeholder="내용"
           required
         />
+        {/* 최대 인원 입력 필드 */}
         <Input
           type="number"
           name="max"
@@ -173,6 +188,7 @@ function CreateHiring() {
           min="1"
           required
         />
+        {/* 지역 입력 필드 */}
         <Input
           name="location"
           value={hiringData.location}
@@ -180,6 +196,7 @@ function CreateHiring() {
           placeholder="지역"
           required
         />
+        {/* 제출 버튼 */}
         <Button type="submit">등록</Button>
       </Form>
     </CreateHiringContainer>

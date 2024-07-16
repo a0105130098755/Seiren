@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import {
@@ -10,23 +10,11 @@ import {
   teamKick,
 } from "../../api/hiringApi";
 import axios from "axios";
-import {
-  PageWrapper,
-  ContentWrapper,
-  Header,
-  InfoSection,
-  ButtonGroup,
-  Button,
-  ApplyButton,
-  DeleteButton,
-  ApplicationsSection,
-  ApplicationCard,
-  StatusButton,
-  BackButtonWrapper,
-  KickButton,
-} from "./HireDetailStyled";
+import // ... (스타일 컴포넌트 import)
+"./HireDetailStyled";
 import BackButton from "../BackButton";
 
+// API 인스턴스 생성
 const api = axios.create({
   baseURL: "http://localhost:8111/",
   headers: {
@@ -34,40 +22,58 @@ const api = axios.create({
   },
 });
 
+/**
+ * 구인 상세 정보 컴포넌트
+ * @param {Object} props
+ * @param {Object} props.hiring - 구인 정보
+ * @param {Function} props.setHiring - 구인 정보 설정 함수
+ */
 const HiringDetail = ({ hiring, setHiring }) => {
+  // 상태 관리
   const [detail, setDetail] = useState(hiring);
   const [applications, setApplications] = useState([]);
   const [team, setTeam] = useState([]);
   const navigate = useNavigate();
-  const bytes = CryptoJS.AES.decrypt(
+
+  // 현재 사용자 닉네임 복호화
+  const currentNickname = CryptoJS.AES.decrypt(
     localStorage.getItem("nickname"),
     process.env.REACT_APP_SECRET_KEY
-  );
-  const currentNickname = bytes.toString(CryptoJS.enc.Utf8);
+  ).toString(CryptoJS.enc.Utf8);
 
-  const fetchApplications = async () => {
+  /**
+   * 지원자 목록 가져오기
+   */
+  const fetchApplications = useCallback(async () => {
     try {
       const response = await fetchReceivedApplications({ id: detail.id });
       setApplications(response || []);
     } catch (error) {
       console.error("Error fetching received applications:", error);
     }
-  };
+  }, [detail.id]);
 
-  const teamListFunc = async () => {
+  /**
+   * 팀 목록 가져오기
+   */
+  const fetchTeamList = useCallback(async () => {
     try {
       const response = await teamList(hiring);
       setTeam(response);
     } catch (error) {
-      console.error("Error fetching received applications:", error);
+      console.error("Error fetching team list:", error);
     }
-  };
+  }, [hiring]);
 
+  // 컴포넌트 마운트 시 지원자 목록과 팀 목록 가져오기
   useEffect(() => {
     fetchApplications();
-    teamListFunc();
-  }, []);
+    fetchTeamList();
+  }, [fetchApplications, fetchTeamList]);
 
+  /**
+   * 지원하기 핸들러
+   */
   const handleApply = async () => {
     if (detail.current >= detail.max) {
       alert("모집 인원이 마감되었습니다.");
@@ -77,7 +83,6 @@ const HiringDetail = ({ hiring, setHiring }) => {
       alert("자신의 글에는 지원할 수 없습니다.");
       return;
     }
-
     if (team.some((member) => member.nickname === currentNickname)) {
       alert("이미 팀에 속해 있습니다.");
       return;
@@ -86,12 +91,16 @@ const HiringDetail = ({ hiring, setHiring }) => {
     try {
       await createJobApplication({ id: detail.id });
       alert("지원이 완료되었습니다.");
+      fetchApplications();
     } catch (error) {
       console.error("Error applying for job:", error);
       alert("지원 중 오류가 발생했습니다.");
     }
   };
 
+  /**
+   * 구인글 삭제 핸들러
+   */
   const handleDelete = async () => {
     if (window.confirm("정말로 삭제하시겠습니까?")) {
       try {
@@ -107,42 +116,35 @@ const HiringDetail = ({ hiring, setHiring }) => {
     }
   };
 
+  /**
+   * 지원 상태 변경 핸들러
+   * @param {Object} application - 지원 정보
+   * @param {number} newStatus - 새로운 상태 (1: 수락, 2: 거절)
+   */
   const handleStatusChange = async (application, newStatus) => {
-    if (newStatus === 1) {
-      try {
-        await updateApplicationStatus({
-          id: application.id,
-          status: 1,
-          nickname: application.nickname,
-          hiringDTO: application.hiringDTO,
-        });
-        alert("신청을 수락했습니다.");
+    try {
+      await updateApplicationStatus({
+        id: application.id,
+        status: newStatus,
+        nickname: application.nickname,
+        hiringDTO: application.hiringDTO,
+      });
+      alert(newStatus === 1 ? "신청을 수락했습니다." : "신청을 거절했습니다.");
+      if (newStatus === 1) {
         setDetail((prev) => ({ ...prev, current: prev.current + 1 }));
         setHiring((prev) => ({ ...prev, current: prev.current + 1 }));
-        const response = await fetchReceivedApplications({ id: detail.id });
-        setApplications(response || []);
-      } catch (error) {
-        console.error("Error changing application status:", error);
-        alert("상태 변경 중 오류가 발생했습니다.");
       }
-    } else {
-      try {
-        await updateApplicationStatus({
-          id: application.id,
-          status: 2,
-          nickname: application.nickname,
-          hiringDTO: application.hiringDTO,
-        });
-        alert("신청을 거절했습니다.");
-        const response = await fetchReceivedApplications({ id: detail.id });
-        setApplications(response || []);
-      } catch (error) {
-        console.error("Error changing application status:", error);
-        alert("상태 변경 중 오류가 발생했습니다.");
-      }
+      fetchApplications();
+    } catch (error) {
+      console.error("Error changing application status:", error);
+      alert("상태 변경 중 오류가 발생했습니다.");
     }
   };
 
+  /**
+   * 팀원 추방 핸들러
+   * @param {Object} teamMember - 추방할 팀원 정보
+   */
   const handleRemoveTeamMember = async (teamMember) => {
     if (window.confirm(`${teamMember.nickname}님을 팀에서 추방하시겠습니까?`)) {
       try {
@@ -170,6 +172,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
         <BackButton />
       </BackButtonWrapper>
       <ContentWrapper>
+        {/* 구인글 상세 정보 */}
         <Header>
           <h1>{detail.title}</h1>
         </Header>
@@ -188,6 +191,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
             <DeleteButton onClick={handleDelete}>삭제하기</DeleteButton>
           )}
         </ButtonGroup>
+        {/* 지원자 목록 (글 작성자에게만 표시) */}
         {detail.nickname === currentNickname && (
           <ApplicationsSection>
             <h2>지원자 목록</h2>
@@ -223,6 +227,7 @@ const HiringDetail = ({ hiring, setHiring }) => {
             )}
           </ApplicationsSection>
         )}
+        {/* 팀 목록 */}
         <ApplicationsSection>
           <h2>팀 목록</h2>
           {team &&

@@ -13,18 +13,24 @@ import MyBoardsSection from "./MyBoardsSection";
 import MyHiringsSection from "./MyHiringsSection";
 import MyApplicationsSection from "./MyApplicationsSection";
 
+// MyPage 컴포넌트: 사용자의 마이페이지를 구성하는 메인 컴포넌트
 const MyPage = () => {
+  // 현재 활성화된 탭 상태
   const [activeTab, setActiveTab] = useState("info");
+  // 사용자 정보 상태
   const [userInfo, setUserInfo] = useState(null);
+  // 로딩 상태
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadUserInfo();
   }, []);
 
+  // 로컬 스토리지에서 사용자 정보를 불러오는 함수
   const loadUserInfo = () => {
     const encryptedNickname = localStorage.getItem("nickname");
     if (encryptedNickname) {
+      // 암호화된 닉네임 복호화
       const bytes = CryptoJS.AES.decrypt(
         encryptedNickname,
         process.env.REACT_APP_SECRET_KEY
@@ -39,6 +45,7 @@ const MyPage = () => {
     setLoading(false);
   };
 
+  // 현재 탭에 따라 적절한 컨텐츠를 렌더링하는 함수
   const renderContent = () => {
     if (loading) return <div>로딩 중...</div>;
 
@@ -66,6 +73,7 @@ const MyPage = () => {
     <>
       <PageContainer>
         <PageTitle>마이페이지</PageTitle>
+        {/* 탭 네비게이션 */}
         <TabContainer>
           <Tab
             active={activeTab === "info"}
@@ -93,6 +101,7 @@ const MyPage = () => {
           </Tab>
         </TabContainer>
 
+        {/* 컨텐츠 섹션 */}
         <ContentSection>
           <SectionTitle>
             {activeTab === "info" && "내 정보"}

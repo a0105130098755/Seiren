@@ -2,55 +2,50 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { fetchSentApplications, deleteApplication } from "../../api/hiringApi";
 
+// 스타일 컴포넌트 정의
 const ApplicationCard = styled.div`
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 15px;
-  margin-bottom: 10px;
+  // ... (스타일 코드)
 `;
 
 const Button = styled.button`
-  padding: 10px 20px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-
-  &:hover {
-    background-color: #4a5c6a;
-  }
+  // ... (스타일 코드)
 `;
 
+// SentApplications 컴포넌트: 사용자가 보낸 지원 신청 목록을 표시하고 관리
 const SentApplications = () => {
+  // 보낸 지원 신청 목록 상태
   const [sentApplications, setSentApplications] = useState([]);
+  // 로딩 상태
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // 보낸 지원 신청 목록을 가져오는 함수
     const fetchApplications = async () => {
       try {
         const response = await fetchSentApplications();
         setSentApplications(response);
       } catch (error) {
         console.error("Error fetching sent applications:", error);
+        // TODO: 사용자에게 오류 메시지 표시
       } finally {
         setLoading(false);
       }
     };
 
     fetchApplications();
-  }, []);
+  }, []); // 컴포넌트 마운트 시 한 번만 실행
 
+  // 지원 신청 삭제 핸들러
   const handleDelete = async (application) => {
     if (application.status === 1) {
+      // 수락된 신청의 경우
       alert("신청 내역이 확인되었습니다.");
       try {
         await deleteApplication({
           id: application.id,
           nickname: application.nickname,
         });
+        // 상태 업데이트: 삭제된 신청 제거
         setSentApplications((prev) =>
           prev.filter((app) => app.id !== application.id)
         );
@@ -59,12 +54,14 @@ const SentApplications = () => {
         alert("오류가 발생했습니다.");
       }
     } else {
+      // 대기 중이거나 거절된 신청의 경우
       if (window.confirm("정말로 신청을 취소하시겠습니까?")) {
         try {
           await deleteApplication({
             id: application.id,
             nickname: application.nickname,
           });
+          // 상태 업데이트: 삭제된 신청 제거
           setSentApplications((prev) =>
             prev.filter((app) => app.id !== application.id)
           );

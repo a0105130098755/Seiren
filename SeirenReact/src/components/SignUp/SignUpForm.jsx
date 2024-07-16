@@ -13,7 +13,9 @@ import "./SignUpForm.css";
 
 Modal.setAppElement("#root");
 
+// SignUpForm 컴포넌트: 회원가입 폼을 관리하고 렌더링
 const SignUpForm = () => {
+  // 상태 관리
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [phone, setPhone] = useState("");
@@ -23,6 +25,7 @@ const SignUpForm = () => {
   const [privacyModalIsOpen, setPrivacyModalIsOpen] = useState(false);
   const [uploadTrigger, setUploadTrigger] = useState(false);
 
+  // 입력 필드 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
     let newErrors = { ...errors };
@@ -50,6 +53,7 @@ const SignUpForm = () => {
     setErrors(newErrors);
   };
 
+  // 폼 유효성 검사
   const validateForm = () => {
     let newErrors = {};
 
@@ -62,6 +66,7 @@ const SignUpForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // 회원가입 제출 핸들러
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
@@ -75,7 +80,6 @@ const SignUpForm = () => {
           phone,
           profile: profileImageUrl || "기본 이미지 URL",
         });
-        console.log("회원 가입 성공:", response);
         alert("회원가입이 완료되었습니다.");
       } catch (error) {
         setErrors((prev) => ({
@@ -100,6 +104,7 @@ const SignUpForm = () => {
           <form className="form" onSubmit={handleSignUpSubmit}>
             <h1>회원 가입</h1>
             <div className="form-group">
+              {/* 이름 입력 필드 */}
               <div className="input box full-width">
                 <input
                   type="text"
@@ -112,11 +117,14 @@ const SignUpForm = () => {
               </div>
               {errors.name && <p className="error">{errors.name}</p>}
 
+              {/* 이메일 인증 컴포넌트 */}
               <EmailVerification />
 
+              {/* 비밀번호 입력 컴포넌트 */}
               <PasswordInput name="password" />
               <PasswordInput name="confirmPassword" />
 
+              {/* 닉네임 및 전화번호 인증 컴포넌트 */}
               <NicknamePhoneVerification
                 nickname={nickname}
                 phone={phone}
@@ -124,12 +132,14 @@ const SignUpForm = () => {
                 errors={errors}
               />
 
+              {/* 이미지 업로드 컴포넌트 */}
               <ImageUploader
                 usernickname={nickname}
                 uploadTrigger={uploadTrigger}
                 setProfileImageUrl={setProfileImageUrl}
               />
 
+              {/* 개인정보 처리방침 동의 체크박스 */}
               <div className="checkbox-container">
                 <label>
                   <input
@@ -152,6 +162,7 @@ const SignUpForm = () => {
               )}
               {errors.submit && <p className="error">{errors.submit}</p>}
 
+              {/* 제출 버튼 */}
               <button type="submit" className="button">
                 계정 생성
               </button>
@@ -162,6 +173,7 @@ const SignUpForm = () => {
           </form>
         </div>
 
+        {/* 개인정보 처리방침 모달 */}
         <Modal
           isOpen={privacyModalIsOpen}
           onRequestClose={() => setPrivacyModalIsOpen(false)}

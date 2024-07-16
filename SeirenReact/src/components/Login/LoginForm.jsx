@@ -8,15 +8,19 @@ import "./LoginForm.css";
 import NavBar from "../Navbar/NavBar";
 import CryptoJS from "crypto-js";
 
+// LoginForm 컴포넌트: 사용자 로그인 폼을 제공
 const LoginForm = () => {
+  // 상태 관리
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // 입력 핸들러
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
+  // 폼 유효성 검사
   const validateForm = () => {
     if (!email || !password) {
       setError("모든 필드를 입력해주세요.");
@@ -30,12 +34,14 @@ const LoginForm = () => {
     return true;
   };
 
+  // 로그인 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     if (validateForm()) {
       try {
         const data = await login(email, password);
+        // 로그인 성공 시 로컬 스토리지에 사용자 정보 저장
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("tokenExpiresIn", data.tokenExpiresIn);
@@ -55,6 +61,7 @@ const LoginForm = () => {
     }
   };
 
+  // 에러 처리 함수
   const handleError = (error) => {
     if (error.response) {
       switch (error.response.status) {
@@ -86,6 +93,7 @@ const LoginForm = () => {
       <div className="form-container">
         <form onSubmit={handleSubmit} className="form login-form wrapper">
           <h1>로그인</h1>
+          {/* 이메일 입력 필드 */}
           <div className="input box">
             <input
               type="text"
@@ -96,6 +104,7 @@ const LoginForm = () => {
             />
             <MdAlternateEmail className="icon" />
           </div>
+          {/* 비밀번호 입력 필드 */}
           <div className="input box">
             <input
               type="password"
@@ -106,16 +115,21 @@ const LoginForm = () => {
             />
             <FaLock className="icon" />
           </div>
+          {/* 에러 메시지 표시 */}
           {error && <div className="error">{error}</div>}
+          {/* 아이디/비밀번호 찾기 링크 */}
           <div className="remember-forgot">
             <Link to="/recovery">아이디/비밀번호 찾기</Link>
           </div>
+          {/* 회원가입 링크 */}
           <div className="register">
             <Link to="/signup">회원가입 하시겠어요?</Link>
           </div>
+          {/* 로그인 버튼 */}
           <button type="submit" className="button">
             로그인
           </button>
+          {/* 카카오 로그인 버튼 */}
           <KakaoLoginButton />
         </form>
       </div>
