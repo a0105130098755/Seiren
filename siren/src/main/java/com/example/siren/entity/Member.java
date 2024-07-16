@@ -2,6 +2,7 @@ package com.example.siren.entity;
 
 import com.example.siren.constant.Authority;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -51,4 +52,17 @@ public class Member {
     public void updatePoint (int point){
         this.point = point;
     }
+
+    public void updatePassword(PasswordEncoder passwordEncoder, String password){
+        this.password = passwordEncoder.encode(password);
+    }
+
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    public void updateStatus(boolean status){
+        this.status = status;
+    }
+
 }
